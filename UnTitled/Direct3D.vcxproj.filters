@@ -1,0 +1,499 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Systems\Keyboard.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Mouse.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Time.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Window.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\D3D.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\Perspective.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\Viewport.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\Camera.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Program.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Utilities\BinaryFile.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Executes\Execute.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Executes\ExeGui.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Executes\GuiSettings.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\GlobalBuffers.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Math.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Path.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Shader.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\ShaderBuffer.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\States.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\String.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\VertexLayouts.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Material.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\ICloneable.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Json.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\RenderTarget.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\Orthographic.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelMeshPart.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelMesh.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Model.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Fbx\Exporter.h">
+      <Filter>Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Fbx\Type.h">
+      <Filter>Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Fbx\Utility.h">
+      <Filter>Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Texture.h">
+      <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Executes\DrawModel.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelBone.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Fbx\BoneWeights.h">
+      <Filter>Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelAnimClip.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelAnimPlayer.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GameRender.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Executes\ExportMesh.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Executes\ExportAnimation.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Xml.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Fbx\XmlToAnim.h">
+      <Filter>Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimationBinder.h">
+      <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimationKeyframe.h">
+      <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimationClip.h">
+      <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimationBlender.h">
+      <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GameModel.h">
+      <Filter>Objects\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GameAnimationModel.h">
+      <Filter>Objects\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\Free.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Units\GameSettings.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounding\Box.h">
+      <Filter>Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounding\Shape.h">
+      <Filter>Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounding\Sphere.h">
+      <Filter>Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="Landscape\Terrain.h">
+      <Filter>Landscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Landscape\Data.h">
+      <Filter>Landscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\Command.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\UndoRedoManager.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\SpotLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\PointLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounding\Cone.h">
+      <Filter>Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\Fog.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\MeshSphere.h">
+      <Filter>Objects\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\MeshCube.h">
+      <Filter>Objects\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\MeshTeapot.h">
+      <Filter>Objects\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounding\Frustum.h">
+      <Filter>Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Sky.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\SkyPlane.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Landscape\Ocean.h">
+      <Filter>Landscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\Reflection.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\Mirror.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Rain.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Snow.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\WeatherType.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Executes\DrawEnvironment.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\FrustumView.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\ProjectionTexture.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewer\FixedCamera.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights\DirectionalLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Executes">
+      <UniqueIdentifier>{9cf8f685-25e3-48a2-b6b3-b00c8505ac32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renders">
+      <UniqueIdentifier>{30f71ca6-86fc-4a07-8c55-3b9b4a221935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{c2abd35d-375a-43b3-ba7e-7b4b24b403bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{409d6f39-6218-4c24-9e39-1646a0cde279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Viewer">
+      <UniqueIdentifier>{cfbc03d8-52c3-41bd-9fd4-797036f4b8ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{3bc07dfa-3b3e-4d9a-9b26-2daf147e1768}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{1f386553-a9f1-4b3d-9eac-6ee8265acaad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fbx">
+      <UniqueIdentifier>{5168b9ea-7c26-4c6b-91eb-c50b600d92c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{b8e22b6e-ca58-4412-b76d-cdc9b2ea4b45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Animation">
+      <UniqueIdentifier>{ef3f3779-359b-4bf1-92b4-6527c398280c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Models">
+      <UniqueIdentifier>{efefd54a-0aca-4f3c-888b-f42cbcf3352a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bounding">
+      <UniqueIdentifier>{b2987761-b36c-4387-870b-e9c647300d70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape">
+      <UniqueIdentifier>{17dc80e1-322b-4cf3-b1d6-035fafdccf10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Commands">
+      <UniqueIdentifier>{5a0171ce-5abd-4643-92c5-312d2d65d39e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{97191a73-77d6-4e04-882b-44b81ce5f8b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Meshes">
+      <UniqueIdentifier>{3965cf61-1e6d-4f11-8087-7c2eca163eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{73382aba-7b5d-42b7-87bf-2cf522dfc09b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool">
+      <UniqueIdentifier>{211905b6-deb3-4444-93ba-931588c22eb0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Systems\Mouse.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Time.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Window.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\D3D.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Keyboard.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\Viewport.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\Perspective.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\Camera.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Utilities\BinaryFile.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Executes\ExeGui.cpp">
+      <Filter>Executes</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Path.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Math.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Shader.cpp">
+      <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\States.cpp">
+      <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\String.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Material.cpp">
+      <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Json.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\RenderTarget.cpp">
+      <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\Orthographic.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelMeshPart.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelMesh.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Model.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Fbx\Exporter.cpp">
+      <Filter>Fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Fbx\Utility.cpp">
+      <Filter>Fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelReader.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Texture.cpp">
+      <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Executes\DrawModel.cpp">
+      <Filter>Executes</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelBone.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelAnimClip.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelAnimPlayer.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GameRender.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Executes\ExportMesh.cpp">
+      <Filter>Executes</Filter>
+    </ClCompile>
+    <ClCompile Include="Executes\ExportAnimation.cpp">
+      <Filter>Executes</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Xml.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Fbx\XmlToAnim.cpp">
+      <Filter>Fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GameModel.cpp">
+      <Filter>Objects\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GameAnimationModel.cpp">
+      <Filter>Objects\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\Free.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Units\GameSettings.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounding\Shape.cpp">
+      <Filter>Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounding\Sphere.cpp">
+      <Filter>Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounding\Box.cpp">
+      <Filter>Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="Landscape\Terrain.cpp">
+      <Filter>Landscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Landscape\Data.cpp">
+      <Filter>Landscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\Command.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\UndoRedoManager.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\SpotLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\PointLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounding\Cone.cpp">
+      <Filter>Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\Fog.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\MeshSphere.cpp">
+      <Filter>Objects\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\MeshCube.cpp">
+      <Filter>Objects\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\MeshTeapot.cpp">
+      <Filter>Objects\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounding\Frustum.cpp">
+      <Filter>Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Sky.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\SkyPlane.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Landscape\Ocean.cpp">
+      <Filter>Landscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\Reflection.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\Mirror.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Rain.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Snow.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Executes\DrawEnvironment.cpp">
+      <Filter>Executes</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\FrustumView.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\ProjectionTexture.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\FixedCamera.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights\DirectionalLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
