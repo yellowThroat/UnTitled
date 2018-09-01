@@ -50,6 +50,11 @@ public:
 	void Scaling(D3DXVECTOR3& vec);
 	D3DXVECTOR3 Scaling();
 
+	void Velocity(D3DXVECTOR3& vec);
+	D3DXVECTOR3 Velocity();
+
+	D3DXVECTOR3 CalcVelocity(D3DXVECTOR3& velocity);
+	void AddPosition(D3DXVECTOR3 & vec);
 	D3DXMATRIX Transformed();
 
 	virtual void Update();
@@ -83,6 +88,7 @@ public:
 
 protected:
 	D3DXMATRIX GetParentWorld();
+	void CalcPosition();
 
 protected:
 	bool enable;
@@ -93,7 +99,7 @@ protected:
 	D3DXVECTOR3 position;
 	D3DXVECTOR3 rotate;
 	D3DXVECTOR3 scale;
-
+	D3DXVECTOR3 velocity;
 private:
 
 	D3DXVECTOR3 direction;

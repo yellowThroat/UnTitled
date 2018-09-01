@@ -24,6 +24,10 @@
     <ClInclude Include="Bounding\Frustum.h" />
     <ClInclude Include="Bounding\Shape.h" />
     <ClInclude Include="Bounding\Sphere.h" />
+    <ClInclude Include="Characters\Character.h" />
+    <ClInclude Include="Characters\Eve.h" />
+    <ClInclude Include="Characters\GameData.h" />
+    <ClInclude Include="Characters\GamePlayerInput.h" />
     <ClInclude Include="Commands\UndoRedoManager.h" />
     <ClInclude Include="Commands\Command.h" />
     <ClInclude Include="Environment\Rain.h" />
@@ -86,7 +90,7 @@
     <ClInclude Include="Systems\Mouse.h" />
     <ClInclude Include="Systems\Time.h" />
     <ClInclude Include="Systems\Window.h" />
-    <ClInclude Include="Units\GameSettings.h" />
+    <ClInclude Include="Tool\GameSettings.h" />
     <ClInclude Include="Utilities\BinaryFile.h" />
     <ClInclude Include="Utilities\Json.h" />
     <ClInclude Include="Utilities\Math.h" />
@@ -101,6 +105,8 @@
     <ClInclude Include="Viewer\Orthographic.h" />
     <ClInclude Include="Viewer\Perspective.h" />
     <ClInclude Include="Viewer\Viewport.h" />
+    <ClInclude Include="Weapons\Sword.h" />
+    <ClInclude Include="Weapons\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bounding\Box.cpp" />
@@ -108,6 +114,8 @@
     <ClCompile Include="Bounding\Frustum.cpp" />
     <ClCompile Include="Bounding\Shape.cpp" />
     <ClCompile Include="Bounding\Sphere.cpp" />
+    <ClCompile Include="Characters\Character.cpp" />
+    <ClCompile Include="Characters\Eve.cpp" />
     <ClCompile Include="Commands\UndoRedoManager.cpp" />
     <ClCompile Include="Commands\Command.cpp" />
     <ClCompile Include="Environment\Rain.cpp" />
@@ -158,7 +166,7 @@
     <ClCompile Include="Systems\Mouse.cpp" />
     <ClCompile Include="Systems\Time.cpp" />
     <ClCompile Include="Systems\Window.cpp" />
-    <ClCompile Include="Units\GameSettings.cpp" />
+    <ClCompile Include="Tool\GameSettings.cpp" />
     <ClCompile Include="Utilities\BinaryFile.cpp" />
     <ClCompile Include="Utilities\Json.cpp" />
     <ClCompile Include="Utilities\Math.cpp" />
@@ -173,6 +181,8 @@
     <ClCompile Include="Viewer\Orthographic.cpp" />
     <ClCompile Include="Viewer\Perspective.cpp" />
     <ClCompile Include="Viewer\Viewport.cpp" />
+    <ClCompile Include="Weapons\Sword.cpp" />
+    <ClCompile Include="Weapons\Weapon.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>

@@ -150,9 +150,6 @@
     <ClInclude Include="Viewer\Free.h">
       <Filter>Viewer</Filter>
     </ClInclude>
-    <ClInclude Include="Units\GameSettings.h">
-      <Filter>Tool</Filter>
-    </ClInclude>
     <ClInclude Include="Bounding\Box.h">
       <Filter>Bounding</Filter>
     </ClInclude>
@@ -237,6 +234,27 @@
     <ClInclude Include="Lights\DirectionalLight.h">
       <Filter>Lights</Filter>
     </ClInclude>
+    <ClInclude Include="Characters\Character.h">
+      <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\Eve.h">
+      <Filter>Characters\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\GameSettings.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\Weapon.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\Sword.h">
+      <Filter>Weapons\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\GamePlayerInput.h">
+      <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\GameData.h">
+      <Filter>Characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Executes">
@@ -290,8 +308,20 @@
     <Filter Include="Environment">
       <UniqueIdentifier>{73382aba-7b5d-42b7-87bf-2cf522dfc09b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Characters">
+      <UniqueIdentifier>{da709bf0-da4a-4f07-bbea-7260ef775328}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Characters\Player">
+      <UniqueIdentifier>{6e7bc4b3-c0b5-4b20-a744-cc21b14b5aa5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Tool">
-      <UniqueIdentifier>{211905b6-deb3-4444-93ba-931588c22eb0}</UniqueIdentifier>
+      <UniqueIdentifier>{852c8e48-95f7-4381-a427-8ea0f8122ce1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{f7df0f69-acd4-49a6-83b2-0d74c390b07c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons\Sword">
+      <UniqueIdentifier>{b6876b61-d69d-4618-81ee-4030fa3fa57a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -411,9 +441,6 @@
     <ClCompile Include="Viewer\Free.cpp">
       <Filter>Viewer</Filter>
     </ClCompile>
-    <ClCompile Include="Units\GameSettings.cpp">
-      <Filter>Tool</Filter>
-    </ClCompile>
     <ClCompile Include="Bounding\Shape.cpp">
       <Filter>Bounding</Filter>
     </ClCompile>
@@ -494,6 +521,21 @@
     </ClCompile>
     <ClCompile Include="Lights\DirectionalLight.cpp">
       <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Characters\Character.cpp">
+      <Filter>Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Characters\Eve.cpp">
+      <Filter>Characters\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\GameSettings.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\Weapon.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\Sword.cpp">
+      <Filter>Weapons\Sword</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

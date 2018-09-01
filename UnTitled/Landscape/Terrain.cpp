@@ -244,7 +244,8 @@ void Landscape::Terrain::PostRender()
 
 	if (ImGui::CollapsingHeader("Ocean"))
 	{
-		ocean->PostRender();
+		if (ocean)
+			ocean->PostRender();
 	}
 
 	ImGui::End();	

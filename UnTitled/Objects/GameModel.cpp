@@ -3,7 +3,7 @@
 #include "../Bounding/Box.h"
 
 GameModel::GameModel(wstring matFile, wstring meshFile)
-	: velocity(0, 0, 0), box(NULL)
+	: box(NULL)
 {
 	model = new Model();
 	model->ReadMaterial(matFile);
@@ -28,54 +28,6 @@ GameModel::~GameModel()
 	SAFE_DELETE(model);
 
 	SAFE_DELETE(box);
-}
-
-void GameModel::Velocity(D3DXVECTOR3 & vec)
-{
-	velocity = vec;
-}
-
-D3DXVECTOR3 GameModel::Velocity()
-{
-	return velocity;
-}
-
-D3DXVECTOR3 GameModel::CalcVelocity(D3DXVECTOR3 & velocity)
-{
-	D3DXVECTOR3 v(0, 0, 0);
-	
-	if (velocity.z != 0.0f)
-		v += Direction() * velocity.z;
-
-	if (velocity.x != 0.0f)
-		v += Right() * velocity.x;
-
-	if (velocity.y != 0.0f)
-		v += Up() * velocity.y;
-
-	return v;
-}
-
-void GameModel::SetPosition(D3DXVECTOR3 & vec)
-{
-	Position(vec);
-}
-
-void GameModel::AddPosition(D3DXVECTOR3 & vec)
-{
-	D3DXVECTOR3 pos = Position() + vec;
-	
-	Position(pos);
-}
-
-void GameModel::CalcPosition()
-{
-	if (D3DXVec3Length(&velocity) > 0)
-	{
-		D3DXVECTOR3 v = CalcVelocity(velocity) * Time::Delta();
-
-		AddPosition(v);
-	}
 }
 
 void GameModel::Update()

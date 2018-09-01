@@ -13,6 +13,10 @@ public:
 
 	void Update();
 	void Render();
+public:
+	void World(D3DXMATRIX* world);
+	void RootAxis(D3DXMATRIX* root);
+	D3DXMATRIX GetTransform(UINT index);
 
 private:
 	void UpdateTime();
@@ -37,7 +41,6 @@ private:
 	vector<D3DXMATRIX> boneAnimation;
 	vector<D3DXMATRIX> skinTransform;
 
-	D3DXMATRIX mat;
-	D3DXVECTOR3 r;
-
+	D3DXMATRIX* world;
+	D3DXMATRIX* rootAxis;
 };

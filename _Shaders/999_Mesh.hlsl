@@ -25,5 +25,4 @@ float4 PS(PixelInput input) : SV_TARGET
 {
     float4 color = _diffuseMap.Sample(_diffuseSampler, input.uv);
     return color;
-    //return GetDiffuseColor(color, _direction, input.normal);
 }

@@ -28,13 +28,12 @@ Program::Program()
 	values->GlobalTime = new TimeBuffer();
 
 	values->MainCamera = new Free();
-	values->MainCamera->SetPosition(0, 1, -5);
+	values->MainCamera->SetPosition(0, 5, -15);
 	values->MainCamera->SetRotationDegree(0, 0);
 
 	values->jsonRoot = new Json::Value();
 	Json::ReadData(L"LevelEditor.json", values->jsonRoot);
 
-	//executes.push_back(new ExportAnimation(values));
 	executes.push_back(new ExportMesh(values));
 	executes.push_back(new DrawEnvironment(values));
 	executes.push_back(new DrawModel(values));

@@ -19,14 +19,11 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 		material->SetShader(shader);
 
 	
-	currentClip = model->Clip(0);
+	currentClip = model->Clip(1);
 	D3DXMATRIX M;
 	D3DXMatrixIdentity(&M);
-	D3DXMatrixIdentity(&mat);
 	skinTransform.assign(model->BoneCount(), M);
 	boneAnimation.assign(model->BoneCount(), M);
-
-	r = D3DXVECTOR3(0, 0, 0);
 }
 
 ModelAnimPlayer::~ModelAnimPlayer()
@@ -39,8 +36,6 @@ void ModelAnimPlayer::Update()
 	if (currentClip == NULL)
 		return;
 
-	D3DXMatrixRotationYawPitchRoll(&mat, r.y, r.x, r.z);
-
 	if(mode == Mode::Play)
 	UpdateTime();
 	UpdateBone();
@@ -49,9 +44,6 @@ void ModelAnimPlayer::Update()
 
 void ModelAnimPlayer::Render()
 {
-	ImGui::Separator();
-
-	ImGui::DragFloat3("R", r);
 	ImGui::Begin("Animation Player");
 
 	if (ImGui::Button("Play"))
@@ -81,6 +73,21 @@ void ModelAnimPlayer::Render()
 
 	for (ModelMesh* mesh : model->Meshes())
 		mesh->Render();
+}
+
+void ModelAnimPlayer::World(D3DXMATRIX * world)
+{
+	this->world = world;
+}
+
+void ModelAnimPlayer::RootAxis(D3DXMATRIX * root)
+{
+	rootAxis = root;
+}
+
+D3DXMATRIX ModelAnimPlayer::GetTransform(UINT index)
+{
+	return skinTransform[index];
 }
 
 void ModelAnimPlayer::UpdateTime()
@@ -159,17 +166,11 @@ void ModelAnimPlayer::UpdateBone()
 		int parentIndex = bone->ParentIndex();
 		
 		if (parentIndex < 0)
-		{
-			D3DXMATRIX S;
-			D3DXMatrixScaling(&S, 0.1f, 0.1f, 0.1f);
-			matAnimation *= S;
 			D3DXMatrixIdentity(&matParentAnimation);
-		}
 		else
 			matParentAnimation = boneAnimation[parentIndex];
 
-
 		boneAnimation[i] = matAnimation * matParentAnimation;
-		skinTransform[i] = matInvBindPose * boneAnimation[i];
+		skinTransform[i] = matInvBindPose * boneAnimation[i] * (*rootAxis) * (*world);
 	}
 }

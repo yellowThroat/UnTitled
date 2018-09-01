@@ -16,6 +16,7 @@ GameRender::GameRender()
 	, name("No Name"), oShader(NULL), parent(NULL)
 	, position(0, 0, 0), rotate(0, 0, 0), scale(1, 1, 1)
 	, direction(0, 0, 1), up(0, 1, 0), right(1, 0, 0)
+	, velocity(0, 0, 0)
 	, type(RenderType::Unknown)
 	, isBoneBuffer(NULL)
 {
@@ -197,6 +198,49 @@ void GameRender::Scaling(D3DXVECTOR3 & vec)
 D3DXVECTOR3 GameRender::Scaling()
 {
 	return scale;
+}
+
+void GameRender::Velocity(D3DXVECTOR3 & vec)
+{
+	velocity = vec;
+}
+
+D3DXVECTOR3 GameRender::Velocity()
+{
+	return velocity;
+}
+
+D3DXVECTOR3 GameRender::CalcVelocity(D3DXVECTOR3 & velocity)
+{
+	D3DXVECTOR3 v(0, 0, 0);
+
+	if (velocity.z != 0.0f)
+		v += Direction() * velocity.z;
+
+	if (velocity.x != 0.0f)
+		v += Right() * velocity.x;
+
+	if (velocity.y != 0.0f)
+		v += Up() * velocity.y;
+
+	return v;
+}
+
+void GameRender::AddPosition(D3DXVECTOR3 & vec)
+{
+	D3DXVECTOR3 pos = Position() + vec;
+
+	Position(pos);
+}
+
+void GameRender::CalcPosition()
+{
+	if (D3DXVec3Length(&velocity) > 0)
+	{
+		D3DXVECTOR3 v = CalcVelocity(velocity) * Time::Delta();
+
+		AddPosition(v);
+	}
 }
 
 D3DXMATRIX GameRender::Transformed()

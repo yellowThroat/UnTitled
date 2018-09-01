@@ -2,10 +2,12 @@
 #include "DrawModel.h"
 #include "../Fbx/Exporter.h"
 #include "../Objects/GameAnimationModel.h"
-#include "../Units/GameSettings.h"
+#include "../Tool/GameSettings.h"
 #include "../Model/ModelAnimPlayer.h"
 #include "../Environment/Rain.h"
 #include "../Environment/Snow.h"
+#include "../Characters/Eve.h"
+#include "../Weapons/Sword.h"
 
 DrawModel::DrawModel(ExecuteValues* values)
 	: Execute(values)
@@ -13,15 +15,16 @@ DrawModel::DrawModel(ExecuteValues* values)
 	, weather(0)
 {
 	settings = new GameSettings(values);
+	sword = new Sword();
+	eve = new Eve();
+	//WeatherCube Cube = WeatherCube
+	//(
+	//	D3DXVECTOR3(0, 0, 0),
+	//	D3DXVECTOR3(100, 100, 100)
+	//);
 
-	WeatherCube Cube = WeatherCube
-	(
-		D3DXVECTOR3(0, 0, 0),
-		D3DXVECTOR3(100, 100, 100)
-	);
-
-	rain = new Rain(Cube, 300, values);
-	snow = new Snow(Cube, 300, values);
+	//rain = new Rain(Cube, 300, values);
+	//snow = new Snow(Cube, 300, values);
 }
 
 DrawModel::~DrawModel()
@@ -35,6 +38,10 @@ void DrawModel::Update()
 {
 	if (settings)
 		settings->Update();	
+	eve->Update();
+	D3DXMATRIX temp = eve->GetBoneTransform(L"RightHand");
+	sword->World(temp);
+	sword->Update();
 }
 
 void DrawModel::PreRender()
@@ -52,13 +59,15 @@ void DrawModel::Render()
 		rain->Render();
 	if (snow && weather == 2)
 		snow->Render();
+	eve->Render();
+	sword->Render();
 }
 
 void DrawModel::PostRender()
 {
 	if (settings)
 		settings->PostRender();
-
+	/*
 	if (values->GuiSettings->bShowEnvironmentWindow)
 	{
 		ImGui::Begin("Environment");
@@ -74,4 +83,5 @@ void DrawModel::PostRender()
 
 		ImGui::End();
 	}
+	*/
 }

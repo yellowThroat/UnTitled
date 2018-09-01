@@ -206,22 +206,14 @@ void Fbx::Exporter::ReadMeshData(FbxNode * node, int parentBone)
 
 			int cpIndex = mesh->GetPolygonVertex(p, vi);
 			vertex->ControlPoint = cpIndex;
-
-			D3DXMATRIX mat;
-			D3DXMatrixRotationX(&mat, Math::ToRadian(-90));
 			
-			D3DXVECTOR3 temp;
 			FbxVector4 position = mesh->GetControlPointAt(cpIndex);
-			temp = Utility::ToVector3(position);
-			//D3DXVec3TransformCoord(&vertex->Vertex.position, &temp, &Utility::Negative(bXna));
-			D3DXVec3TransformCoord(&vertex->Vertex.position, &temp, &mat);
+			vertex->Vertex.position = Utility::ToVector3(position);
 					
 			FbxVector4 normal;
 			mesh->GetPolygonVertexNormal(p, vi, normal);
 			normal.Normalize();
-			temp = Utility::ToVector3(normal);
-			//D3DXVec3TransformNormal(&vertex->Vertex.normal, &temp, &Utility::Negative(bXna));
-			D3DXVec3TransformNormal(&vertex->Vertex.normal, &temp, &mat);
+			vertex->Vertex.normal = Utility::ToVector3(normal);
 	
 			vertex->MaterialName = Utility::GetMaterialName(mesh, p, cpIndex);
 	

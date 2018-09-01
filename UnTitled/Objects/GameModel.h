@@ -10,27 +10,16 @@ public:
 	GameModel(wstring matFile, wstring meshFile);
 	virtual ~GameModel();
 
-	void Velocity(D3DXVECTOR3& vec);
-	D3DXVECTOR3 Velocity();
-
-	D3DXVECTOR3 CalcVelocity(D3DXVECTOR3& velocity);
-	
-	void SetPosition(D3DXVECTOR3& vec);
-	void AddPosition(D3DXVECTOR3& vec);
-
 	virtual void Update();
 	virtual void Render();
 
 	void Rotate(D3DXVECTOR2 amount);
 	Model* GetModel() { return model; }
-protected:
-	void CalcPosition();
 
 protected:
 	Shader* shader;
 	Model* model;
 
-	D3DXVECTOR3 velocity;
 	D3DXMATRIX rotateMatrix;
 
 	vector<D3DXMATRIX> boneTransforms;
