@@ -4,9 +4,8 @@
 enum class GamePlayerKey
 {
 	MoveForward = 0, MoveBackward, MoveLeft, MoveRight,
-	TurnLeft, TurnRight,
-	WeaponFire, WeaponReload, WeaponChange,
-	Run, Jump,
+	Transition,
+	Run, Jump, Attack,
 	Count,
 };
 
@@ -23,12 +22,9 @@ public:
 		keyboard[(UINT)GamePlayerKey::MoveLeft]		= 'A';
 		keyboard[(UINT)GamePlayerKey::MoveRight]	= 'D';
 
-		keyboard[(UINT)GamePlayerKey::TurnLeft]		= 'F';
-		keyboard[(UINT)GamePlayerKey::TurnRight]	= 'H';
+		keyboard[(UINT)GamePlayerKey::Transition]	= 'X';
+		keyboard[(UINT)GamePlayerKey::Attack]		= VK_LBUTTON;
 
-		keyboard[(UINT)GamePlayerKey::WeaponFire]	= 'G';
-		keyboard[(UINT)GamePlayerKey::WeaponReload] = 'R';
-		keyboard[(UINT)GamePlayerKey::WeaponChange] = 'V';
 		keyboard[(UINT)GamePlayerKey::Run] = VK_LSHIFT;
 		keyboard[(UINT)GamePlayerKey::Jump]	= VK_SPACE;
 	}
@@ -60,15 +56,6 @@ public:
 		bool  b = true;
 		b &= Mouse::Get()->Press(1) == false;
 		b &= Keyboard::Get()->Down(keyboard[(UINT)key]);
-
-		return b;
-	}
-
-	bool IsPressTurn()
-	{
-		bool b = false;
-		b |= Pressed(GamePlayerKey::TurnLeft);
-		b |= Pressed(GamePlayerKey::TurnRight);
 
 		return b;
 	}

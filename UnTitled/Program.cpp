@@ -2,6 +2,7 @@
 #include "Program.h"
 
 #include "./Viewer/Free.h"
+#include "./Viewer/TPP.h"
 
 #include <fstream>
 #include "./Utilities/String.h"
@@ -27,9 +28,15 @@ Program::Program()
 	values->GlobalLight = new LightBuffer();
 	values->GlobalTime = new TimeBuffer();
 
-	values->MainCamera = new Free();
-	values->MainCamera->SetPosition(0, 5, -15);
-	values->MainCamera->SetRotationDegree(0, 0);
+	{
+		Camera* camera = new Free();
+		camera->SetPosition(0, 5, -15);
+		Camera::cameras.push_back(camera);
+
+		camera = new TPP();
+		Camera::cameras.push_back(camera);
+	}
+	values->MainCamera = Camera::cameras[0];
 
 	values->jsonRoot = new Json::Value();
 	Json::ReadData(L"LevelEditor.json", values->jsonRoot);

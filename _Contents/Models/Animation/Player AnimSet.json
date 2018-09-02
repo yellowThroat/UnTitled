@@ -3,12 +3,11 @@
       "anim" : [
          "../_Contents/Models/Animation/Idle.anim",
          "../_Contents/Models/Animation/Walking.anim",
-         "../_Contents/Models/Animation/Walking Backward.anim",
          "../_Contents/Models/Animation/Running.anim",
-         "../_Contents/Models/Animation/Jog Backward.anim",
-         "../_Contents/Models/Animation/Left Turn.anim",
-         "../_Contents/Models/Animation/Right Turn.anim",
-         "../_Contents/Models/Animation/Jump.anim"
+         "../_Contents/Models/Animation/Jump.anim",
+         "../_Contents/Models/Animation/Boxing_Idle.anim",
+         "../_Contents/Models/Animation/Boxing_Step.anim",
+         "../_Contents/Models/Animation/Lead Jap.anim"
       ]
    }
 }

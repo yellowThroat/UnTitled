@@ -104,6 +104,7 @@
     <ClInclude Include="Viewer\Mirror.h" />
     <ClInclude Include="Viewer\Orthographic.h" />
     <ClInclude Include="Viewer\Perspective.h" />
+    <ClInclude Include="Viewer\TPP.h" />
     <ClInclude Include="Viewer\Viewport.h" />
     <ClInclude Include="Weapons\Sword.h" />
     <ClInclude Include="Weapons\Weapon.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Viewer\Mirror.cpp" />
     <ClCompile Include="Viewer\Orthographic.cpp" />
     <ClCompile Include="Viewer\Perspective.cpp" />
+    <ClCompile Include="Viewer\TPP.cpp" />
     <ClCompile Include="Viewer\Viewport.cpp" />
     <ClCompile Include="Weapons\Sword.cpp" />
     <ClCompile Include="Weapons\Weapon.cpp" />

@@ -6,14 +6,16 @@ ExportMesh::ExportMesh(ExecuteValues* values)
 	: Execute(values)
 {
 	Fbx::Exporter* exporter = NULL;
+	exporter = new Fbx::Exporter(Assets + L"Characters/eve.fbx");
+	exporter->ExportMesh(Models + L"Characters/Player/", L"Eve");
+	//exporter = new Fbx::Exporter(Assets + L"ToExport/Lead Jab.fbx");
+	//exporter->ExportAnimation(Models + L"Animation/", L"Lead Jap");
 	//exporter->ExportMaterial(Models + L"Characters/Player/", L"Eve");
-	//exporter->ExportMesh(Models + L"Characters/Player/", L"Eve");
 
-	//exporter = new Fbx::Exporter(Assets + L"Jump.fbx");
-	//exporter->ExportAnimation(Models + L"Animation/", L"Jump");
+	//exporter->ExportAnimation(Models + L"Animation/", L"Lead Jap");
 
 	//vector<wstring> files;
-	//Path::GetFiles(&files, Assets, L"*.fbx", false);
+	//Path::GetFiles(&files, Assets + L"ToExport/", L"*.fbx", false);
 
 	//for (UINT i = 0; i < files.size(); i++)
 	//{

@@ -5,6 +5,6 @@ struct GamePlayerSpec
 {
 	float WalkSpeed = 5.0f;
 	float RunSpeed = 12.0f;
-	float BackWalkSpeed = 4.0f;
-	float BackRunSpeed = 7.0f;
+	float BattleMoveSpeed = 6.0f;
+	float RotateSpeed = 10.0f;
 };

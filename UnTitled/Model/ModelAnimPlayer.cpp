@@ -158,7 +158,7 @@ void ModelAnimPlayer::UpdateBone()
 		D3DXMATRIX matParentAnimation;
 		D3DXMATRIX S, R, T;
 		D3DXVECTOR3 vS, vT;
-		D3DXQUATERNION vQ;
+		D3DXQUATERNION Q;
 
 		D3DXMatrixIdentity(&matAnimation);
 
@@ -167,7 +167,7 @@ void ModelAnimPlayer::UpdateBone()
 
 		if (BindCount <= 1)
 		{
-			matAnimation = currentClip->GetCurrentTransform(bone->Name(), vS, vQ, vT);
+			matAnimation = currentClip->GetCurrentTransform(bone->Name(), vS, Q, vT);
 		}
 		else
 		{
@@ -179,10 +179,10 @@ void ModelAnimPlayer::UpdateBone()
 
 			D3DXVec3Lerp(&vS, &s0, &s1, t);
 			D3DXVec3Lerp(&vT, &t0, &t1, t);
-			D3DXQuaternionSlerp(&vQ, &q0, &q1, t);
+			D3DXQuaternionSlerp(&Q, &q0, &q1, t);
 			
 			D3DXMatrixScaling(&S, vS.x, vS.y, vS.z);
-			D3DXMatrixRotationQuaternion(&R, &vQ);
+			D3DXMatrixRotationQuaternion(&R, &Q);
 			D3DXMatrixTranslation(&T, vT.x, vT.y, vT.z);
 
 			matAnimation = S* R* T;
@@ -191,10 +191,7 @@ void ModelAnimPlayer::UpdateBone()
 		int parentIndex = bone->ParentIndex();
 		
 		if (parentIndex < 0)
-		{
 			matParentAnimation = rootAxis * (*world);
-			//D3DXMatrixIdentity(&matParentAnimation);
-		}
 		else
 			matParentAnimation = boneAnimation[parentIndex];
 
@@ -262,15 +259,10 @@ void Binder::CopyBinder(Binder * binder)
 
 bool Binder::IsDone()
 {
-	bool b = false;
+	if (!bLoop && currentKeyframe >= clip->TotalFrame() - 1)
+		return true;
 
-	if (!bLoop)
-	{
-		if (currentKeyframe >= clip->TotalFrame() - 1)
-			b = true;
-	}
-
-	return b;
+	return false;
 }
 
 D3DXMATRIX Binder::GetCurrentTransform(wstring name, D3DXVECTOR3 & vS, D3DXQUATERNION & vQ, D3DXVECTOR3 & vT)

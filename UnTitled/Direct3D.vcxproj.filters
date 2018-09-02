@@ -255,6 +255,9 @@
     <ClInclude Include="Characters\GameData.h">
       <Filter>Characters</Filter>
     </ClInclude>
+    <ClInclude Include="Viewer\TPP.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Executes">
@@ -536,6 +539,9 @@
     </ClCompile>
     <ClCompile Include="Weapons\Sword.cpp">
       <Filter>Weapons\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\TPP.cpp">
+      <Filter>Viewer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

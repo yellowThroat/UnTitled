@@ -3,6 +3,15 @@
 class Camera
 {
 public:
+	enum class CameraType
+	{
+		Free,
+		FristPersonPoint,
+		ThirdPersonPoint,
+		Count,
+	};
+
+public:
 	~Camera();
 
 	void GetPosition(D3DXVECTOR3* vec)
@@ -59,9 +68,13 @@ public:
 		*vec = up;
 	}
 
-	D3DXVECTOR3 GetDirection(class Viewport* vp, class Perspective* perspective);
+	void CopyInfo(Camera* camera);
 
+	D3DXVECTOR3 GetDirection(class Viewport* vp, class Perspective* perspective);
+	D3DXVECTOR3 GetDirection(D3DXVECTOR3 & direction);
 	virtual void Update() = 0;
+
+	static vector<Camera*> cameras;
 
 protected:
 	Camera();

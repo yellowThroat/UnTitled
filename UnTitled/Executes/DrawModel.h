@@ -15,10 +15,9 @@ public:
 	void ResizeScreen() {}
 
 private:
+	void Test();
+
 	class GameSettings* settings;
 	class Eve* eve;
 	class Sword* sword;
-	class Rain* rain;
-	class Snow* snow;
-	int weather;
 };

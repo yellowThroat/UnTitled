@@ -8,17 +8,22 @@ public:
 	enum class PlayerAnimation
 	{
 		UnKnown = -1,
-		Idle,
-		Walk, BackWardWalk,
-		Run, BackWardRun,
-		TurnLeft, TurnRight,
+		Idle, Walk,	Run, 
 		Jump,
+		Boxing_Idle, Boxing_Step,
+		LeadJap,
 		Count,
 	};
 
+	enum class Mode
+	{
+		Unknown = -1,
+		Free, Battle,
+		Count,
+	};
 
 public:
-	Eve();
+	Eve(ExecuteValues* values);
 	~Eve();
 
 	void Update() override;
@@ -27,20 +32,25 @@ public:
 private:
 	void OpenModel();
 	void InputHandle();
+	void InputTransition();
 	void InputMove();
+	void InputAction();
 	void ModelRotation();
 	void Play();
-	void Prepare(PlayerAnimation animation);
+	bool Prepare(PlayerAnimation animation);
 	void DecideAction(D3DXVECTOR3& velocity);
 	bool Movable();
+	float CorrectionDegree(float& degree);
+	float MoveSpeed();
 private:
-	float moveSpeed;
 	float currentWaistAngle;
 	float rootRotationAngle;
 	float rootElapsedAngle;
 
 	bool bRun;
+	Mode mode;
 
+	ExecuteValues* values;
 	struct GamePlayerInput* input;
 	struct GamePlayerSpec* spec;
 	

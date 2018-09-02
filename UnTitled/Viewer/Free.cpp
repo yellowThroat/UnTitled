@@ -58,6 +58,8 @@ void Free::Update()
 
 			rotation.x += move.y * rotationSpeed * Time::Delta();
 			rotation.y += move.x * rotationSpeed * Time::Delta();
+
+			rotation.x = Math::Clamp(rotation.x, -(float)D3DX_PI / 2.0f, (float)D3DX_PI / 2.0f);
 		}
 
 		SetRotation(rotation.x, rotation.y);

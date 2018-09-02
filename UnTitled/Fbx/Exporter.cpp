@@ -200,7 +200,7 @@ void Fbx::Exporter::ReadMeshData(FbxNode * node, int parentBone)
 		int vertexInPolygon = mesh->GetPolygonSize(p);
 		assert(vertexInPolygon == 3);
 
-		for (int vi = 0; vi < vertexInPolygon; vi++)
+		for (int vi = 2; vi >= 0; vi--)
 		{
 			FbxVertex* vertex = new FbxVertex;
 

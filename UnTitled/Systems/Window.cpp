@@ -40,9 +40,9 @@ WPARAM Window::Run()
 			//if (ImGui::IsMouseHoveringAnyWindow() == false)
 			if(!ImGui::GetIO().WantCaptureMouse)
 			{
-				Mouse::Get()->Update();
 				Keyboard::Get()->Update();
 			}
+			Mouse::Get()->Update();
 
 			program->Update();
 			ImGui::Update();

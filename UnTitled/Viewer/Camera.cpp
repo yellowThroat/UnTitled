@@ -3,6 +3,8 @@
 #include "Viewport.h"
 #include "Perspective.h"
 
+vector<Camera*> Camera::cameras;
+
 Camera::Camera()
 	: position(0, 0, 0), rotation(0, 0)
 	, forward(0, 0, 1), right(1, 0, 0), up(0, 1, 0)
@@ -39,6 +41,18 @@ void Camera::UpdateRotation()
 void Camera::UpdateView()
 {
 	D3DXMatrixLookAtLH(&matView, &position, &(position + forward), &up);
+}
+
+void Camera::CopyInfo(Camera * camera)
+{
+	D3DXVECTOR3 position;
+	D3DXVECTOR2 rotate;
+
+	camera->GetPosition(&position);
+	camera->GetRotation(&rotate);
+
+	SetPosition(position.x, position.y, position.z);
+	SetRotation(rotate.x, rotate.y);
 }
 
 D3DXVECTOR3 Camera::GetDirection(Viewport * vp, Perspective* perspective)
@@ -79,4 +93,16 @@ D3DXVECTOR3 Camera::GetDirection(Viewport * vp, Perspective* perspective)
 	}
 
 	return dir;
+}
+
+D3DXVECTOR3 Camera::GetDirection(D3DXVECTOR3 & direction)
+{
+	D3DXVECTOR3 d = D3DXVECTOR3(0, 0, 1);
+	D3DXMATRIX R;
+	D3DXMatrixRotationYawPitchRoll(&R, rotation.y, rotation.x, 0);
+	D3DXVec3TransformNormal(&d, &d, &R);
+
+	direction = d;
+
+	return direction;
 }

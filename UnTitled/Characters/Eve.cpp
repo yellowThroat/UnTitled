@@ -6,11 +6,13 @@
 #include "../Objects/AnimationBlender.h"
 #include "../Objects/AnimationClip.h"
 
-Eve::Eve()
-	: moveSpeed(5.0f), bRun(false)
+Eve::Eve(ExecuteValues* values)
+	: bRun(false)
 	, currentWaistAngle(0.0f), rootRotationAngle(0.0f), rootElapsedAngle(0.0f)
 	, currentAnimation(PlayerAnimation::UnKnown)
 	, prepareAnimation(PlayerAnimation::UnKnown)
+	, mode(Mode::Free)
+	, values(values)
 {
 	OpenModel();
 
@@ -28,14 +30,15 @@ void Eve::Update()
 {
 	InputHandle();
 
-	CalcPosition();
 	ModelRotation();
 
 	D3DXMATRIX S, R, T;
 	D3DXMatrixTranslation(&T, position.x, position.y, position.z);
-	D3DXMatrixRotationYawPitchRoll(&R, rotate.y, rotate.x, rotate.z);
+	D3DXMatrixRotationYawPitchRoll(&R, rotate.y + Math::ToRadian(currentWaistAngle), rotate.x, rotate.z);
 
-	world = R * T;
+	World(R * T);
+
+	CalcPosition();
 
 	Character::Update();
 }
@@ -48,7 +51,7 @@ void Eve::OpenModel()
 	model->LoadAnimationSet(Models + L"Animation/Player AnimSet.json");
 
 	D3DXMATRIX S;
-	D3DXMatrixScaling(&S, 0.05f, 0.05f, 0.05f);
+	D3DXMatrixScaling(&S, -0.05f, 0.05f, 0.05f);
 	
 	anim = new ModelAnimPlayer(model);
 	anim->RootAxis(S);
@@ -57,9 +60,25 @@ void Eve::OpenModel()
 
 void Eve::InputHandle()
 {
+	InputTransition();
 	InputMove();
+	InputAction();
 	if (prepareAnimation != PlayerAnimation::UnKnown)
 		Play();
+}
+
+void Eve::InputTransition()
+{
+	if (input->Stroke(GamePlayerKey::Run)) bRun = true;
+	if (input->Released(GamePlayerKey::Run)) bRun = false;
+	if (input->Stroke(GamePlayerKey::Transition))
+	{
+		switch (mode)
+		{
+		case Eve::Mode::Free:	mode = Mode::Battle; break;
+		case Eve::Mode::Battle: mode = Mode::Free; break;
+		}
+	}
 }
 
 void Eve::InputMove()
@@ -68,14 +87,9 @@ void Eve::InputMove()
 
 	velocity = D3DXVECTOR3(0, 0, 0);
 	D3DXVECTOR3 moveDirection = D3DXVECTOR3(0, 0, 0);
-	if (input->Stroke(GamePlayerKey::Run)) bRun = true;
-	if (input->Released(GamePlayerKey::Run)) bRun = false;
 
 	if (input->IsPressMovement())
 	{
-		float moveSpeed = spec->WalkSpeed;
-		if (bRun) moveSpeed = spec->RunSpeed;
-
 		if (input->Pressed(GamePlayerKey::MoveForward))
 		{
 			if (input->Pressed(GamePlayerKey::MoveLeft))
@@ -91,9 +105,6 @@ void Eve::InputMove()
 			else if (input->Pressed(GamePlayerKey::MoveRight))
 				moveDirection = D3DXVECTOR3(1, 0, -1);
 			else moveDirection = D3DXVECTOR3(0, 0, -1);
-
-			if (bRun) moveSpeed = spec->BackRunSpeed;
-			else moveSpeed = spec->BackWalkSpeed;
 		}
 		else
 		{
@@ -103,27 +114,37 @@ void Eve::InputMove()
 				moveDirection = D3DXVECTOR3(1, 0, 0);
 		}
 		D3DXVec3Normalize(&moveDirection, &moveDirection);
-		velocity = moveDirection * moveSpeed;
+		velocity = D3DXVECTOR3(0, 0, 1) * MoveSpeed();
 	}
 
 	DecideAction(moveDirection);
 
-	if (input->Pressed(GamePlayerKey::Jump) && moveDirection.z >= 0)
+}
+
+void Eve::InputAction()
+{
+	if (!Movable()) return;
+	if (input->Stroke(GamePlayerKey::Jump))
 		Prepare(PlayerAnimation::Jump);
+	if (input->Stroke(GamePlayerKey::Attack))
+	{
+		velocity = D3DXVECTOR3(0, 0, 0);
+		Prepare(PlayerAnimation::LeadJap);
+	}
 }
 
 void Eve::ModelRotation()
 {
+	if (!Movable()) return;
 	if (input->IsPressMovement())
 	{
-		if (rootRotationAngle > currentWaistAngle)
-			rootElapsedAngle = Math::Clamp(3.0f, 0.0f, rootRotationAngle - currentWaistAngle);
-		else if (rootRotationAngle < currentWaistAngle)
-			rootElapsedAngle = Math::Clamp(-3.0f, rootRotationAngle - currentWaistAngle, 0.0f);
+		if (rootRotationAngle > 0.0f)
+			rootElapsedAngle = Math::Clamp(spec->RotateSpeed, 0.0f, rootRotationAngle);
+		else if (rootRotationAngle < 0.0f)
+			rootElapsedAngle = Math::Clamp(-spec->RotateSpeed, rootRotationAngle, 0.0f);
 		else rootElapsedAngle = 0.0f;
 
 		currentWaistAngle += rootElapsedAngle;
-		rotate.y = Math::ToRadian(currentWaistAngle);
 	}
 }
 
@@ -135,14 +156,13 @@ void Eve::Play()
 	{
 	case Eve::PlayerAnimation::Idle:
 	case Eve::PlayerAnimation::Walk:
-	case Eve::PlayerAnimation::BackWardWalk:
 	case Eve::PlayerAnimation::Run:
-	case Eve::PlayerAnimation::BackWardRun:
-	case Eve::PlayerAnimation::TurnLeft:
-	case Eve::PlayerAnimation::TurnRight:
-		blendTime = 0.3f;
+	case Eve::PlayerAnimation::Boxing_Idle:
+	case Eve::PlayerAnimation::Boxing_Step:
+		blendTime = 0.2f;
 		break;
 	case Eve::PlayerAnimation::Jump:
+	case Eve::PlayerAnimation::LeadJap:
 		blendTime = 0.1f;
 		bLoop = false;
 		break;
@@ -154,10 +174,15 @@ void Eve::Play()
 	prepareAnimation = PlayerAnimation::UnKnown;
 }
 
-void Eve::Prepare(PlayerAnimation animation)
+bool Eve::Prepare(PlayerAnimation animation)
 {
 	if (currentAnimation != animation)
+	{
 		prepareAnimation = animation;
+		return true;
+	}
+
+	return false;
 }
 
 void Eve::DecideAction(D3DXVECTOR3 & direction)
@@ -166,47 +191,82 @@ void Eve::DecideAction(D3DXVECTOR3 & direction)
 
 	rootRotationAngle = 0.0f;
 
+	D3DXVECTOR3 d, forward;
+	forward = Direction();
+	values->MainCamera->GetDirection(d); d.y = 0;
+
+	D3DXVec3Normalize(&forward, &forward);
+	D3DXVec3Normalize(&d, &d);
+
+	float angle = D3DXVec3Dot(&forward, &d);
+	angle = Math::Clamp(angle, -1.0f, 1.0f);
+	angle = acosf(angle);
+	D3DXVECTOR3 cross;
+	D3DXVec3Cross(&cross, &forward, &d);
+	if (cross.y < 0) angle = -angle;
+	angle = Math::ToDegree(angle);
+
 	if (direction.z > 0.0f)
 	{
 		if (direction.x < 0.0f)
-			rootRotationAngle = -45.0f;
+			angle -= 45.0f;
 		else if (direction.x > 0.0f)
-			rootRotationAngle = 45.0f;
-		
-		if (bRun)
-			Prepare(PlayerAnimation::Run);
-		 else Prepare(PlayerAnimation::Walk);
+			angle += 45.0f;
+
+		rootRotationAngle = CorrectionDegree(angle);
+
 	}
 	else if (direction.z < 0.0f)
 	{
+		angle += 180.0f;
 		if (direction.x < 0.0f)
-			rootRotationAngle = 30.0f;
+			angle += 45.0f;
 		else if (direction.x > 0.0f)
-			rootRotationAngle = -30.0f;	
-		
-		if (bRun)
-			Prepare(PlayerAnimation::BackWardRun);
-		else Prepare(PlayerAnimation::BackWardWalk);
+			angle -= 45.0f;
+
+		rootRotationAngle = CorrectionDegree(angle);
 	}
 	else
 	{
-		if (direction.x != 0.0f)
+		if (direction.x < 0.0f)
+			angle -= 90.0f;
+		else if(direction.x > 0.0f)
+			angle += 90.0f;
+		rootRotationAngle = CorrectionDegree(angle);
+
+		if (direction.x == 0.0f)
 		{
-			if (direction.x < 0.0f)
-				rootRotationAngle = -90.0f;
-			else rootRotationAngle = 90.0f;
-			
+			bMove = false;
+			rootRotationAngle = 0.0f;
+		}
+	}
+
+	if (bMove)
+	{
+		switch (mode)
+		{
+		case Eve::Mode::Free:
 			if (bRun)
 				Prepare(PlayerAnimation::Run);
 			else Prepare(PlayerAnimation::Walk);
-
+			break;
+		case Eve::Mode::Battle:
+			Prepare(PlayerAnimation::Boxing_Step);
+			break;
 		}
-		else bMove = false;
 	}
-
-	if (!bMove)
-		Prepare(PlayerAnimation::Idle);
-
+	else
+	{
+		switch (mode)
+		{
+		case Eve::Mode::Free:
+			Prepare(PlayerAnimation::Idle);
+			break;
+		case Eve::Mode::Battle:
+			Prepare(PlayerAnimation::Boxing_Idle);
+			break;
+		}
+	}
 }
 
 bool Eve::Movable()
@@ -218,14 +278,13 @@ bool Eve::Movable()
 		break;
 	case Eve::PlayerAnimation::Idle:
 	case Eve::PlayerAnimation::Walk:
-	case Eve::PlayerAnimation::BackWardWalk:
 	case Eve::PlayerAnimation::Run:
-	case Eve::PlayerAnimation::BackWardRun:
-	case Eve::PlayerAnimation::TurnLeft:
-	case Eve::PlayerAnimation::TurnRight:
+	case Eve::PlayerAnimation::Boxing_Idle:
+	case Eve::PlayerAnimation::Boxing_Step:
 		b = true;
 		break;
 	case Eve::PlayerAnimation::Jump:
+	case Eve::PlayerAnimation::LeadJap:
 		b = false;
 		break;
 	case Eve::PlayerAnimation::Count:
@@ -236,4 +295,32 @@ bool Eve::Movable()
 		b |= anim->CurrentClip()->IsDone();
 	
 	return b;
+}
+
+float Eve::CorrectionDegree(float & degree)
+{
+	if (degree > 180.0f)
+		degree -= 360.0f;
+
+	if (degree < -180.0f)
+		degree += 360.0f;
+
+	return degree;
+}
+
+float Eve::MoveSpeed()
+{
+	float speed = 0.0f;
+	switch (mode)
+	{
+	case Eve::Mode::Free:
+		if (!bRun) speed = spec->WalkSpeed;
+		else speed = spec->RunSpeed;
+		break;
+	case Eve::Mode::Battle:
+		speed = spec->BattleMoveSpeed;
+		break;
+	}
+
+	return speed;
 }
