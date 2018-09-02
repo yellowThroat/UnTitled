@@ -1,5 +1,49 @@
 #pragma once
 
+struct Binder
+{
+	Binder()
+		: currentKeyframe(0), frameTime(0.0f), keyframeFactor(0.0)
+		, nextKeyframe(0), elapsedTime(0.0f), bLoop(true)
+	{
+	}
+
+	Binder& operator=(class ModelAnimClip* clip)
+	{
+		this->clip = clip;
+
+		return *this;
+	}
+
+	void Initialize()
+	{
+		clip = NULL;
+		currentKeyframe = 0;
+		frameTime = 0.0f;
+		keyframeFactor = 0.0f;
+		nextKeyframe = 0;
+		elapsedTime = 0.0f;
+		bLoop = true;
+	}
+
+	void UpdateTime();
+
+	D3DXMATRIX GetCurrentTransform(wstring name,
+		D3DXVECTOR3& vS, D3DXQUATERNION& vQ, D3DXVECTOR3& vT);
+	void CopyBinder(Binder* binder);
+	bool IsDone();
+
+	class ModelAnimClip* clip;
+
+	int currentKeyframe;
+	int nextKeyframe;
+	float elapsedTime; // 프레임 경과 시간
+	float frameTime; //현재 프레임부터 경과시간
+	float keyframeFactor; //현재 프레임과 다음 프레임 사이의 보간 값
+	bool bLoop;
+	UINT index;
+};
+
 class ModelAnimPlayer
 {
 public:
@@ -15,32 +59,37 @@ public:
 	void Render();
 public:
 	void World(D3DXMATRIX* world);
-	void RootAxis(D3DXMATRIX* root);
+	void RootAxis(D3DXMATRIX root);
 	D3DXMATRIX GetTransform(UINT index);
+	Binder* CurrentClip() { return currentClip; }
+	Binder* NextClip() { return nextClip; }
+	void Play(UINT index, float blendTime, bool bLoop);
 
 private:
 	void UpdateTime();
 	void UpdateBone();
+	void Stop();
+	void Play();
+	void Pause();
 
 private:
 	Shader* shader;
 
 	Model* model;
-	class ModelAnimClip* currentClip;
+	Binder* currentClip;
+	Binder* nextClip;
 
-	
 	Mode mode;
 
-	bool bUseSlerp;
+	string clipList;
 
-	int currentKeyframe;
-	float frameTime; //현재 프레임부터 경과시간
-	float keyframeFactor; //현재 프레임과 다음 프레임 사이의 보간 값
-	int nextKeyframe;
+	UINT BindCount;
+
+	float blendTime;
 
 	vector<D3DXMATRIX> boneAnimation;
 	vector<D3DXMATRIX> skinTransform;
 
 	D3DXMATRIX* world;
-	D3DXMATRIX* rootAxis;
+	D3DXMATRIX rootAxis;
 };

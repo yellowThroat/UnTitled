@@ -44,6 +44,7 @@ public:
 	void Clone(void** clone);
 
 	wstring Name() { return name; }
+	wstring File() { return file; }
 
 	int TotalFrame() { return totalFrame; }
 	float FrameRate() { return frameRate; }
@@ -58,6 +59,7 @@ private:
 	~ModelAnimClip();
 
 	wstring name;
+	wstring file;
 
 	int totalFrame;
 	float frameRate;

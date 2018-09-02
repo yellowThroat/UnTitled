@@ -112,6 +112,37 @@ void Model::Render()
 	}
 }
 
+void Model::SaveAnimationSet()
+{
+	Json::Value* root = new Json::Value();
+	Json::Value anim;
+	for (UINT i = 0; i < clips.size(); i++)
+		Json::SetValue(anim, "anim", String::ToString(clips[i]->File()));
+
+	(*root)["Anim Set"] = anim;
+	Json::WriteData(Models + L"Animation/Player AnimSet.json", root);
+
+	SAFE_DELETE(root);
+}
+
+void Model::LoadAnimationSet(wstring file)
+{
+	Json::Value* root = new Json::Value();
+
+	Json::ReadData(file, root);
+	Json::Value anim = (*root)["Anim Set"];
+
+	string ani;
+	for (size_t i = 0; i < anim["anim"].size(); i++)
+	{
+		ani = anim["anim"][i].asString();
+		ReadAnimation(String::ToWString(ani));
+	}
+
+
+	SAFE_DELETE(root);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Models::Create()

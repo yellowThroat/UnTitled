@@ -16,7 +16,8 @@ void ModelAnimClip::Clone(void ** clone)
 {
 	ModelAnimClip* clip = new ModelAnimClip();
 	clip->name = name;
-
+	clip->file = file;
+	
 	clip->totalFrame = totalFrame;
 	clip->frameRate = frameRate;
 	clip->defaltFrameRate = defaltFrameRate;

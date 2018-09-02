@@ -75,6 +75,7 @@ namespace Fbx
 	struct FbxAnimation
 	{
 		string Name;
+		string file;
 
 		int TotalFrame;
 		float FrameRate;

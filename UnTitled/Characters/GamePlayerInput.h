@@ -6,7 +6,7 @@ enum class GamePlayerKey
 	MoveForward = 0, MoveBackward, MoveLeft, MoveRight,
 	TurnLeft, TurnRight,
 	WeaponFire, WeaponReload, WeaponChange,
-	Boost, 
+	Run, Jump,
 	Count,
 };
 
@@ -29,7 +29,8 @@ public:
 		keyboard[(UINT)GamePlayerKey::WeaponFire]	= 'G';
 		keyboard[(UINT)GamePlayerKey::WeaponReload] = 'R';
 		keyboard[(UINT)GamePlayerKey::WeaponChange] = 'V';
-		keyboard[(UINT)GamePlayerKey::Boost]	= VK_SPACE;
+		keyboard[(UINT)GamePlayerKey::Run] = VK_LSHIFT;
+		keyboard[(UINT)GamePlayerKey::Jump]	= VK_SPACE;
 	}
 	void SetGameKey(GamePlayerKey key, UINT setKey)
 	{

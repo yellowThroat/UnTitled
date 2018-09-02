@@ -275,6 +275,7 @@ void Models::ReadAnimationData(wstring file)
 	{
 		ModelAnimClip* clip = new ModelAnimClip();
 		clip->name = String::ToWString(r->String());
+		clip->file = String::ToWString(r->String());
 
 		clip->totalFrame = r->Int();
 		clip->frameRate = r->Float();

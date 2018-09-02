@@ -15,7 +15,6 @@ DrawModel::DrawModel(ExecuteValues* values)
 	, weather(0)
 {
 	settings = new GameSettings(values);
-	sword = new Sword();
 	eve = new Eve();
 	//WeatherCube Cube = WeatherCube
 	//(
@@ -29,6 +28,7 @@ DrawModel::DrawModel(ExecuteValues* values)
 
 DrawModel::~DrawModel()
 {	
+	SAFE_DELETE(eve);
 	SAFE_DELETE(rain);
 	SAFE_DELETE(snow);
 	SAFE_DELETE(settings);	
@@ -39,9 +39,6 @@ void DrawModel::Update()
 	if (settings)
 		settings->Update();	
 	eve->Update();
-	D3DXMATRIX temp = eve->GetBoneTransform(L"RightHand");
-	sword->World(temp);
-	sword->Update();
 }
 
 void DrawModel::PreRender()
@@ -60,7 +57,6 @@ void DrawModel::Render()
 	if (snow && weather == 2)
 		snow->Render();
 	eve->Render();
-	sword->Render();
 }
 
 void DrawModel::PostRender()

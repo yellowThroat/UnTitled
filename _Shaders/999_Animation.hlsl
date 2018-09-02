@@ -24,7 +24,7 @@ PixelInput VS(VertexTextureNormalTangentBlend input)
     output.position = mul(world , _view);
     output.position = mul(output.position, _projection);
 
-    output.normal = mul(input.normal, (float3x3) transform);
+    output.normal = normalize(mul(input.normal, (float3x3) transform));
     output.view = normalize(GetViewPosition() - world.xyz);
     output.uv = input.uv;
     output.tangent = normalize(mul(input.tangent, (float3x3) transform));

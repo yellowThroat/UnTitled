@@ -486,7 +486,8 @@ void Fbx::Exporter::WriteAnimation(wstring saveFolder, wstring saveName)
 	w->UInt(animDatas.size());
 	for (FbxAnimation* animation : animDatas)
 	{
-		w->String(animation->Name);
+		w->String(String::ToString(saveName));
+		w->String(String::ToString(saveFolder + saveName + L".anim"));
 
 		w->Int(animation->TotalFrame);
 		w->Float(animation->FrameRate);

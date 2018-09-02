@@ -57,13 +57,17 @@ public:
 	class ModelBone* Root() { return root; }
 
 	class ModelAnimClip* Clip(UINT index) { return clips[index]; }
+	UINT ClipCount() { return clips.size(); }
 
 	void CopyAbsoluteBoneTo(vector<D3DXMATRIX>& transforms);
 	void CopyAbsoluteBoneTo(D3DXMATRIX matrix, vector<D3DXMATRIX>& transforms);
 
 	void Render();
 
-private:
+	void SaveAnimationSet();
+	void LoadAnimationSet(wstring file);
+
+	private:
 	void BindMeshData();
 
 private:
