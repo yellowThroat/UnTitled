@@ -69,6 +69,7 @@ public:
 	}
 
 	void CopyInfo(Camera* camera);
+	virtual void SetTarget(D3DXVECTOR3 * target) {}
 
 	D3DXVECTOR3 GetDirection(class Viewport* vp, class Perspective* perspective);
 	D3DXVECTOR3 GetDirection(D3DXVECTOR3 & direction);

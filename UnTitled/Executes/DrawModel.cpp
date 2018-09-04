@@ -52,17 +52,17 @@ void DrawModel::PostRender()
 
 void DrawModel::Test()
 {
-	//if (Keyboard::Get()->Down(VK_RETURN))
-	//{
-	//	values->MainCamera = Camera::cameras[1];
-	//	values->MainCamera->CopyInfo(Camera::cameras[0]);
-	//}
-	//D3DXVECTOR3 position = eve->Position();
-	//D3DXVECTOR3 direction = D3DXVECTOR3(0, 0, 1);
-	//values->MainCamera->GetDirection(direction);
+	if (Keyboard::Get()->Down(VK_RETURN))
+	{
+		values->MainCamera = Camera::cameras[1];
+		values->MainCamera->CopyInfo(Camera::cameras[0]);
+		values->MainCamera->SetTarget(eve->Target());
+	}
 
-	//position.y = 5.0f;
-	//position -= 10 * direction;
+	if (Keyboard::Get()->Down('P'))
+	{
+		values->MainCamera = Camera::cameras[0];
+		values->MainCamera->CopyInfo(Camera::cameras[1]);
+	}
 
-	//values->MainCamera->SetPosition(position.x, position.y, position.z);
 }

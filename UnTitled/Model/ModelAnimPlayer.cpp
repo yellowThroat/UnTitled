@@ -62,6 +62,8 @@ void ModelAnimPlayer::Render()
 	if (ImGui::Button("Stop"))	Stop(); ImGui::SameLine();
 	if (ImGui::Button("Pause"))	Pause();
 
+	ImGui::SliderInt("keyframe", &currentClip->currentKeyframe, 0, currentClip->clip->TotalFrame() - 1);
+
 	ImGui::End();
 
 	model->Buffer()->SetVSBuffer(2);
@@ -85,7 +87,7 @@ D3DXMATRIX ModelAnimPlayer::GetTransform(UINT index)
 	return skinTransform[index];
 }
 
-void ModelAnimPlayer::Play(UINT index, float blendTime, bool bLoop)
+void ModelAnimPlayer::Play(UINT index, float blendTime, bool bLoop, int cut)
 {
 	this->blendTime = blendTime;
 	if (blendTime == 0.0f)
@@ -94,6 +96,7 @@ void ModelAnimPlayer::Play(UINT index, float blendTime, bool bLoop)
 		nextClip->Initialize();
 		*currentClip = model->Clip(index);
 		currentClip->bLoop = bLoop;
+		currentClip->cut += cut;
 		BindCount = 1;
 	}
 	else
@@ -110,6 +113,7 @@ void ModelAnimPlayer::Play(UINT index, float blendTime, bool bLoop)
 			nextClip->Initialize();
 			*nextClip = model->Clip(index);
 			nextClip->bLoop = bLoop;
+			nextClip->cut += cut;
 			BindCount++;
 		}
 		else
@@ -117,6 +121,7 @@ void ModelAnimPlayer::Play(UINT index, float blendTime, bool bLoop)
 			currentClip->Initialize();
 			*currentClip = model->Clip(index);
 			currentClip->bLoop = bLoop;
+			currentClip->cut += cut;
 			BindCount++;
 		}
 	}
@@ -255,11 +260,20 @@ void Binder::CopyBinder(Binder * binder)
 	nextKeyframe = binder->nextKeyframe;
 	elapsedTime = binder->elapsedTime;
 	bLoop = binder->bLoop;
+	cut = binder->cut;
 }
 
 bool Binder::IsDone()
 {
 	if (!bLoop && currentKeyframe >= clip->TotalFrame() - 1)
+		return true;
+
+	return false;
+}
+
+bool Binder::Combo()
+{
+	if (!bLoop && currentKeyframe >= clip->TotalFrame() - cut)
 		return true;
 
 	return false;

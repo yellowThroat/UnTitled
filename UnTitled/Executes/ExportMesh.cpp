@@ -6,10 +6,10 @@ ExportMesh::ExportMesh(ExecuteValues* values)
 	: Execute(values)
 {
 	Fbx::Exporter* exporter = NULL;
-	exporter = new Fbx::Exporter(Assets + L"Characters/eve.fbx");
-	exporter->ExportMesh(Models + L"Characters/Player/", L"Eve");
-	//exporter = new Fbx::Exporter(Assets + L"ToExport/Lead Jab.fbx");
-	//exporter->ExportAnimation(Models + L"Animation/", L"Lead Jap");
+	//exporter = new Fbx::Exporter(Assets + L"Characters/eve.fbx");
+	//exporter->ExportMesh(Models + L"Characters/Player/", L"Eve");
+	//exporter = new Fbx::Exporter(Assets + L"Right Hook.fbx");
+	//exporter->ExportAnimation(Models + L"Animation/", L"Right Hook");
 	//exporter->ExportMaterial(Models + L"Characters/Player/", L"Eve");
 
 	//exporter->ExportAnimation(Models + L"Animation/", L"Lead Jap");

@@ -11,6 +11,7 @@ Eve::Eve(ExecuteValues* values)
 	, currentWaistAngle(0.0f), rootRotationAngle(0.0f), rootElapsedAngle(0.0f)
 	, currentAnimation(PlayerAnimation::UnKnown)
 	, prepareAnimation(PlayerAnimation::UnKnown)
+	, priorityAnimation(PlayerAnimation::UnKnown)
 	, mode(Mode::Free)
 	, values(values)
 {
@@ -63,8 +64,14 @@ void Eve::InputHandle()
 	InputTransition();
 	InputMove();
 	InputAction();
+
+	if (priorityAnimation != PlayerAnimation::UnKnown &&
+		Movable(MoveEnd::Combo))
+		Combo();
+
 	if (prepareAnimation != PlayerAnimation::UnKnown)
 		Play();
+
 }
 
 void Eve::InputTransition()
@@ -83,7 +90,7 @@ void Eve::InputTransition()
 
 void Eve::InputMove()
 {	
-	if (!Movable()) return;
+	if (!Movable(MoveEnd::Normal)) return;
 
 	velocity = D3DXVECTOR3(0, 0, 0);
 	D3DXVECTOR3 moveDirection = D3DXVECTOR3(0, 0, 0);
@@ -123,14 +130,31 @@ void Eve::InputMove()
 
 void Eve::InputAction()
 {
-	if (!Movable()) return;
-	if (input->Stroke(GamePlayerKey::Jump))
-		Prepare(PlayerAnimation::Jump);
+	bool bStop = false;
+
 	if (input->Stroke(GamePlayerKey::Attack))
 	{
-		velocity = D3DXVECTOR3(0, 0, 0);
-		Prepare(PlayerAnimation::LeadJap);
+		if (currentAnimation == PlayerAnimation::LeadJap)
+		{
+			Priority(PlayerAnimation::RightHook);
+		}
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (!Movable(MoveEnd::Normal)) return;
+
+	if (input->Stroke(GamePlayerKey::Jump))
+		Prepare(PlayerAnimation::Jump);
+
+	if (input->Stroke(GamePlayerKey::Attack))
+	{
+		if (Prepare(PlayerAnimation::LeadJap))
+			bStop = true;
+	}
+
+	if (bStop)
+		velocity = D3DXVECTOR3(0, 0, 0);
 }
 
 void Eve::ModelRotation()
@@ -152,6 +176,7 @@ void Eve::Play()
 {
 	float blendTime = 0.0f;
 	bool bLoop = true;
+	int cut = 0;
 	switch (prepareAnimation)
 	{
 	case Eve::PlayerAnimation::Idle:
@@ -162,15 +187,40 @@ void Eve::Play()
 		blendTime = 0.2f;
 		break;
 	case Eve::PlayerAnimation::Jump:
-	case Eve::PlayerAnimation::LeadJap:
 		blendTime = 0.1f;
 		bLoop = false;
 		break;
+	case Eve::PlayerAnimation::LeadJap:
+		blendTime = 0.1f;
+		bLoop = false;
+		cut = 15;
+		break;
+	}
+	
+	anim->Play((UINT)prepareAnimation, blendTime, bLoop, cut);
+	currentAnimation = prepareAnimation;
+	prepareAnimation = PlayerAnimation::UnKnown;
+}
+
+void Eve::Combo()
+{
+	float blendTime = 0.0f;
+	bool bLoop = false;
+	int cut = 0;
+
+	switch (priorityAnimation)
+	{
+	case PlayerAnimation::RightHook:
+		blendTime = 0.1f;
+		bLoop = false;
+		int cut = 10;
+	break;
 	}
 
-	anim->Play((UINT)prepareAnimation, blendTime, bLoop);
-	
-	currentAnimation = prepareAnimation;
+	anim->Play((UINT)priorityAnimation, blendTime, bLoop, cut);
+
+	currentAnimation = priorityAnimation;
+	priorityAnimation = PlayerAnimation::UnKnown;
 	prepareAnimation = PlayerAnimation::UnKnown;
 }
 
@@ -179,6 +229,17 @@ bool Eve::Prepare(PlayerAnimation animation)
 	if (currentAnimation != animation)
 	{
 		prepareAnimation = animation;
+		return true;
+	}
+
+	return false;
+}
+
+bool Eve::Priority(PlayerAnimation animation)
+{
+	if (currentAnimation != animation && priorityAnimation == PlayerAnimation::UnKnown)
+	{
+		priorityAnimation = animation;
 		return true;
 	}
 
@@ -269,7 +330,7 @@ void Eve::DecideAction(D3DXVECTOR3 & direction)
 	}
 }
 
-bool Eve::Movable()
+bool Eve::Movable(MoveEnd type)
 {
 	bool b = true;
 	switch (currentAnimation)
@@ -285,14 +346,28 @@ bool Eve::Movable()
 		break;
 	case Eve::PlayerAnimation::Jump:
 	case Eve::PlayerAnimation::LeadJap:
+	case Eve::PlayerAnimation::RightHook:
 		b = false;
 		break;
 	case Eve::PlayerAnimation::Count:
 		break;
 	}
 
-	if (!b && !anim->NextClip()->clip)
-		b |= anim->CurrentClip()->IsDone();
+	if (!b)
+	{
+		switch (type)
+		{
+		case Eve::MoveEnd::Normal:
+		if (!anim->NextClip()->clip)
+			b |= anim->CurrentClip()->IsDone();
+			break;
+
+		case Eve::MoveEnd::Combo:
+			if (!anim->NextClip()->clip)
+				b |= anim->CurrentClip()->Combo();
+			break;
+		}
+	}
 	
 	return b;
 }
