@@ -20,6 +20,5 @@ namespace Shapes
 
 		float radius;
 		Segment* segment;
-		D3DXMATRIX world;
 	};
 }

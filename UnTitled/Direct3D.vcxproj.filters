@@ -264,6 +264,12 @@
     <ClInclude Include="Bounding\Segment.h">
       <Filter>Bounding</Filter>
     </ClInclude>
+    <ClInclude Include="Weapons\Fist.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\Zombie.h">
+      <Filter>Characters\Monsters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Executes">
@@ -331,6 +337,9 @@
     </Filter>
     <Filter Include="Weapons\Sword">
       <UniqueIdentifier>{b6876b61-d69d-4618-81ee-4030fa3fa57a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Characters\Monsters">
+      <UniqueIdentifier>{b5e78856-b8ee-4f90-b04d-a572294a0041}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -554,6 +563,12 @@
     </ClCompile>
     <ClCompile Include="Bounding\Segment.cpp">
       <Filter>Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\Fist.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Characters\Zombie.cpp">
+      <Filter>Characters\Monsters</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

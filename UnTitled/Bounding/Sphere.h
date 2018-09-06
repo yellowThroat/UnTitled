@@ -13,8 +13,9 @@ namespace Shapes
 		virtual void Render() override;
 		virtual void MakeShape() override;
 
-		float GetRadius() { return _radius; }
+		float GetRadius() override;
 		void SetRadius(float radius);
+
 	private:
 		float		_radius;
 	};

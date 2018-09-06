@@ -3,9 +3,8 @@
 
 D3DXMATRIX Fbx::Utility::Negative(bool bXna)
 {
-	D3DXMATRIX scaleX, R;
+	D3DXMATRIX scaleX;
 	D3DXMatrixScaling(&scaleX, -1, 1, 1);
-	D3DXMatrixRotationYawPitchRoll(&R, 0, Math::ToRadian(90), 0);
 	if (bXna == true)
 	{
 		D3DXMATRIX rotationX;
@@ -21,7 +20,7 @@ D3DXMATRIX Fbx::Utility::Negative(bool bXna)
 		D3DXMATRIX rotation;
 		D3DXMatrixRotationY(&rotation, Math::ToRadian(180));
 	
-		return scaleX * rotation;
+		return scaleX;
 	}
 }
 
@@ -67,8 +66,8 @@ D3DXMATRIX Fbx::Utility::ToMatrix(FbxAMatrix & matrix, bool bXna)
 		(float)r3.mData[0], (float)r3.mData[1], (float)r3.mData[2], (float)r3.mData[3],
 		(float)r4.mData[0], (float)r4.mData[1], (float)r4.mData[2], (float)r4.mData[3]
 	);
-	return temp;
-	//return Negative(bXna) * temp * Negative(bXna);
+	//return temp;
+	return Negative(bXna) * temp * Negative(bXna);
 }
 
 D3DXVECTOR3 Fbx::Utility::CalcTangent(D3DXVECTOR3 p0, D3DXVECTOR3 p1, D3DXVECTOR3 p2, D3DXVECTOR2 uv0, D3DXVECTOR2 uv1, D3DXVECTOR2 uv2)

@@ -78,7 +78,7 @@ void Fbx::Exporter::ExportMaterial(wstring saveFolder, wstring saveName)
 		prop = fbxMaterial->FindProperty(FbxSurfaceMaterial::sEmissive);
 		material->EmissiveFile = Utility::GetTextureFile(prop);
 
-		prop = fbxMaterial->FindProperty(FbxSurfaceMaterial::sBump);
+		prop = fbxMaterial->FindProperty(FbxSurfaceMaterial::sNormalMap);
 		material->NormalFile = Utility::GetTextureFile(prop);
 
 		materials.push_back(material);
@@ -193,7 +193,8 @@ void Fbx::Exporter::ReadBoneData(FbxNode * node, int index, int parent)
 void Fbx::Exporter::ReadMeshData(FbxNode * node, int parentBone)
 {
 	FbxMesh* mesh = node->GetMesh();
-	
+	D3DXVECTOR3 temp;
+
 	vector<FbxVertex *> vertices;
 	for (int p = 0; p < mesh->GetPolygonCount(); p++)
 	{
@@ -208,12 +209,14 @@ void Fbx::Exporter::ReadMeshData(FbxNode * node, int parentBone)
 			vertex->ControlPoint = cpIndex;
 			
 			FbxVector4 position = mesh->GetControlPointAt(cpIndex);
-			vertex->Vertex.position = Utility::ToVector3(position);
-					
+			temp = Utility::ToVector3(position);
+			D3DXVec3TransformCoord(&vertex->Vertex.position, &temp, &Utility::Negative(bXna));
+
 			FbxVector4 normal;
 			mesh->GetPolygonVertexNormal(p, vi, normal);
 			normal.Normalize();
-			vertex->Vertex.normal = Utility::ToVector3(normal);
+			temp = Utility::ToVector3(normal);
+			D3DXVec3TransformNormal(&vertex->Vertex.normal, &temp, &Utility::Negative(bXna));
 	
 			vertex->MaterialName = Utility::GetMaterialName(mesh, p, cpIndex);
 	

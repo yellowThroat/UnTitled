@@ -6,6 +6,7 @@ Shapes::Shape::Shape()
 {
 	_shader = new Shader(Shaders + L"Shape.hlsl");
 	_worldBuffer = new WorldBuffer();
+	_color = new Buffer();
 	D3DXMatrixIdentity(&_world);
 	SetWorld(_world);
 }
@@ -14,7 +15,7 @@ Shapes::Shape::~Shape()
 {
 	SAFE_DELETE(_worldBuffer);
 	SAFE_DELETE(_shader);
-
+	SAFE_DELETE(_color);
 	Clear();
 }
 
@@ -24,7 +25,7 @@ void Shapes::Shape::Update()
 
 void Shapes::Shape::Render()
 {
-	UINT stride = sizeof(VertexColor);
+	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &_buffer, &stride, &offset);
@@ -33,6 +34,7 @@ void Shapes::Shape::Render()
 
 	_worldBuffer->SetVSBuffer(1);
 	_shader->Render();
+	_color->SetPSBuffer(5);
 
 	D3D::GetDC()->DrawIndexed(_indexCount, 0, 0);
 }
@@ -55,6 +57,11 @@ void Shapes::Shape::SetWorld(D3DXMATRIX mat)
 	_position.z = _world._43;
 }
 
+void Shapes::Shape::SetColor(D3DXCOLOR color)
+{
+	_color->Data.color = color;
+}
+
 void Shapes::Shape::MakeBuffer()
 {
 	// 버텍스 버퍼 생성
@@ -63,7 +70,7 @@ void Shapes::Shape::MakeBuffer()
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 
 		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.ByteWidth = sizeof(VertexColor) * _vertexCount;
+		desc.ByteWidth = sizeof(Vertex) * _vertexCount;
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		D3D11_SUBRESOURCE_DATA data;
@@ -97,6 +104,19 @@ void Shapes::Shape::ChangeData()
 {
 	D3D::GetDC()->UpdateSubresource
 	(
-		_buffer, 0, NULL, _data, sizeof(VertexColor) * _vertexCount, 0
+		_buffer, 0, NULL, _data, sizeof(Vertex) * _vertexCount, 0
 	);
+}
+
+Shapes::BoundingBox::BoundingBox()
+	: index(0)
+	, box(NULL)
+	, model(NULL)
+{
+}
+
+Shapes::BoundingBox::~BoundingBox()
+{
+	SAFE_DELETE(box);
+	SAFE_DELETE(model);
 }

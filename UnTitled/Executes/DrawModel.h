@@ -1,4 +1,8 @@
 #pragma once
+namespace Shapes
+{
+	class Shape;
+}
 
 class DrawModel : public Execute
 {
@@ -19,5 +23,4 @@ private:
 
 	class GameSettings* settings;
 	class Eve* eve;
-	class Sword* sword;
 };

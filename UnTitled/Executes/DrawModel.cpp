@@ -8,6 +8,7 @@
 #include "../Environment/Snow.h"
 #include "../Characters/Eve.h"
 #include "../Weapons/Sword.h"
+#include "../Bounding/Capsule.h"
 
 DrawModel::DrawModel(ExecuteValues* values)
 	: Execute(values)
@@ -42,6 +43,7 @@ void DrawModel::Render()
 	if (settings)
 		settings->Render();
 	eve->Render();
+
 }
 
 void DrawModel::PostRender()

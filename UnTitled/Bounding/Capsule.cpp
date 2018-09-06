@@ -18,8 +18,8 @@ Shapes::Capsule::~Capsule()
 
 void Shapes::Capsule::Update()
 {
-	D3DXVec3TransformCoord(&segment->p0, &segment->oP0, &world);
-	D3DXVec3TransformCoord(&segment->p1, &segment->oP1, &world);
+	D3DXVec3TransformCoord(&segment->p0, &segment->oP0, &_world);
+	D3DXVec3TransformCoord(&segment->p1, &segment->oP1, &_world);
 	
 	Shapes::Shape::Update();
 }
@@ -37,14 +37,13 @@ void Shapes::Capsule::MakeShape()
 	_vertexCount = _lineCount * 2;
 	_indexCount = _vertexCount;
 
-	_data = new VertexColor[_vertexCount];
+	_data = new Vertex[_vertexCount];
 
 	float step = 2.0f * (float)D3DX_PI / CapsuleResolution;
 
 	int index = 0;
 	
-	VertexColor V;
-	V.color = D3DXCOLOR(0, 1, 0, 1);
+	Vertex V;
 	for (float i = 0.0f; i < 2 * D3DX_PI; i+= step)
 	{
 		V.position = D3DXVECTOR3(cosf(i), sinf(i), 0.0f);

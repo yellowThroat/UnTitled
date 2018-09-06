@@ -1,17 +1,22 @@
 #pragma once
 
+namespace Shapes
+{
+	class Shape;
+	class BoundingBox;
+}
+
 class Weapon 
 {
 public:
-	Weapon();
+	Weapon(class Character* character = NULL);
 	~Weapon();
 
 	virtual void Update();
 	virtual void Render();
 
-	void World(D3DXMATRIX val) { world = val; }
-
 protected:
-	class Model* model;
-	D3DXMATRIX world;
+	vector<class Shapes::BoundingBox*> hitBoxes;
+	class Character* character;
+	D3DXMATRIX rootAxis;
 };

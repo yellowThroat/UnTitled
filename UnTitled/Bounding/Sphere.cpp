@@ -31,14 +31,13 @@ void Shapes::Sphere::MakeShape()
 	_vertexCount = _lineCount * 2;
 	_indexCount = _vertexCount;
 
-	_data = new VertexColor[_vertexCount];
+	_data = new Vertex[_vertexCount];
 
 	float step = 2.0f * (float)D3DX_PI / sphereResolution;
 
 	int index = 0;
 
-	VertexColor V;
-	V.color = D3DXCOLOR(0, 1, 0, 1);
+	Vertex V;
 	for (float i = 0.0f; i < 2 * D3DX_PI; i+= step)
 	{
 		V.position = D3DXVECTOR3(cosf(i), sinf(i), 0.0f);
@@ -77,6 +76,14 @@ void Shapes::Sphere::MakeShape()
 	{
 		_indexData[i] = i;
 	}
+}
+
+float Shapes::Sphere::GetRadius()
+{
+	D3DXVECTOR3 S, T;
+	D3DXQUATERNION Q;
+	D3DXMatrixDecompose(&S, &Q, &T, &_world);
+	return _radius * S.x;
 }
 
 void Shapes::Sphere::SetRadius(float radius)

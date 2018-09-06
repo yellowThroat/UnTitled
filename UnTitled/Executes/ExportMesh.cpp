@@ -6,10 +6,12 @@ ExportMesh::ExportMesh(ExecuteValues* values)
 	: Execute(values)
 {
 	Fbx::Exporter* exporter = NULL;
-	exporter = new Fbx::Exporter(Assets + L"ToExportModel/Zombie.fbx");
-	exporter->ExportMesh(Models + L"Characters/Monsters/", L"Zombie");
-	//exporter = new Fbx::Exporter(Assets + L"Right Hook.fbx");
-	//exporter->ExportAnimation(Models + L"Animation/", L"Right Hook");
+	//exporter = new Fbx::Exporter(Assets + L"eve.fbx");
+	//exporter->ExportMesh(Models + L"Characters/Player/", L"eve");
+	//exporter = new Fbx::Exporter(Assets + L"ToExportModel/Zombie.fbx");
+	//exporter->ExportMesh(Models + L"Characters/Monsters/", L"Zombie");
+	//exporter = new Fbx::Exporter(Assets + L"Idle.fbx");
+	//exporter->ExportAnimation(Models + L"Animation/", L"Idle");
 	//exporter->ExportMaterial(Models + L"Characters/Player/", L"Eve");
 
 	//exporter->ExportAnimation(Models + L"Animation/", L"Lead Jap");

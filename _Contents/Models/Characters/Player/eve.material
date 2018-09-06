@@ -6,7 +6,7 @@
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "SpacePirate_M" ],
-      "NormalFile" : [ "" ],
+      "NormalFile" : [ "SpacePirate_normal.png" ],
       "ShaderName" : [ "999_Mesh.hlsl" ],
       "Shininess" : 2.0,
       "Specular" : [ 0.5, 0.5, 0.5, 1.0 ],

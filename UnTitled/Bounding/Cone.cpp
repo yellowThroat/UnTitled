@@ -31,15 +31,14 @@ void Shapes::Cone::MakeShape()
 	_vertexCount = _lineCount * 2 + 1;
 	_indexCount = _vertexCount + 7;
 
-	_data = new VertexColor[_vertexCount];
+	_data = new Vertex[_vertexCount];
 
 	float h = tanf(_angle) * _height;
 	float step = 2.0f * (float)D3DX_PI / 32;
 
 	int index = 0;
 
-	VertexColor V;
-	V.color = D3DXCOLOR(1, 1, 0, 1);
+	Vertex V;
 	V.position = D3DXVECTOR3(0, 0, 0);
 	_data[index++] = V;
 	for (float i = 0.0f; i < 2 * D3DX_PI; i+= step)

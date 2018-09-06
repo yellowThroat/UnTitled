@@ -383,6 +383,7 @@ void Specular(inout float3 color, float3 normal, float3 eye)
     float3 reflection = reflect(_direction, normal);
     float intensity = saturate(dot(reflection, eye));
     float specular = pow(intensity, _shininess);
+
     color = color + _specular.rgb * specular;
 }
 
@@ -392,7 +393,7 @@ void Specular(inout float3 color, float3 specularMap, float3 normal, float3 eye)
     float intensity = saturate(dot(reflection, eye));
     float specular = pow(intensity, _shininess);
 
-    color = color + _specular.rgb * specular * specularMap;
+    color = saturate(color + specular * specularMap);
 }
 
 void Specular(inout float3 color, float3 mapIntensity, float3 direction, float3 normal, float3 eye)

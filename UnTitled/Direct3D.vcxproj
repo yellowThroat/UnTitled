@@ -30,6 +30,7 @@
     <ClInclude Include="Characters\Eve.h" />
     <ClInclude Include="Characters\GameData.h" />
     <ClInclude Include="Characters\GamePlayerInput.h" />
+    <ClInclude Include="Characters\Zombie.h" />
     <ClInclude Include="Commands\UndoRedoManager.h" />
     <ClInclude Include="Commands\Command.h" />
     <ClInclude Include="Environment\Rain.h" />
@@ -108,6 +109,7 @@
     <ClInclude Include="Viewer\Perspective.h" />
     <ClInclude Include="Viewer\TPP.h" />
     <ClInclude Include="Viewer\Viewport.h" />
+    <ClInclude Include="Weapons\Fist.h" />
     <ClInclude Include="Weapons\Sword.h" />
     <ClInclude Include="Weapons\Weapon.h" />
   </ItemGroup>
@@ -121,6 +123,7 @@
     <ClCompile Include="Bounding\Sphere.cpp" />
     <ClCompile Include="Characters\Character.cpp" />
     <ClCompile Include="Characters\Eve.cpp" />
+    <ClCompile Include="Characters\Zombie.cpp" />
     <ClCompile Include="Commands\UndoRedoManager.cpp" />
     <ClCompile Include="Commands\Command.cpp" />
     <ClCompile Include="Environment\Rain.cpp" />
@@ -187,6 +190,7 @@
     <ClCompile Include="Viewer\Perspective.cpp" />
     <ClCompile Include="Viewer\TPP.cpp" />
     <ClCompile Include="Viewer\Viewport.cpp" />
+    <ClCompile Include="Weapons\Fist.cpp" />
     <ClCompile Include="Weapons\Sword.cpp" />
     <ClCompile Include="Weapons\Weapon.cpp" />
   </ItemGroup>

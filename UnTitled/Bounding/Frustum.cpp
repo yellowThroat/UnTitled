@@ -32,10 +32,9 @@ void Shapes::Frustum::MakeShape()
 	_indexCount = _lineCount * 2;
 
 
-	_data = new VertexColor[_vertexCount];
+	_data = new Vertex[_vertexCount];
 
-	VertexColor V;
-	V.color = D3DXCOLOR(0, 0, 1, 1);
+	Vertex V;
 
 	Shapes::Ray ray = ComputeIntersectionLine(plane[0], plane[2]);
 	V.position = ComputeIntersection(plane[4], ray); _data[0] = V;
@@ -59,8 +58,7 @@ void Shapes::Frustum::MakeShape()
 
 void Shapes::Frustum::UpdateVertex()
 {
-	VertexColor V;
-	V.color = D3DXCOLOR(0, 0, 1, 1);
+	Vertex V;
 
 	Shapes::Ray ray = ComputeIntersectionLine(plane[0], plane[2]);
 	V.position = ComputeIntersection(plane[4], ray); _data[0] = V;

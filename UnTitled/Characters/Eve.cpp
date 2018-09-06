@@ -2,9 +2,12 @@
 #include "Eve.h"
 #include "../Model/ModelAnimPlayer.h"
 #include "GamePlayerInput.h"
-#include "GameData.h"
 #include "../Objects/AnimationBlender.h"
 #include "../Objects/AnimationClip.h"
+#include "../Bounding/Capsule.h"
+#include "../Bounding/Sphere.h"
+#include "../Weapons/Fist.h"
+#include "../Weapons/Sword.h"
 
 Eve::Eve(ExecuteValues* values)
 	: bRun(false)
@@ -15,10 +18,13 @@ Eve::Eve(ExecuteValues* values)
 	, mode(Mode::Free)
 	, values(values)
 {
+	testBone = 0;
+	testWeapon = 0;
 	OpenModel();
 
 	spec = new GamePlayerSpec();
 	input = new GamePlayerInput();
+	sphere = new Shapes::Sphere(3);
 }
 
 Eve::~Eve()
@@ -29,6 +35,8 @@ Eve::~Eve()
 
 void Eve::Update()
 {
+	currentWeapon = weapons[testWeapon];
+
 	InputHandle();
 
 	ModelRotation();
@@ -42,24 +50,55 @@ void Eve::Update()
 	CalcPosition();
 
 	Character::Update();
+
+	D3DXMATRIX mat;
+	mat = GetTransform(testBone);
+	sphere->SetWorld(mat);
+}
+
+void Eve::Render()
+{
+	Character::Render();
+
+	sphere->Render();
+	ImGui::SliderInt("weapon", (int*)&testWeapon, 0, 1);
+	ImGui::SliderInt("bone", (int*)&testBone, 0, model->BoneCount()-1);
+	ImGui::Text(String::ToString(model->Bone(testBone)->Name()).c_str());
 }
 
 void Eve::OpenModel()
 {
+	// Model
 	model = new Model();
 	model->ReadMaterial(Models + L"Characters/Player/Eve.material");
 	model->ReadMesh(Models + L"Characters/Player/Eve.mesh");
 	model->LoadAnimationSet(Models + L"Animation/Player AnimSet.json");
 
-	D3DXMATRIX S;
-	D3DXMatrixScaling(&S, -0.05f, 0.05f, 0.05f);
-	
+	// Animation
+	D3DXMatrixScaling(&rootAxis, 0.05f, 0.05f, 0.05f);
 	anim = new ModelAnimPlayer(model);
-	anim->RootAxis(S);
+	anim->RootAxis(rootAxis);
 	anim->World(&world);
 
-	headHurtIndex = model->Bone(L"Head")->Index();
-	bodyHurtIndex = model->Bone(L"Hips")->Index();
+	// Bounding Box
+	// Hurt Box
+	Shapes::BoundingBox* box;
+
+	box = new Shapes::BoundingBox();
+	box->index = model->Bone(L"Spine1")->Index();
+	box->box = new Shapes::Capsule(D3DXVECTOR3(0, -40, 0), D3DXVECTOR3(0, 20, 0), 18.0f);
+	hurtBoxes.push_back(box);
+
+	box = new Shapes::BoundingBox();
+	box->index = model->Bone(L"Head")->Index();
+	box->box = new Shapes::Sphere(10.0f);
+	hurtBoxes.push_back(box);
+
+	// Weapon
+	weapons.push_back(new Fist(this));
+	weapons.push_back(new Sword(this));
+	
+	currentWeapon = weapons[0];
 }
 
 void Eve::InputHandle()
@@ -152,6 +191,7 @@ void Eve::InputAction()
 
 	if (input->Stroke(GamePlayerKey::Attack))
 	{
+		mode = Mode::Battle;
 		if (Prepare(PlayerAnimation::OnePunch))
 			bStop = true;
 	}

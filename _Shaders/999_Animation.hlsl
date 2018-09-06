@@ -36,6 +36,6 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 color = _diffuseMap.Sample(_diffuseSampler, input.uv);
     float4 specular = _specularMap.Sample(_specularSampler, input.uv);
     if (length(specular) > 0)
-        Specular(color.rgb, input.normal, input.view);
+        Specular(color.rgb, specular.rgb, input.normal, input.view);
     return color;
 }

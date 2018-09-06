@@ -31,9 +31,8 @@ void Shapes::Box::MakeShape()
 	_vertexCount = 8;
 	_indexCount = _lineCount * 2;
 
-	_data = new VertexColor[8];
-	VertexColor V;
-	V.color = D3DXCOLOR(1, 0, 0, 1);
+	_data = new Vertex[8];
+	Vertex V;
 	V.position = D3DXVECTOR3(_min.x, _min.y, _min.z); _data[0] = V;
 	V.position = D3DXVECTOR3(_min.x, _max.y, _min.z); _data[1] = V;
 	V.position = D3DXVECTOR3(_max.x, _min.y, _min.z); _data[2] = V;

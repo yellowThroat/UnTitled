@@ -3,10 +3,11 @@
 class Sword : public Weapon
 {
 public:
-	Sword();
+	Sword(class Character* character);
 	~Sword();
+
+	void Update() override;
 
 private:
 	void OpenModel();
-
 };
