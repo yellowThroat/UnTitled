@@ -11,7 +11,7 @@ public:
 		Idle, Walk,	Run, 
 		Jump,
 		Boxing_Idle, Boxing_Step,
-		LeadJap, RightHook,
+		OnePunch, TwoPunch, Kick,
 		Count,
 	};
 
@@ -26,6 +26,13 @@ public:
 	{
 		Unknown = -1,
 		Normal, Combo,
+		Count,
+	};
+
+	enum class Weapon
+	{
+		Unknown = -1,
+		Fist, Sword,
 		Count,
 	};
 
@@ -60,14 +67,14 @@ private:
 	bool bRun;
 	Mode mode;
 
-	ExecuteValues* values;
-	struct GamePlayerInput* input;
-	struct GamePlayerSpec* spec;
-	
-	
-private:
-
 	PlayerAnimation prepareAnimation;
 	PlayerAnimation currentAnimation;
 	PlayerAnimation priorityAnimation;
+
+	UINT headHurtIndex;
+	UINT bodyHurtIndex;
+
+	ExecuteValues* values;
+	struct GamePlayerInput* input;
+	struct GamePlayerSpec* spec;
 };

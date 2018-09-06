@@ -51,19 +51,19 @@ void TPP::FixMouse()
 	RECT windowRc;
 	D3DDesc desc;
 	D3D::GetDesc(&desc);
-	D3DXVECTOR3 mousePos;
-	D3DXVECTOR2 correctionPos = D3DXVECTOR2(0, 0);
-	D3DXVECTOR2 center = D3DXVECTOR2(0, 0);
+	POINT mousePos;
+	POINT correctionPos = { 0, 0 };
+	POINT center = { 0, 0 };
 	LONG offset = 150;
 
-	mousePos = Mouse::Get()->GetPosition();
+	GetCursorPos(&mousePos);
 	correctionPos.x = mousePos.x;
 	correctionPos.y = mousePos.y;
 
 	GetWindowRect(desc.Handle, &windowRc);
 
-	center.x = (windowRc.left + windowRc.right) * 0.5f;
-	center.y = (windowRc.top + windowRc.bottom) * 0.5f;
+	center.x = (LONG)((float)(windowRc.left + windowRc.right) * 0.5f);
+	center.y = (LONG)((float)(windowRc.top + windowRc.bottom) * 0.5f);
 
 	if (mousePos.x >= windowRc.right - offset || mousePos.x <= windowRc.left + offset)
 	{
@@ -76,7 +76,7 @@ void TPP::FixMouse()
 		change = true;
 	}
 
-	if(change)
-	Mouse::Get()->SetPosition(correctionPos);
+	if (change)
+		Mouse::Get()->SetPosition(correctionPos);
 
 }

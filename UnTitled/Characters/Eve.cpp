@@ -57,6 +57,9 @@ void Eve::OpenModel()
 	anim = new ModelAnimPlayer(model);
 	anim->RootAxis(S);
 	anim->World(&world);
+
+	headHurtIndex = model->Bone(L"Head")->Index();
+	bodyHurtIndex = model->Bone(L"Hips")->Index();
 }
 
 void Eve::InputHandle()
@@ -134,10 +137,10 @@ void Eve::InputAction()
 
 	if (input->Stroke(GamePlayerKey::Attack))
 	{
-		if (currentAnimation == PlayerAnimation::LeadJap)
-		{
-			Priority(PlayerAnimation::RightHook);
-		}
+		if (currentAnimation == PlayerAnimation::OnePunch)
+			Priority(PlayerAnimation::TwoPunch);
+		if (currentAnimation == PlayerAnimation::TwoPunch)
+			Priority(PlayerAnimation::Kick);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +152,7 @@ void Eve::InputAction()
 
 	if (input->Stroke(GamePlayerKey::Attack))
 	{
-		if (Prepare(PlayerAnimation::LeadJap))
+		if (Prepare(PlayerAnimation::OnePunch))
 			bStop = true;
 	}
 
@@ -190,10 +193,10 @@ void Eve::Play()
 		blendTime = 0.1f;
 		bLoop = false;
 		break;
-	case Eve::PlayerAnimation::LeadJap:
+	case Eve::PlayerAnimation::OnePunch:
 		blendTime = 0.1f;
 		bLoop = false;
-		cut = 15;
+		cut = 12;
 		break;
 	}
 	
@@ -210,11 +213,15 @@ void Eve::Combo()
 
 	switch (priorityAnimation)
 	{
-	case PlayerAnimation::RightHook:
+	case PlayerAnimation::TwoPunch:
 		blendTime = 0.1f;
 		bLoop = false;
-		int cut = 10;
-	break;
+		cut = 18;
+		break;
+	case PlayerAnimation::Kick:
+		blendTime = 0.1f;
+		bLoop = false;
+		break;
 	}
 
 	anim->Play((UINT)priorityAnimation, blendTime, bLoop, cut);
@@ -262,6 +269,7 @@ void Eve::DecideAction(D3DXVECTOR3 & direction)
 	float angle = D3DXVec3Dot(&forward, &d);
 	angle = Math::Clamp(angle, -1.0f, 1.0f);
 	angle = acosf(angle);
+
 	D3DXVECTOR3 cross;
 	D3DXVec3Cross(&cross, &forward, &d);
 	if (cross.y < 0) angle = -angle;
@@ -345,8 +353,9 @@ bool Eve::Movable(MoveEnd type)
 		b = true;
 		break;
 	case Eve::PlayerAnimation::Jump:
-	case Eve::PlayerAnimation::LeadJap:
-	case Eve::PlayerAnimation::RightHook:
+	case Eve::PlayerAnimation::OnePunch:
+	case Eve::PlayerAnimation::TwoPunch:
+	case Eve::PlayerAnimation::Kick:
 		b = false;
 		break;
 	case Eve::PlayerAnimation::Count:
@@ -358,8 +367,8 @@ bool Eve::Movable(MoveEnd type)
 		switch (type)
 		{
 		case Eve::MoveEnd::Normal:
-		if (!anim->NextClip()->clip)
-			b |= anim->CurrentClip()->IsDone();
+			if (!anim->NextClip()->clip)
+				b |= anim->CurrentClip()->IsDone();
 			break;
 
 		case Eve::MoveEnd::Combo:

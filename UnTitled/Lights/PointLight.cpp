@@ -15,7 +15,7 @@ PointLight::PointLight()
 	strcpy_s(editBuf.name, name.c_str());
 	type = RenderType::PointLight;
 
-	sphere = new Shapes::Sphere(D3DXVECTOR3(0, 0, 0), buffer->Data.Light[index].Range);
+	sphere = new Shapes::Sphere(buffer->Data.Light[index].Range);
 }
 
 PointLight::~PointLight()

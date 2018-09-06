@@ -6,6 +6,8 @@ Shapes::Shape::Shape()
 {
 	_shader = new Shader(Shaders + L"Shape.hlsl");
 	_worldBuffer = new WorldBuffer();
+	D3DXMatrixIdentity(&_world);
+	SetWorld(_world);
 }
 
 Shapes::Shape::~Shape()
@@ -48,6 +50,9 @@ void Shapes::Shape::SetWorld(D3DXMATRIX mat)
 {
 	_worldBuffer->SetMatrix(mat);
 	_world = mat;
+	_position.x = _world._41;
+	_position.y = _world._42;
+	_position.z = _world._43;
 }
 
 void Shapes::Shape::MakeBuffer()
@@ -86,4 +91,12 @@ void Shapes::Shape::MakeBuffer()
 		hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &_indexBuffer);
 		assert(SUCCEEDED(hr));
 	}
+}
+
+void Shapes::Shape::ChangeData()
+{
+	D3D::GetDC()->UpdateSubresource
+	(
+		_buffer, 0, NULL, _data, sizeof(VertexColor) * _vertexCount, 0
+	);
 }

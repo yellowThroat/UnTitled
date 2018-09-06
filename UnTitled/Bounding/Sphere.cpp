@@ -2,11 +2,9 @@
 
 #include "Sphere.h"
 
-Shapes::Sphere::Sphere(D3DXVECTOR3 center, float radius)
-	: _center(center), _radius(radius)
+Shapes::Sphere::Sphere(float radius)
+	: _radius(radius)
 {
-	_position = _center;
-
 	MakeShape();
 	MakeBuffer();
 }
@@ -19,9 +17,6 @@ Shapes::Sphere::~Sphere()
 void Shapes::Sphere::Update()
 {
 	Shapes::Shape::Update();
-
-
-	int a = 0;
 }
 
 void Shapes::Sphere::Render()
@@ -84,20 +79,15 @@ void Shapes::Sphere::MakeShape()
 	}
 }
 
-D3DXVECTOR3 Shapes::Sphere::GetCenter()
-{
-	D3DXVECTOR3 v;
-
-	D3DXVec3TransformCoord(&v, &_center, &_world);
-
-	return v;
-}
-
 void Shapes::Sphere::SetRadius(float radius)
 {
-	_radius = radius;
-	Clear();
+	for (UINT i = 0; i < _vertexCount; i++)
+	{
+		_data[i].position /= _radius;
+		_data[i].position *= radius;
+	}
 
-	MakeShape();
-	MakeBuffer();
+	ChangeData();
+
+	_radius = radius;
 }

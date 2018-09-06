@@ -6,9 +6,6 @@
 Shapes::Box::Box(D3DXVECTOR3 min, D3DXVECTOR3 max)
 	: _min(min), _max(max)
 {
-	_position = _min + _max;
-	_position /= 2;
-
 	MakeShape();
 	MakeBuffer();
 }
@@ -53,14 +50,14 @@ void Shapes::Box::MakeShape()
 bool Shapes::Box::Intersect(Sphere * sphere)
 {
 	float single;
-	D3DXVECTOR3 v = sphere->GetCenter();
+	D3DXVECTOR3 v = sphere->GetPosition();
 	D3DXVECTOR3 min, max;
 	D3DXVec3TransformCoord(&min, &_min, &_world);
 	D3DXVec3TransformCoord(&max, &_max, &_world);
 	v.x = Math::Clamp(v.x, min.x, max.x);
 	v.y = Math::Clamp(v.y, min.y, max.y);
 	v.z = Math::Clamp(v.z, min.z, max.z);
-	D3DXVECTOR3 vec = sphere->GetCenter() - v;
+	D3DXVECTOR3 vec = sphere->GetPosition() - v;
 	single = D3DXVec3LengthSq(&vec);
 	if (single <= sphere->GetRadius() * sphere->GetRadius())
 		return true;

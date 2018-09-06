@@ -6,25 +6,25 @@ ExportMesh::ExportMesh(ExecuteValues* values)
 	: Execute(values)
 {
 	Fbx::Exporter* exporter = NULL;
-	//exporter = new Fbx::Exporter(Assets + L"Characters/eve.fbx");
-	//exporter->ExportMesh(Models + L"Characters/Player/", L"Eve");
+	exporter = new Fbx::Exporter(Assets + L"ToExportModel/Zombie.fbx");
+	exporter->ExportMesh(Models + L"Characters/Monsters/", L"Zombie");
 	//exporter = new Fbx::Exporter(Assets + L"Right Hook.fbx");
 	//exporter->ExportAnimation(Models + L"Animation/", L"Right Hook");
 	//exporter->ExportMaterial(Models + L"Characters/Player/", L"Eve");
 
 	//exporter->ExportAnimation(Models + L"Animation/", L"Lead Jap");
 
-	//vector<wstring> files;
-	//Path::GetFiles(&files, Assets + L"ToExport/", L"*.fbx", false);
+	vector<wstring> files;
+	Path::GetFiles(&files, Assets + L"ToExportAnimation/", L"*.fbx", false);
 
-	//for (UINT i = 0; i < files.size(); i++)
-	//{
-	//	wstring folder = Models + L"Animation/";
-	//	wstring name = Path::GetFileNameWithoutExtension(files[i]);
-	//	exporter = new Fbx::Exporter(files[i]);
-	//	exporter->ExportAnimation(folder, name);
-	//}
-
+	for (UINT i = 0; i < files.size(); i++)
+	{
+		wstring folder = Models + L"Animation/";
+		wstring name = Path::GetFileNameWithoutExtension(files[i]);
+		exporter = new Fbx::Exporter(files[i]);
+		exporter->ExportAnimation(folder, name);
+		SAFE_DELETE(exporter);
+	}
 }
 
 ExportMesh::~ExportMesh()

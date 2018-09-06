@@ -123,7 +123,7 @@ bool Shapes::Frustum::CheckCube(float xCenter, float yCenter, float zCenter, flo
 
 Shapes::ContainmentType Shapes::Frustum::Contains(Shapes::Sphere* sphere)
 {
-	D3DXVECTOR3 center = sphere->GetCenter();
+	D3DXVECTOR3 center = sphere->GetPosition();
 	float radius = sphere->GetRadius();
 	int num = 0;
 	for (int i = 0; i < 6; i++)

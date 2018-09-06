@@ -20,7 +20,7 @@ public:
 	LRESULT InputProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 	D3DXVECTOR3 GetPosition() { return position; }
-	void SetPosition(D3DXVECTOR2 pos);
+	void SetPosition(POINT pos);
 	bool Down(DWORD button)
 	{
 		return buttonMap[button] == BUTTON_INPUT_STATUS_DOWN;

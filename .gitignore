@@ -1,5 +1,6 @@
 UnTitled/Debug/
+UnTitled/.vs/
 _Assets/
 _Libraries/
 UnTitled/Direct3D.VC.VC.opendb
-UnTitled/Direct3D.VC.db
+*.db

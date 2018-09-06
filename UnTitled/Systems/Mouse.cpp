@@ -142,10 +142,10 @@ LRESULT Mouse::InputProc(UINT message, WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-void Mouse::SetPosition(D3DXVECTOR2 pos)
+void Mouse::SetPosition(POINT pos)
 {
-	wheelStatus.x = pos.x;
-	wheelStatus.y = pos.y;
+	wheelStatus.x = (float)pos.x;
+	wheelStatus.y = (float)pos.y;
 
 	SetCursorPos(pos.x, pos.y);
 }

@@ -7,8 +7,9 @@
          "../_Contents/Models/Animation/Jump.anim",
          "../_Contents/Models/Animation/Boxing_Idle.anim",
          "../_Contents/Models/Animation/Boxing_Step.anim",
-         "../_Contents/Models/Animation/Lead Jap.anim",
-         "../_Contents/Models/Animation/Right Hook.anim"
+         "../_Contents/Models/Animation/One Punch.anim",
+         "../_Contents/Models/Animation/Two Punch.anim",
+         "../_Contents/Models/Animation/kick.anim"
       ]
    }
 }

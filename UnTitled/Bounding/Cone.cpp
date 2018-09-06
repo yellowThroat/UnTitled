@@ -2,12 +2,10 @@
 
 #include "Cone.h"
 
-Shapes::Cone::Cone(D3DXVECTOR3 center, float angle, float height)
-	: _center(center), _angle(angle)
+Shapes::Cone::Cone(float angle, float height)
+	: _angle(angle)
 	, _height(height)
 {
-	_position = _center;
-
 	MakeShape();
 	MakeBuffer();
 }
@@ -71,15 +69,6 @@ void Shapes::Cone::MakeShape()
 	_indexData[_vertexCount + 5] = 49;
 	_indexData[_vertexCount + 6] = 0;
 
-}
-
-D3DXVECTOR3 Shapes::Cone::GetCenter()
-{
-	D3DXVECTOR3 v;
-
-	D3DXVec3TransformCoord(&v, &_center, &_world);
-
-	return v;
 }
 
 void Shapes::Cone::SetAngle(float angle)

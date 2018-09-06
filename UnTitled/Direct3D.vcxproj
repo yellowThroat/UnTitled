@@ -20,8 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bounding\Box.h" />
+    <ClInclude Include="Bounding\Capsule.h" />
     <ClInclude Include="Bounding\Cone.h" />
     <ClInclude Include="Bounding\Frustum.h" />
+    <ClInclude Include="Bounding\Segment.h" />
     <ClInclude Include="Bounding\Shape.h" />
     <ClInclude Include="Bounding\Sphere.h" />
     <ClInclude Include="Characters\Character.h" />
@@ -111,8 +113,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bounding\Box.cpp" />
+    <ClCompile Include="Bounding\Capsule.cpp" />
     <ClCompile Include="Bounding\Cone.cpp" />
     <ClCompile Include="Bounding\Frustum.cpp" />
+    <ClCompile Include="Bounding\Segment.cpp" />
     <ClCompile Include="Bounding\Shape.cpp" />
     <ClCompile Include="Bounding\Sphere.cpp" />
     <ClCompile Include="Characters\Character.cpp" />

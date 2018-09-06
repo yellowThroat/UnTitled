@@ -16,7 +16,6 @@ SpotLight::SpotLight()
 	type = RenderType::SpotLight;
 	cone = new Shapes::Cone
 	(
-		D3DXVECTOR3(0,0,0), 
 		Math::ToRadian(buffer->Data.Light[index].OuterAngle) / 2.0f,
 		buffer->Data.Light[index].Range
 	);

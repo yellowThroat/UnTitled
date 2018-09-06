@@ -258,6 +258,12 @@
     <ClInclude Include="Viewer\TPP.h">
       <Filter>Viewer</Filter>
     </ClInclude>
+    <ClInclude Include="Bounding\Capsule.h">
+      <Filter>Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounding\Segment.h">
+      <Filter>Bounding</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Executes">
@@ -542,6 +548,12 @@
     </ClCompile>
     <ClCompile Include="Viewer\TPP.cpp">
       <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounding\Capsule.cpp">
+      <Filter>Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounding\Segment.cpp">
+      <Filter>Bounding</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

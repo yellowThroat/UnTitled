@@ -12,17 +12,15 @@ namespace Shapes
 		virtual void Update();
 		virtual void Render();
 		void Clear();
+		D3DXVECTOR3 GetPosition() { return _position; }
 		D3DXMATRIX GetWorld() { return _world; }
 		void SetWorld(D3DXMATRIX mat);
-		void SetPosition(D3DXVECTOR3 position)
-		{
-			_position = position;
-		}
 		void SetValues(ExecuteValues* val) { _values = val; }
 		
 	protected:
 		virtual void MakeShape() {}
 		void MakeBuffer();
+		void ChangeData();
 
 	protected:
 		D3DXMATRIX		_world;
