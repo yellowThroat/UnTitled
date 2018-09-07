@@ -1,9 +1,9 @@
-$ git rm -r --cached .
-$ git add .
-$ git commit -m "fixed untracked files"
 UnTitled/Debug/
 UnTitled/.vs/
 _Assets/
 _Libraries/
 UnTitled/Direct3D.VC.VC.opendb
 *.db
+*.suo
+*.o
+*.so
