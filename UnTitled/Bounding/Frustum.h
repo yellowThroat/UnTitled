@@ -5,11 +5,10 @@
 namespace Shapes
 {
 	class Sphere;
+	class Box;
+	class Capsule;
+	
 
-	enum ContainmentType
-	{
-		Disjoint, Contains, Intersects
-	};
 	struct Plane
 	{
 		D3DXVECTOR3 normal;
@@ -32,9 +31,17 @@ namespace Shapes
 		virtual void Render() override;
 		virtual void MakeShape() override;
 		void UpdateVertex();
+
+		bool Collide(Shape* shape);
+		bool Collide(Sphere* sphere);
+		bool Collide(Box* box);
+		bool Collide(Frustum* frustum);
+
+		ContainmentType Contains(Shape* shape) override;
+		ContainmentType Contains(Shapes::Sphere* sphere) override;
+
 	public:
 		bool CheckCube(float, float, float, float);
-		ContainmentType Contains(Shapes::Sphere* sphere);
 		bool CheckFrustumIntersection(Shapes::Sphere* sphere);
 		void UnprojectRectangle(RECT source, D3DXMATRIX projection, D3DXMATRIX view);
 
@@ -42,6 +49,7 @@ namespace Shapes
 		void SetMatrix(D3DXMATRIX mat);
 		D3DXVECTOR3 ComputeIntersection(Plane &pl, Shapes::Ray& ra);
 		Shapes::Ray ComputeIntersectionLine(Plane &pl0, Plane& pl1);
+
 	private:
 		const int	_nearPlaneIndex		= 0;
 		const int	_FarPlaneIndex		= 1;

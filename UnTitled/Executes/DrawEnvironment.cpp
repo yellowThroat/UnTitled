@@ -3,17 +3,20 @@
 #include "DrawEnvironment.h"
 #include "../Environment/Sky.h"
 #include "../Environment/SkyPlane.h"
+#include "../Landscape/Grid.h"
 
 DrawEnvironment::DrawEnvironment(ExecuteValues * values)
 	: Execute(values)
-	, sky(NULL)
+	, sky(NULL), grid(NULL)
 {
 	sky = new Sky(values);
+	grid = new Grid();
 }
 
 DrawEnvironment::~DrawEnvironment()
 {
 	SAFE_DELETE(sky);
+	SAFE_DELETE(grid);
 }
 
 void DrawEnvironment::Update()
@@ -37,6 +40,9 @@ void DrawEnvironment::Render()
 {
 	if (sky)
 		sky->Render();
+
+	if (grid)
+		grid->Render();
 }
 
 void DrawEnvironment::PostRender()

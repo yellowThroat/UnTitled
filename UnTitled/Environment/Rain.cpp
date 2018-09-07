@@ -94,6 +94,8 @@ Rain::~Rain()
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+	SAFE_RELEASE(alphaBlend[0]);
+	SAFE_RELEASE(alphaBlend[1]);
 
 	SAFE_DELETE(texture);
 	SAFE_DELETE(shader);

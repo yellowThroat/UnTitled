@@ -4,6 +4,9 @@
 namespace Shapes
 {
 	class Sphere;
+	class Frustum;
+	class Cone;
+	class Capsule;
 
 	class Box : public Shape
 	{
@@ -15,6 +18,9 @@ namespace Shapes
 		virtual void MakeShape() override;
 
 		bool Intersect(Sphere* sphere);
+
+		bool Collide(Shape* shape) override;
+		ContainmentType Contains(Shape* shape) override;
 
 	private:
 		D3DXVECTOR3 _min;

@@ -4,7 +4,10 @@
 namespace Shapes
 {
 	class Segment;
-
+	class Box;
+	class Sphere;
+	class Frustum;
+	
 	class Capsule : public Shape
 	{
 	public:
@@ -15,6 +18,14 @@ namespace Shapes
 		virtual void MakeShape() override;
 
 		bool static Intersect(Capsule * c1, Capsule * c2);
+		
+		bool Collide(Shape* shape);
+		bool Collide(Sphere* sphere);
+		bool Collide(Capsule* capsule);
+
+		Shapes::ContainmentType Contains(Shape* shape);
+		Shapes::ContainmentType Contains(Capsule* capsule);
+		Shapes::ContainmentType Contains(Sphere* sphere);
 
 	private:
 

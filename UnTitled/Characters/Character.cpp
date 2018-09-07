@@ -8,6 +8,7 @@
 Character::Character()
 	: model(NULL)
 	, currentWeapon(NULL)
+	, mode(Mode::Free)
 {
 }
 
@@ -35,7 +36,7 @@ void Character::Update()
 		hurtBox->box->Update();
 	}
 
-	if (currentWeapon)
+	if (currentWeapon && mode == Mode::Battle)
 		currentWeapon->Update();
 }
 
@@ -47,8 +48,19 @@ void Character::Render()
 	for (auto hurtBox : hurtBoxes)
 		hurtBox->box->Render();
 
-	if (currentWeapon)
+	if (currentWeapon && mode == Mode::Battle)
 		currentWeapon->Render();
+}
+
+void Character::Damaged(Character * hitter)
+{
+	for (UINT i = 0; i < hitter->GetWeapon()->GetHitBoxes().size(); i++)
+	{
+		for (UINT i = 0; i < hurtBoxes.size(); i++)
+		{
+
+		}
+	}
 }
 
 D3DXMATRIX Character::GetTransform(UINT index)

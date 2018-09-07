@@ -27,9 +27,9 @@ void Sword::OpenModel()
 	hitBox->model = new Model();
 	hitBox->model->ReadMaterial(Models + L"Weapons/Sword/Sword.material");
 	hitBox->model->ReadMesh(Models + L"Weapons/Sword/Sword.mesh");
-	hitBox->box = new Shapes::Capsule(D3DXVECTOR3(7, -1, -10), D3DXVECTOR3(7, -1, 58), 3.0f);
+	hitBox->box = new Shapes::Capsule(D3DXVECTOR3(8.7f, -2.4f, 0.0f), D3DXVECTOR3(8.7f, -2.4f, 58.0f), 3.0f);
 
 	hitBoxes.push_back(hitBox);
 
-	D3DXMatrixTranslation(&rootAxis, 12, -2, 25);
+	D3DXMatrixTranslation(&rootAxis, 13.7f, -3.4f, 25.0f);
 }

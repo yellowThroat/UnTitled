@@ -118,3 +118,34 @@ bool Shapes::Capsule::Intersect(Capsule * c1, Capsule * c2)
 	return false;
 }
 
+bool Shapes::Capsule::Collide(Shape * shape)
+{
+	return shape->Collide(this);
+}
+
+bool Shapes::Capsule::Collide(Sphere * sphere)
+{
+	return false;
+}
+
+bool Shapes::Capsule::Collide(Capsule * capsule)
+{
+
+	return false;
+}
+
+Shapes::ContainmentType Shapes::Capsule::Contains(Shape * shape)
+{
+	return shape->Contains(this);
+}
+
+Shapes::ContainmentType Shapes::Capsule::Contains(Capsule * capsule)
+{
+	return Shapes::ContainmentType::Disjoint;
+}
+
+Shapes::ContainmentType Shapes::Capsule::Contains(Sphere * sphere)
+{
+	return Shapes::ContainmentType::Disjoint;
+}
+

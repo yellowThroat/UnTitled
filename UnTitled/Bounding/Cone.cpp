@@ -87,3 +87,13 @@ void Shapes::Cone::SetHeight(float height)
 	MakeShape();
 	MakeBuffer();
 }
+
+bool Shapes::Cone::Collide(Shape * shape)
+{
+	return shape->Collide(this);
+}
+
+Shapes::ContainmentType Shapes::Cone::Contains(Shape * shape)
+{
+	return shape->Contains(this);
+}

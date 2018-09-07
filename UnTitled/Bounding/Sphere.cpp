@@ -98,3 +98,53 @@ void Shapes::Sphere::SetRadius(float radius)
 
 	_radius = radius;
 }
+
+bool Shapes::Sphere::Collide(Shape * shape)
+{
+	return shape->Collide(this);
+}
+
+bool Shapes::Sphere::Collide(Sphere * sphere)
+{
+
+
+	return false;
+}
+
+bool Shapes::Sphere::Collide(Capsule * capsule)
+{
+
+
+	return false;
+}
+
+Shapes::ContainmentType Shapes::Sphere::Contains(Shape * shape)
+{
+	return shape->Contains(this);
+}
+
+Shapes::ContainmentType Shapes::Sphere::Contains(Capsule * capsule)
+{
+	return ContainmentType::Disjoint;
+}
+
+Shapes::ContainmentType Shapes::Sphere::Contains(Sphere * sphere)
+{
+	D3DXVECTOR3 p0 = GetPosition();
+	D3DXVECTOR3 p1 = sphere->GetPosition();
+
+	float distance = Math::Distance(p0, p1);
+	float sumRadius = GetRadius() + sphere->GetRadius();
+
+	if (distance > sumRadius) return ContainmentType::Disjoint;
+	else
+	{
+		//float min;
+		//min = GetRadius() > sphere->GetRadius() ? 
+		//if (distance + diff <= sumRadius)
+		//	return ContainmentType::Contains;
+
+		return ContainmentType::Intersects;
+	}
+	return ContainmentType::Disjoint;
+}

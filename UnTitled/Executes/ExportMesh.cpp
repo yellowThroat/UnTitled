@@ -6,8 +6,8 @@ ExportMesh::ExportMesh(ExecuteValues* values)
 	: Execute(values)
 {
 	Fbx::Exporter* exporter = NULL;
-	//exporter = new Fbx::Exporter(Assets + L"Characters/Player/eve.fbx");
-	//exporter->ExportMesh(Models + L"Characters/Player/", L"eve");
+	//exporter = new Fbx::Exporter(Assets + L"Zombie.fbx");
+	//exporter->ExportMesh(Models + L"Characters/Monsters/", L"Zombie");
 	//exporter = new Fbx::Exporter(Assets + L"ToExportModel/Zombie.fbx");
 	//exporter->ExportMesh(Models + L"Characters/Monsters/", L"Zombie");
 	//exporter->ExportMaterial(Models + L"Characters/Monsters/", L"Zombie");

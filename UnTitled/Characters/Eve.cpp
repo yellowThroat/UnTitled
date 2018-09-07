@@ -15,16 +15,13 @@ Eve::Eve(ExecuteValues* values)
 	, currentAnimation(PlayerAnimation::UnKnown)
 	, prepareAnimation(PlayerAnimation::UnKnown)
 	, priorityAnimation(PlayerAnimation::UnKnown)
-	, mode(Mode::Free)
+	, currentWeaponType(WeaponType::UnArmed)
 	, values(values)
 {
-	testBone = 0;
-	testWeapon = 0;
 	OpenModel();
 
 	spec = new GamePlayerSpec();
 	input = new GamePlayerInput();
-	sphere = new Shapes::Sphere(3);
 }
 
 Eve::~Eve()
@@ -35,8 +32,6 @@ Eve::~Eve()
 
 void Eve::Update()
 {
-	currentWeapon = weapons[testWeapon];
-
 	InputHandle();
 
 	ModelRotation();
@@ -51,19 +46,12 @@ void Eve::Update()
 
 	Character::Update();
 
-	D3DXMATRIX mat;
-	mat = GetTransform(testBone);
-	sphere->SetWorld(mat);
+	DecideValid();
 }
 
 void Eve::Render()
 {
 	Character::Render();
-
-	sphere->Render();
-	ImGui::SliderInt("weapon", (int*)&testWeapon, 0, 1);
-	ImGui::SliderInt("bone", (int*)&testBone, 0, model->BoneCount()-1);
-	ImGui::Text(String::ToString(model->Bone(testBone)->Name()).c_str());
 }
 
 void Eve::OpenModel()
@@ -98,7 +86,7 @@ void Eve::OpenModel()
 	weapons.push_back(new Fist(this));
 	weapons.push_back(new Sword(this));
 	
-	currentWeapon = weapons[0];
+	WeaponChage(WeaponType::Fist);
 }
 
 void Eve::InputHandle()
@@ -120,7 +108,7 @@ void Eve::InputTransition()
 {
 	if (input->Stroke(GamePlayerKey::Run)) bRun = true;
 	if (input->Released(GamePlayerKey::Run)) bRun = false;
-	if (input->Stroke(GamePlayerKey::Transition))
+	if (input->Stroke(GamePlayerKey::Transition) && Movable())
 	{
 		switch (mode)
 		{
@@ -128,6 +116,9 @@ void Eve::InputTransition()
 		case Eve::Mode::Battle: mode = Mode::Free; break;
 		}
 	}
+
+	if (input->isStrokeSlot() >= 0)
+		WeaponChage((WeaponType)input->isStrokeSlot());
 }
 
 void Eve::InputMove()
@@ -192,8 +183,17 @@ void Eve::InputAction()
 	if (input->Stroke(GamePlayerKey::Attack))
 	{
 		mode = Mode::Battle;
-		if (Prepare(PlayerAnimation::OnePunch))
-			bStop = true;
+		switch (currentWeaponType)
+		{
+		case Eve::WeaponType::Fist:
+			if (Prepare(PlayerAnimation::OnePunch))
+				bStop = true;
+			break;
+		case Eve::WeaponType::OneHand:
+			if (Prepare(PlayerAnimation::OneHand_Combo))
+				bStop = true;
+			break;
+		}
 	}
 
 	if (bStop)
@@ -227,6 +227,9 @@ void Eve::Play()
 	case Eve::PlayerAnimation::Run:
 	case Eve::PlayerAnimation::Boxing_Idle:
 	case Eve::PlayerAnimation::Boxing_Step:
+	case Eve::PlayerAnimation::OneHand_Idle:
+	case Eve::PlayerAnimation::OneHand_Walk:
+	case Eve::PlayerAnimation::OneHand_Run:
 		blendTime = 0.2f;
 		break;
 	case Eve::PlayerAnimation::Jump:
@@ -234,10 +237,12 @@ void Eve::Play()
 		bLoop = false;
 		break;
 	case Eve::PlayerAnimation::OnePunch:
+	case Eve::PlayerAnimation::OneHand_Combo:
 		blendTime = 0.1f;
 		bLoop = false;
 		cut = 12;
 		break;
+
 	}
 	
 	anim->Play((UINT)prepareAnimation, blendTime, bLoop, cut);
@@ -360,7 +365,18 @@ void Eve::DecideAction(D3DXVECTOR3 & direction)
 			else Prepare(PlayerAnimation::Walk);
 			break;
 		case Eve::Mode::Battle:
-			Prepare(PlayerAnimation::Boxing_Step);
+			switch (currentWeaponType)
+			{
+			case Eve::WeaponType::Fist:
+				Prepare(PlayerAnimation::Boxing_Step);
+				break;
+			case Eve::WeaponType::OneHand:
+				if(bRun)
+				Prepare(PlayerAnimation::OneHand_Run);
+				else
+					Prepare(PlayerAnimation::OneHand_Walk);
+				break;
+			}
 			break;
 		}
 	}
@@ -372,10 +388,61 @@ void Eve::DecideAction(D3DXVECTOR3 & direction)
 			Prepare(PlayerAnimation::Idle);
 			break;
 		case Eve::Mode::Battle:
-			Prepare(PlayerAnimation::Boxing_Idle);
+			switch (currentWeaponType)
+			{
+			case Eve::WeaponType::Fist:
+				Prepare(PlayerAnimation::Boxing_Idle);
+				break;
+			case Eve::WeaponType::OneHand:
+				Prepare(PlayerAnimation::OneHand_Idle);
+				break;
+			}
 			break;
 		}
 	}
+}
+
+void Eve::DecideValid()
+{
+	int frame = 0;
+	if(!anim->NextClip()->clip)
+		frame = anim->CurrentClip()->GetCurrentFrame();
+
+	bool bValid = false;
+	UINT index = 0;
+
+	for (UINT i = 0; i < currentWeapon->GetHitBoxes().size(); i++)
+		currentWeapon->SetValid(i, false);
+
+	switch (currentAnimation)
+	{
+	case Eve::PlayerAnimation::OnePunch:
+		if (frame >= 4 && frame <= 14)
+		{
+			bValid = true;
+			index = 0;
+		}
+		break;
+	case Eve::PlayerAnimation::TwoPunch:
+		if (frame >= 7 && frame <= 13)
+		{
+			bValid = true;
+			index = 1;
+		}
+		break;
+	case Eve::PlayerAnimation::Kick:
+		if (frame >= 15 && frame <= 25)
+		{
+			bValid = true;
+			index = 2;
+		}
+		break;
+	case Eve::PlayerAnimation::OneHand_Combo:
+		break;
+	}
+
+	if (bValid)
+		currentWeapon->SetValid(index, true);
 }
 
 bool Eve::Movable(MoveEnd type)
@@ -390,12 +457,16 @@ bool Eve::Movable(MoveEnd type)
 	case Eve::PlayerAnimation::Run:
 	case Eve::PlayerAnimation::Boxing_Idle:
 	case Eve::PlayerAnimation::Boxing_Step:
+	case Eve::PlayerAnimation::OneHand_Idle:
+	case Eve::PlayerAnimation::OneHand_Walk:
+	case Eve::PlayerAnimation::OneHand_Run:
 		b = true;
 		break;
 	case Eve::PlayerAnimation::Jump:
 	case Eve::PlayerAnimation::OnePunch:
 	case Eve::PlayerAnimation::TwoPunch:
 	case Eve::PlayerAnimation::Kick:
+	case Eve::PlayerAnimation::OneHand_Combo:
 		b = false;
 		break;
 	case Eve::PlayerAnimation::Count:
@@ -442,9 +513,31 @@ float Eve::MoveSpeed()
 		else speed = spec->RunSpeed;
 		break;
 	case Eve::Mode::Battle:
-		speed = spec->BattleMoveSpeed;
+		switch (currentWeaponType)
+		{
+		case Eve::WeaponType::Fist:
+			speed = spec->BoxingStepSpeed;
+			break;
+		case Eve::WeaponType::OneHand:
+			if (bRun)
+				speed = spec->BattleRunSpeed;
+			else speed = spec->BattleWalkSpeed;
+			break;
+		}
 		break;
 	}
 
 	return speed;
+}
+
+void Eve::WeaponChage(WeaponType type)
+{
+	if (currentWeaponType == type || (UINT)WeaponType::Count <= (UINT)type) return;
+
+	currentWeaponType = type;
+	currentWeapon = NULL;
+
+	if (type == WeaponType::UnArmed) return;
+
+	currentWeapon = weapons[(int)type];
 }

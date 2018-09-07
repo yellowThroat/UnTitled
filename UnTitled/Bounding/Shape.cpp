@@ -112,6 +112,7 @@ Shapes::BoundingBox::BoundingBox()
 	: index(0)
 	, box(NULL)
 	, model(NULL)
+	, valid(false)
 {
 }
 

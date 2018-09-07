@@ -7,6 +7,7 @@
 #include "../Environment/Rain.h"
 #include "../Environment/Snow.h"
 #include "../Characters/Eve.h"
+#include "../Characters/Zombie.h"
 #include "../Weapons/Sword.h"
 #include "../Bounding/Capsule.h"
 
@@ -16,10 +17,12 @@ DrawModel::DrawModel(ExecuteValues* values)
 {
 	settings = new GameSettings(values);
 	eve = new Eve(values);
+	zombie = new Zombie();
 }
 
 DrawModel::~DrawModel()
 {	
+	SAFE_DELETE(zombie);
 	SAFE_DELETE(eve);
 	SAFE_DELETE(settings);	
 }
@@ -32,6 +35,7 @@ void DrawModel::Update()
 	Test();
 
 	eve->Update();
+	zombie->Update();
 }
 
 void DrawModel::PreRender()
@@ -43,7 +47,7 @@ void DrawModel::Render()
 	if (settings)
 		settings->Render();
 	eve->Render();
-
+	zombie->Render();
 }
 
 void DrawModel::PostRender()

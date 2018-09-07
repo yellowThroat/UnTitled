@@ -63,3 +63,13 @@ bool Shapes::Box::Intersect(Sphere * sphere)
 
 	return false;
 }
+
+bool Shapes::Box::Collide(Shape * shape)
+{
+	return false;
+}
+
+Shapes::ContainmentType Shapes::Box::Contains(Shape * shape)
+{
+	return shape->Contains(this);
+}

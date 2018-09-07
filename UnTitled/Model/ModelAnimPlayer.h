@@ -34,6 +34,7 @@ struct Binder
 	void CopyBinder(Binder* binder);
 	bool IsDone();
 	bool Combo();
+	int GetCurrentFrame() { return currentKeyframe; }
 
 	class ModelAnimClip* clip;
 

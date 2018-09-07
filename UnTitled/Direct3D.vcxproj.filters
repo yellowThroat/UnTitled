@@ -270,6 +270,9 @@
     <ClInclude Include="Characters\Zombie.h">
       <Filter>Characters\Monsters</Filter>
     </ClInclude>
+    <ClInclude Include="Landscape\Grid.h">
+      <Filter>Landscape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Executes">
@@ -569,6 +572,9 @@
     </ClCompile>
     <ClCompile Include="Characters\Zombie.cpp">
       <Filter>Characters\Monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="Landscape\Grid.cpp">
+      <Filter>Landscape</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -54,6 +54,7 @@
     <ClInclude Include="Fbx\XmlToAnim.h" />
     <ClInclude Include="Interfaces\ICloneable.h" />
     <ClInclude Include="Landscape\Data.h" />
+    <ClInclude Include="Landscape\Grid.h" />
     <ClInclude Include="Landscape\Ocean.h" />
     <ClInclude Include="Landscape\Terrain.h" />
     <ClInclude Include="Lights\DirectionalLight.h" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Fbx\Utility.cpp" />
     <ClCompile Include="Fbx\XmlToAnim.cpp" />
     <ClCompile Include="Landscape\Data.cpp" />
+    <ClCompile Include="Landscape\Grid.cpp" />
     <ClCompile Include="Landscape\Ocean.cpp" />
     <ClCompile Include="Landscape\Terrain.cpp" />
     <ClCompile Include="Lights\DirectionalLight.cpp" />

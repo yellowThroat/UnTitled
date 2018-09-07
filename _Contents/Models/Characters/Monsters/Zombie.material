@@ -1,7 +1,7 @@
 {
    "ZombieGirl_Material" : {
-      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
-      "Diffuse" : [ 1.0, 1.0, 1.0, 0.80000001192092896 ],
+      "Ambient" : [ 0.8, 0.8, 0.8, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0],
       "DiffuseFile" : [ "zombie_diffuse.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
       "EmissiveFile" : [ "" ],

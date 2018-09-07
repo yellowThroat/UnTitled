@@ -16,6 +16,16 @@ public:
 		Jump,
 		Boxing_Idle, Boxing_Step,
 		OnePunch, TwoPunch, Kick,
+		OneHand_Idle, OneHand_Walk, OneHand_Run,
+		OneHand_Combo,
+		Count,
+	};
+
+	enum class WeaponType
+	{
+		UnArmed = -1,
+		Fist,
+		OneHand,
 		Count,
 	};
 
@@ -36,11 +46,15 @@ private:
 	void Play();
 	void Combo();
 	void DecideAction(D3DXVECTOR3& velocity);
+	void DecideValid();
+
 	bool Prepare(PlayerAnimation animation);
 	bool Priority(PlayerAnimation animation);
 	bool Movable(MoveEnd type = MoveEnd::Normal);
 	float CorrectionDegree(float& degree);
 	float MoveSpeed();
+	void WeaponChage(WeaponType type);
+	WeaponType GetWeaponType() { return currentWeaponType; }
 
 private:
 	float currentWaistAngle;
@@ -48,17 +62,16 @@ private:
 	float rootElapsedAngle;
 
 	bool bRun;
-	Mode mode;
 
 	PlayerAnimation prepareAnimation;
 	PlayerAnimation currentAnimation;
 	PlayerAnimation priorityAnimation;
+
+	WeaponType currentWeaponType;
 
 	ExecuteValues* values;
 	struct GamePlayerInput* input;
 	struct GamePlayerSpec* spec;
 
 	Shapes::Sphere* sphere;
-	UINT testBone;
-	UINT testWeapon;
 };

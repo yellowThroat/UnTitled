@@ -14,6 +14,8 @@ public:
 
 	virtual void Update();
 	virtual void Render();
+	void SetValid(UINT index, bool val);
+	vector<class Shapes::BoundingBox*>& GetHitBoxes() { return hitBoxes; }
 
 protected:
 	vector<class Shapes::BoundingBox*> hitBoxes;

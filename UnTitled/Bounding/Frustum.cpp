@@ -83,6 +83,31 @@ void Shapes::Frustum::UpdateVertex()
 
 }
 
+bool Shapes::Frustum::Collide(Shape * shape)
+{
+	return shape->Collide(this);
+}
+
+bool Shapes::Frustum::Collide(Sphere * sphere)
+{
+	return false;
+}
+
+bool Shapes::Frustum::Collide(Box * box)
+{
+	return false;
+}
+
+bool Shapes::Frustum::Collide(Frustum * frustum)
+{
+	return false;
+}
+
+Shapes::ContainmentType Shapes::Frustum::Contains(Shape * shape)
+{
+	return shape->Contains(this);
+}
+
 bool Shapes::Frustum::CheckCube(float xCenter, float yCenter, float zCenter, float radius)
 {
 	D3DXPLANE pl[6];

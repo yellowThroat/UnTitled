@@ -9,7 +9,11 @@
          "../_Contents/Models/Animation/Boxing_Step.anim",
          "../_Contents/Models/Animation/One Punch.anim",
          "../_Contents/Models/Animation/Two Punch.anim",
-         "../_Contents/Models/Animation/kick.anim"
+         "../_Contents/Models/Animation/kick.anim",
+         "../_Contents/Models/Animation/One Hand Idle.anim",
+         "../_Contents/Models/Animation/One Hand Walking.anim",
+         "../_Contents/Models/Animation/One Hand Running.anim",
+         "../_Contents/Models/Animation/One Hand Combo.anim"
       ]
    }
 }

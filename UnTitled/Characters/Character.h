@@ -33,17 +33,22 @@ public:
 
 	virtual void Update();
 	virtual void Render();
+
+	void Damaged(Character* hitter);
+
+public:
 	Model* GetModel() { return model; }
 	D3DXMATRIX GetTransform(UINT index);
 
-protected:
+	class Weapon* GetWeapon() { return currentWeapon; }
 
 protected:
 	Model* model;
-
 	class ModelAnimPlayer* anim;
+
 
 	vector<Shapes::BoundingBox*> hurtBoxes;
 	vector<class Weapon*> weapons;
 	class Weapon* currentWeapon;
+	Mode mode;
 };

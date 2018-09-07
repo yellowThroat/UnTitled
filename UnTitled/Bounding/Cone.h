@@ -16,6 +16,9 @@ namespace Shapes
 		void SetAngle(float angle);
 		float GetHeight() { return _height; }
 		void SetHeight(float height);
+
+		bool Collide(Shape* shape);
+		Shapes::ContainmentType Contains(Shape* shape);
 	private:
 		float		_angle;
 		float		_height;

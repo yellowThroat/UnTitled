@@ -23,4 +23,5 @@ private:
 
 	class GameSettings* settings;
 	class Eve* eve;
+	class Zombie* zombie;
 };

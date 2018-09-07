@@ -10,14 +10,17 @@ struct GameCharacterSpec
 
 struct GamePlayerSpec : public GameCharacterSpec
 {
-	float BattleMoveSpeed = 3.0f;
-
+	float BoxingStepSpeed = 3.0f;
+	float BattleWalkSpeed;
+	float BattleRunSpeed;
 	GamePlayerSpec()
 	{
 		WalkSpeed = 5.0f;
 		RotateSpeed = 10.0f;
 		RunSpeed = 12.0f;
-		BattleMoveSpeed = 3.0f;
+		BoxingStepSpeed = 3.0f;
+		BattleWalkSpeed = 5.0f;
+		BattleRunSpeed = 10.0f;
 	}
 };
 

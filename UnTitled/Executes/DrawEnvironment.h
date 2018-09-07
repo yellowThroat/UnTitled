@@ -16,4 +16,5 @@ public:
 
 private:
 	class Sky* sky;
+	class Grid* grid;
 };

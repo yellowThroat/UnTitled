@@ -3,6 +3,17 @@ struct ExecuteValues;
 
 namespace Shapes
 {
+	class Sphere;
+	class Box;
+	class Frustum;
+	class Capsule;
+	class Cone;
+
+	enum class ContainmentType
+	{
+		Disjoint, Contains, Intersects
+	};
+
 	class Shape
 	{
 	public:
@@ -18,6 +29,19 @@ namespace Shapes
 		void SetValues(ExecuteValues* val) { _values = val; }
 		void SetColor(D3DXCOLOR color);
 		virtual float GetRadius() { return 0.0f; }
+
+		virtual bool Collide(Shape* shape) = 0;
+		virtual bool Collide(Box* shape) { return false; }
+		virtual bool Collide(Capsule* shape) { return false; }
+		virtual bool Collide(Cone* shape) { return false; }
+		virtual bool Collide(Frustum* shape) { return false; }
+		virtual bool Collide(Sphere* shape) { return false; }
+
+		virtual ContainmentType Contains(Shape * shape) = 0;
+		virtual ContainmentType Contains(Box* box) { return ContainmentType::Disjoint; }
+		virtual ContainmentType Contains(Sphere* box) { return ContainmentType::Disjoint; }
+		virtual ContainmentType Contains(Frustum* box) { return ContainmentType::Disjoint; }
+		virtual ContainmentType Contains(Capsule* box) { return ContainmentType::Disjoint; }
 
 	protected:
 		virtual void MakeShape() {}
@@ -67,5 +91,6 @@ namespace Shapes
 		UINT index;
 		Shape* box;
 		class Model* model;
+		bool valid;		
 	};
 }

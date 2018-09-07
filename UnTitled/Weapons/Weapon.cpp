@@ -22,6 +22,11 @@ void Weapon::Update()
 		D3DXMATRIX mat;
 		mat = character->GetTransform(hitBoxes[i]->index);
 		hitBoxes[i]->box->SetWorld(mat);
+		if (hitBoxes[i]->valid)
+			hitBoxes[i]->box->SetColor(D3DXCOLOR(1, 0, 0, 1));
+		else
+			hitBoxes[i]->box->SetColor(D3DXCOLOR(0, 0, 1, 1));
+
 		if (hitBoxes[i]->model)
 		{
 			vector<D3DXMATRIX> transforms;
@@ -40,4 +45,9 @@ void Weapon::Render()
 		if (hitBoxes[i]->model)
 			hitBoxes[i]->model->Mesh(0)->Render();
 	}
+}
+
+void Weapon::SetValid(UINT index, bool val)
+{
+	hitBoxes[index]->valid = val;
 }
