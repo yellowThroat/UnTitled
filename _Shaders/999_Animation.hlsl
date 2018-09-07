@@ -34,8 +34,11 @@ PixelInput VS(VertexTextureNormalTangentBlend input)
 float4 PS(PixelInput input) : SV_TARGET
 {
     float4 color = _diffuseMap.Sample(_diffuseSampler, input.uv);
+    float4 bump = _normalMap.Sample(_normalSampler, input.uv);
     float4 specular = _specularMap.Sample(_specularSampler, input.uv);
-    if (length(specular) > 0)
-        Specular(color.rgb, specular.rgb, input.normal, input.view);
+    //if (length(specular) > 0)
+    //    Specular(color.rgb, specular.rgb, input.normal, input.view);
+    //Bump(color, normal, input.normal, input.tangent);
+    Bump(color, bump , specular, input.normal, input.tangent, input.view);
     return color;
 }

@@ -53,6 +53,30 @@ void Model::BindMeshData()
 	}
 }
 
+void Model::GetSize(D3DXVECTOR3 & min, D3DXVECTOR3 & max)
+{
+	min = max = meshes[0]->meshParts[0]->vertices[0].position;
+
+	for(auto mesh : meshes)
+		for (auto part : mesh->meshParts)
+			for (auto p : part->vertices)
+			{
+				if (min.x > p.position.x)
+					min.x = p.position.x;
+				if (min.y > p.position.y)
+					min.y = p.position.y;
+				if (min.z > p.position.z)
+					min.z = p.position.z;
+
+				if (max.x < p.position.x)
+					max.x = p.position.x;
+				if (max.y < p.position.y)
+					max.y = p.position.y;
+				if (max.z < p.position.z)
+					max.z = p.position.z;
+			}
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 map<wstring, vector<Material *>> Models::materialMap;

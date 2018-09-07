@@ -340,7 +340,7 @@ void LinearFog(inout float3 color, float3 vPosition)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Diffuse(inout float3 color, float3 normal)
+void Diffuse(inout float4 color, float3 normal)
 {
     float intensity = dot(normal, -_direction);
     float3 diffuse = _ambient;
@@ -351,58 +351,28 @@ void Diffuse(inout float3 color, float3 normal)
         diffuse = saturate(diffuse);
     }
 
-    color = color * diffuse;
-
-}
-
-void Diffuse(inout float3 color, float3 direction, float3 normal)
-{
-    float intensity = dot(normal, -direction);
-    float3 diffuse = _ambient;
-
-    if (intensity > 0.0f)
-    {
-        diffuse = _ambient + _diffuse * intensity;
-    }
-
-    color = color * diffuse;
-}
-
-void Diffuse(inout float3 color, float3 diffuse, float3 direction, float3 normal)
-{
-    float3 light = direction * -1.0f;
-    float intensity = saturate(dot(normal, light));
-
-    color = color + diffuse * intensity;
-
+    color.rgb *= diffuse;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void Specular(inout float3 color, float3 normal, float3 eye)
+void Specular(inout float4 color, float3 normal, float3 eye)
 {
     float3 reflection = reflect(_direction, normal);
     float intensity = saturate(dot(reflection, eye));
     float specular = pow(intensity, _shininess);
 
-    color = color + _specular.rgb * specular;
+    if(specular > 0.0f)
+        color.rgb = saturate(color.rgb + _specular.rgb * specular);
 }
 
-void Specular(inout float3 color, float3 specularMap, float3 normal, float3 eye)
+void Specular(inout float4 color, float4 specularMap, float3 normal, float3 eye)
 {
     float3 reflection = reflect(_direction, normal);
     float intensity = saturate(dot(reflection, eye));
     float specular = pow(intensity, _shininess);
 
-    color = saturate(color + specular * specularMap);
-}
-
-void Specular(inout float3 color, float3 mapIntensity, float3 direction, float3 normal, float3 eye)
-{
-    float3 reflection = reflect(_direction, normal);
-    float intensity = saturate(dot(reflection, eye));
-    float specular = pow(intensity, _shininess);
-
-    color = color + _specular.rgb * mapIntensity * specular;
+    if (specular > 0.0f)
+        color.rgb = saturate(color.rgb + specularMap.rgb * specular);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,12 +386,7 @@ void Bump(inout float4 tColor, float4 bumpMap, float3 normal, float3 tangent)
 
     bumpNormal = normalize(bumpNormal);
 
-    float intensity = saturate(dot(bumpNormal, -_direction));
-
-    //float4 color = max(_ambient, saturate(_diffuse * intensity));
-    float4 color = saturate(_ambient + _diffuse * intensity);
-
-    tColor = color * tColor;
+    Diffuse(tColor, bumpNormal);
 }
 
 void Bump(inout float4 tColor, float4 bumpMap, float3 normal, float3 tangent, float3 eye)
@@ -433,14 +398,8 @@ void Bump(inout float4 tColor, float4 bumpMap, float3 normal, float3 tangent, fl
 
     bumpNormal = normalize(bumpNormal);
 
-    float intensity = saturate(dot(bumpNormal, -_direction));
-
-    //float4 color = max(_ambient, saturate(_diffuse * intensity));
-    float4 color = saturate(_ambient + _diffuse * intensity);
-
-    tColor = color * tColor;
-
-    Specular(tColor.rgb, bumpNormal, eye);
+    Diffuse(tColor, bumpNormal);
+    Specular(tColor, bumpNormal, eye);
 }
 
 void Bump(inout float4 tColor, float4 bumpMap, float4 specularIntensity, float3 normal, float3 tangent, float3 eye)
@@ -452,23 +411,8 @@ void Bump(inout float4 tColor, float4 bumpMap, float4 specularIntensity, float3 
 
     bumpNormal = normalize(bumpNormal);
 
-    float intensity = saturate(dot(bumpNormal, -_direction));
-
-    //float4 color = max(_ambient, saturate(_diffuse * intensity));
-    float4 color = saturate(_ambient + _diffuse * intensity);
-
-    tColor = color * tColor;
-
-    if (intensity > 0.0f)
-    {
-        float3 reflection = normalize(2 * intensity * bumpNormal + _direction);
-
-        float4 specular = pow(saturate(dot(reflection, eye)), _shininess);
-
-        specular = specular * specularIntensity;
-
-        tColor = saturate(tColor + specular * _specular);
-    }
+    Diffuse(tColor, bumpNormal);
+    Specular(tColor, specularIntensity, bumpNormal, eye);
 }
 
 

@@ -80,7 +80,7 @@ float4 PS(PixelInput input) : SV_TARGET
         myColor = myColor * detailColor * detailBrightness;
     }
     color = myColor;
-    Diffuse(color.rgb, input.normal);
+    Diffuse(color, input.normal);
 
     float4 brush = float4(0, 0, 0, 1);
     bool inBrush = false;
@@ -179,7 +179,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
         }
 
-        Diffuse(color.rgb, _direction, input.normal);
+        Diffuse(color, input.normal);
 
         int i = 0;
         for (i = 0; i < _pointLightCount; i++)

@@ -83,9 +83,9 @@ D3DXVECTOR3 Fbx::Utility::CalcTangent(D3DXVECTOR3 p0, D3DXVECTOR3 p1, D3DXVECTOR
 	float r = 1.0f / (u0 * v1 - v0 * u1);
 
 	D3DXVECTOR3 tangent;
-	tangent.x = r* (v1 * e0.x - v0 - e1.x);
-	tangent.y = r* (v1 * e0.y - v0 - e1.y);
-	tangent.z = r* (v1 * e0.z - v0 - e1.z);
+	tangent.x = r* (v1 * e0.x - v0 * e1.x);
+	tangent.y = r* (v1 * e0.y - v0 * e1.y);
+	tangent.z = r* (v1 * e0.z - v0 * e1.z);
 
 
 	return tangent;

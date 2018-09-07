@@ -1,0 +1,15 @@
+{
+   "ZombieGirl_Material" : {
+      "Ambient" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 0.80000001192092896 ],
+      "DiffuseFile" : [ "zombie_diffuse.png" ],
+      "Emissive" : [ 0.0, 0.0, 0.0, 1.0 ],
+      "EmissiveFile" : [ "" ],
+      "Name" : [ "ZombieGirl_Material" ],
+      "NormalFile" : [ "zombie_normal.png" ],
+      "ShaderName" : [ "999_Mesh.hlsl" ],
+      "Shininess" : 20.0,
+      "Specular" : [ 0.5, 0.5, 0.5, 1.0 ],
+      "SpecularFile" : [ "zombie_specular.png" ]
+   }
+}

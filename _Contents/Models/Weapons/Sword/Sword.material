@@ -1,15 +1,15 @@
 {
    "Material #24" : {
-      "Ambient" : [ 0.0, 0.0, 0.0, 0.0 ],
-      "Diffuse" : [ 0.0, 0.0, 0.0, 0.0 ],
+      "Ambient" : [ 0.7, 0.7, 0.7, 1.0 ],
+      "Diffuse" : [ 1.0, 1.0, 1.0, 1.0 ],
       "DiffuseFile" : [ "Narsil_UVW_3.png" ],
       "Emissive" : [ 0.0, 0.0, 0.0, 0.0 ],
       "EmissiveFile" : [ "" ],
       "Name" : [ "Material #24" ],
       "NormalFile" : [ "" ],
       "ShaderName" : [ "999_Mesh.hlsl" ],
-      "Shininess" : 0.0,
-      "Specular" : [ 0.0, 0.0, 0.0, 0.0 ],
+      "Shininess" : 15.0,
+      "Specular" : [ 1.0, 1.0, 1.0, 1.0 ],
       "SpecularFile" : [ "" ]
    }
 }

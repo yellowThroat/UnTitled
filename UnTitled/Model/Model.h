@@ -66,10 +66,10 @@ public:
 
 	void SaveAnimationSet();
 	void LoadAnimationSet(wstring file);
+	void GetSize(D3DXVECTOR3& min, D3DXVECTOR3& max);
 
 	private:
 	void BindMeshData();
-
 private:
 	class ModelBone* root;
 
