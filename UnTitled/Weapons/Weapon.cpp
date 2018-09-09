@@ -51,3 +51,23 @@ void Weapon::SetValid(UINT index, bool val)
 {
 	hitBoxes[index]->valid = val;
 }
+
+void Weapon::AddVictim(Character * victim)
+{
+	victims.push_back(victim);
+}
+
+void Weapon::ClearVictim()
+{
+	victims.clear();
+}
+
+bool Weapon::CheckVictim(Character * victim)
+{
+	for (auto v : victims)
+	{
+		if (v == victim) return true;
+	}
+
+	return false;
+}

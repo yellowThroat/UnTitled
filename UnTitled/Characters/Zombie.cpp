@@ -17,12 +17,28 @@ Zombie::~Zombie()
 
 void Zombie::Update()
 {
+	if (Movable()) Prepare(ZombieAnimation::Idle);
+
+	if (prepareAnimation != ZombieAnimation::Unknown)
+		Play();
+
 	Character::Update();
 }
 
 void Zombie::Render()
 {
 	Character::Render();
+}
+
+bool Zombie::Damaged(Character * hitter)
+{
+	if (Character::Damaged(hitter))
+	{
+		prepareAnimation = ZombieAnimation::Damaged;
+		return true;
+	}
+
+	return false;
 }
 
 void Zombie::OpenModel()
@@ -43,7 +59,7 @@ void Zombie::OpenModel()
 	
 	box = new Shapes::BoundingBox();
 	box->index = model->Bone(L"Spine1")->Index();
-	box->box = new Shapes::Capsule(D3DXVECTOR3(0, -40, 0), D3DXVECTOR3(0, 60, 0), 20.0f);
+	box->box = new Shapes::Capsule(D3DXVECTOR3(0, -40, 0), D3DXVECTOR3(0, 60, 0), 30.0f);
 	hurtBoxes.push_back(box);
 
 }
@@ -55,5 +71,58 @@ float Zombie::MoveSpeed()
 
 bool Zombie::Movable(MoveEnd type)
 {
+	bool b = true;
+	switch (currentAnimation)
+	{
+	case Zombie::ZombieAnimation::Damaged:
+		b = false;
+		break;
+	}
+
+	if (!b)
+	{
+		switch (type)
+		{
+		case Character::MoveEnd::Normal:
+			if (!anim->NextClip()->clip)
+				b |= anim->CurrentClip()->IsDone();
+			break;
+		case Character::MoveEnd::Combo:
+			if (!anim->NextClip()->clip)
+				b |= anim->CurrentClip()->Combo();
+			break;
+		}
+	}
+	return b;
+}
+
+void Zombie::Play()
+{
+	float blendTime = 0.0f;
+	bool bLoop = true;
+	int cut = 0;
+	switch (prepareAnimation)
+	{
+	case Zombie::ZombieAnimation::Idle:
+		blendTime = 0.2f;
+		break;
+	case Zombie::ZombieAnimation::Damaged:
+		blendTime = 0.1f;
+		bLoop = false;
+		break;
+	}
+
+	anim->Play((UINT)prepareAnimation, blendTime, bLoop, cut);
+	currentAnimation = prepareAnimation;
+	prepareAnimation = ZombieAnimation::Unknown;
+}
+
+bool Zombie::Prepare(ZombieAnimation animation)
+{
+	if (currentAnimation != animation)
+	{
+		prepareAnimation = animation;
+		return true;
+	}
 	return false;
 }

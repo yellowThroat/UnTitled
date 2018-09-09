@@ -237,12 +237,17 @@ void Eve::Play()
 		bLoop = false;
 		break;
 	case Eve::PlayerAnimation::OnePunch:
-	case Eve::PlayerAnimation::OneHand_Combo:
+		weapons[(UINT)WeaponType::Fist]->ClearVictim();
 		blendTime = 0.1f;
 		bLoop = false;
 		cut = 12;
 		break;
-
+	case Eve::PlayerAnimation::OneHand_Combo:
+		weapons[(UINT)WeaponType::OneHand]->ClearVictim();
+		blendTime = 0.1f;
+		bLoop = false;
+		cut = 12;
+		break;
 	}
 	
 	anim->Play((UINT)prepareAnimation, blendTime, bLoop, cut);
@@ -268,6 +273,8 @@ void Eve::Combo()
 		bLoop = false;
 		break;
 	}
+
+	currentWeapon->ClearVictim();
 
 	anim->Play((UINT)priorityAnimation, blendTime, bLoop, cut);
 
@@ -450,26 +457,12 @@ bool Eve::Movable(MoveEnd type)
 	bool b = true;
 	switch (currentAnimation)
 	{
-	case Eve::PlayerAnimation::UnKnown:
-		break;
-	case Eve::PlayerAnimation::Idle:
-	case Eve::PlayerAnimation::Walk:
-	case Eve::PlayerAnimation::Run:
-	case Eve::PlayerAnimation::Boxing_Idle:
-	case Eve::PlayerAnimation::Boxing_Step:
-	case Eve::PlayerAnimation::OneHand_Idle:
-	case Eve::PlayerAnimation::OneHand_Walk:
-	case Eve::PlayerAnimation::OneHand_Run:
-		b = true;
-		break;
 	case Eve::PlayerAnimation::Jump:
 	case Eve::PlayerAnimation::OnePunch:
 	case Eve::PlayerAnimation::TwoPunch:
 	case Eve::PlayerAnimation::Kick:
 	case Eve::PlayerAnimation::OneHand_Combo:
 		b = false;
-		break;
-	case Eve::PlayerAnimation::Count:
 		break;
 	}
 
@@ -540,4 +533,9 @@ void Eve::WeaponChage(WeaponType type)
 	if (type == WeaponType::UnArmed) return;
 
 	currentWeapon = weapons[(int)type];
+}
+
+bool Eve::Damaged(Character * hitter)
+{
+	return false;
 }

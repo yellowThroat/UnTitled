@@ -10,10 +10,13 @@
 #include "../Characters/Zombie.h"
 #include "../Weapons/Sword.h"
 #include "../Bounding/Capsule.h"
+#include "../Bounding/Sphere.h"
 
 DrawModel::DrawModel(ExecuteValues* values)
 	: Execute(values)
 	, settings(NULL)
+	, eve(NULL)
+	, zombie(NULL)
 {
 	settings = new GameSettings(values);
 	eve = new Eve(values);
@@ -32,10 +35,9 @@ void DrawModel::Update()
 	if (settings)
 		settings->Update();	
 
-	Test();
-
 	eve->Update();
 	zombie->Update();
+	Test();
 }
 
 void DrawModel::PreRender()
@@ -71,4 +73,5 @@ void DrawModel::Test()
 		values->MainCamera->CopyInfo(Camera::cameras[1]);
 	}
 
+	zombie->Damaged(eve);
 }

@@ -58,6 +58,38 @@ float Math::DistanceSquared(D3DXVECTOR3 vec1, D3DXVECTOR3 vec2)
 	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
 }
 
+float Math::DistancePointFromLine(D3DXVECTOR3 vec1, D3DXVECTOR3 vec2, D3DXVECTOR3 vec3)
+{
+	if (vec1 == vec3 || vec2 == vec3) return 0.0f;
+
+	D3DXVECTOR3 d0 = vec1 - vec3;
+	D3DXVECTOR3 d1 = vec2 - vec3;
+	D3DXVECTOR3 d2 = vec2 - vec1;
+
+	float a = D3DXVec3Length(&d0);
+	float b = D3DXVec3Length(&d1);
+	float c = D3DXVec3Length(&d2);
+
+	D3DXVec3Normalize(&d0, &d0);
+	D3DXVec3Normalize(&d1, &d1);
+	D3DXVec3Normalize(&d2, &d2);
+
+	float angle0 = acosf(D3DXVec3Dot(&d1, &d2));
+	float angle1 = acosf(D3DXVec3Dot(&-d0, &d2));
+	float angle2 = acosf(D3DXVec3Dot(&d0, &d1));
+
+	if (angle0 > (float)D3DX_PI / 2.0f)
+		return D3DXVec3Length(&(vec2 - vec3));
+
+	if (angle1 > (float)D3DX_PI / 2.0f)
+		return D3DXVec3Length(&(vec1 - vec3));
+	if (angle2 == 0.0f)
+	{
+		return a <= b ? a : b;
+	}
+	return a* b * sinf(angle2) / c;
+}
+
 void Math::RadianFromDirection(float& x, float& y, D3DXVECTOR3 dir)
 {
 	D3DXVECTOR3 X = dir;

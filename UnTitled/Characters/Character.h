@@ -34,7 +34,7 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-	void Damaged(Character* hitter);
+	virtual bool Damaged(Character* hitter);
 
 public:
 	Model* GetModel() { return model; }

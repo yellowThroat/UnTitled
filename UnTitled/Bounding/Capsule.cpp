@@ -2,11 +2,17 @@
 
 #include "Capsule.h"
 #include "Segment.h"
+#include "Sphere.h"
 
 Shapes::Capsule::Capsule(D3DXVECTOR3 p1, D3DXVECTOR3 p2, float radius)
 	: radius(radius)
 {
 	segment = new Segment(p1, p2);
+	D3DXVECTOR3 dir = p2 - p1;
+	D3DXVec3Normalize(&dir, &dir);
+
+	shortSegment = new Segment(p1 + dir * radius, p2 - dir * radius);
+
 	MakeShape();
 	MakeBuffer();
 }
@@ -14,13 +20,11 @@ Shapes::Capsule::Capsule(D3DXVECTOR3 p1, D3DXVECTOR3 p2, float radius)
 Shapes::Capsule::~Capsule()
 {
 	SAFE_DELETE(segment);
+	SAFE_DELETE(shortSegment);
 }
 
 void Shapes::Capsule::Update()
 {
-	D3DXVec3TransformCoord(&segment->p0, &segment->oP0, &_world);
-	D3DXVec3TransformCoord(&segment->p1, &segment->oP1, &_world);
-	
 	Shapes::Shape::Update();
 }
 
@@ -109,12 +113,29 @@ void Shapes::Capsule::MakeShape()
 		_indexData[i] = i;
 }
 
+void Shapes::Capsule::SetWorld(D3DXMATRIX mat)
+{
+	Shape::SetWorld(mat);
+
+	D3DXVec3TransformCoord(&segment->p0, &segment->oP0, &_world);
+	D3DXVec3TransformCoord(&segment->p1, &segment->oP1, &_world);
+	D3DXVec3TransformCoord(&shortSegment->p0, &shortSegment->oP0, &_world);
+	D3DXVec3TransformCoord(&shortSegment->p1, &shortSegment->oP1, &_world);
+}
+
+float Shapes::Capsule::GetRadius()
+{
+	D3DXVECTOR3 S, T;
+	D3DXQUATERNION Q;
+	D3DXMatrixDecompose(&S, &Q, &T, &_world);
+	return radius * fabsf(S.x);
+}
+
 bool Shapes::Capsule::Intersect(Capsule * c1, Capsule * c2)
 {
-	if (c1->radius + c2->radius > Segment::distSegToSeg(*c1->segment, *c2->segment)) {
+	if (c1->radius + c2->radius > Segment::distSegToSeg(*c1->shortSegment, *c2->shortSegment)) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -125,12 +146,33 @@ bool Shapes::Capsule::Collide(Shape * shape)
 
 bool Shapes::Capsule::Collide(Sphere * sphere)
 {
+	ContainmentType type = sphere->Contains(this);
+	switch (type)
+	{
+	case Shapes::ContainmentType::Disjoint:
+		return false;
+		break;
+	case Shapes::ContainmentType::Contains:
+	case Shapes::ContainmentType::Intersects:
+		return true;
+		break;
+	}
 	return false;
 }
 
 bool Shapes::Capsule::Collide(Capsule * capsule)
 {
-
+	ContainmentType type = capsule->Contains(this);
+	switch (type)
+	{
+	case Shapes::ContainmentType::Disjoint:
+		return false;
+		break;
+	case Shapes::ContainmentType::Contains:
+	case Shapes::ContainmentType::Intersects:
+		return true;
+		break;
+	}
 	return false;
 }
 
@@ -141,11 +183,17 @@ Shapes::ContainmentType Shapes::Capsule::Contains(Shape * shape)
 
 Shapes::ContainmentType Shapes::Capsule::Contains(Capsule * capsule)
 {
+	float distance = Segment::distSegToSeg(*shortSegment, *capsule->shortSegment);
+	float sumRadius = GetRadius() + capsule->GetRadius();
+
+	if (distance > sumRadius) return Shapes::ContainmentType::Disjoint;
+	else
+		return Shapes::ContainmentType::Intersects;
 	return Shapes::ContainmentType::Disjoint;
 }
 
 Shapes::ContainmentType Shapes::Capsule::Contains(Sphere * sphere)
 {
-	return Shapes::ContainmentType::Disjoint;
+	return sphere->Contains(this);
 }
 

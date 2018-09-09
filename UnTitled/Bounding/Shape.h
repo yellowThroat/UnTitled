@@ -25,7 +25,7 @@ namespace Shapes
 		void Clear();
 		D3DXVECTOR3 GetPosition() { return _position; }
 		D3DXMATRIX GetWorld() { return _world; }
-		void SetWorld(D3DXMATRIX mat);
+		virtual void SetWorld(D3DXMATRIX mat);
 		void SetValues(ExecuteValues* val) { _values = val; }
 		void SetColor(D3DXCOLOR color);
 		virtual float GetRadius() { return 0.0f; }

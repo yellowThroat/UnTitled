@@ -47,13 +47,14 @@ private:
 	void Combo();
 	void DecideAction(D3DXVECTOR3& velocity);
 	void DecideValid();
+	void WeaponChage(WeaponType type);
+	bool Damaged(Character* hitter) override;
 
 	bool Prepare(PlayerAnimation animation);
 	bool Priority(PlayerAnimation animation);
 	bool Movable(MoveEnd type = MoveEnd::Normal);
 	float CorrectionDegree(float& degree);
 	float MoveSpeed();
-	void WeaponChage(WeaponType type);
 	WeaponType GetWeaponType() { return currentWeaponType; }
 
 private:

@@ -3,6 +3,7 @@
 #include "../Model/ModelAnimPlayer.h"
 #include "../Objects/AnimationBlender.h"
 #include "../Bounding/Sphere.h"
+#include "../Bounding/Shape.h"
 #include "../Weapons/Weapon.h"
 
 Character::Character()
@@ -52,15 +53,23 @@ void Character::Render()
 		currentWeapon->Render();
 }
 
-void Character::Damaged(Character * hitter)
+bool Character::Damaged(Character * hitter)
 {
-	for (UINT i = 0; i < hitter->GetWeapon()->GetHitBoxes().size(); i++)
+	for (auto hit : hitter->GetWeapon()->GetHitBoxes())
 	{
-		for (UINT i = 0; i < hurtBoxes.size(); i++)
+		for (auto hurt : hurtBoxes)
 		{
-
+			if (!hitter->GetWeapon()->CheckVictim(this) && 
+				hit->valid &&
+				hit->box->Collide(hurt->box))
+			{
+				hitter->GetWeapon()->AddVictim(this);
+				return true;
+			}
 		}
 	}
+
+	return false;
 }
 
 D3DXMATRIX Character::GetTransform(UINT index)

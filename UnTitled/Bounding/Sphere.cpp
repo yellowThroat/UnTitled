@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 #include "Sphere.h"
+#include "Capsule.h"
+#include "Segment.h"
 
 Shapes::Sphere::Sphere(float radius)
 	: _radius(radius)
@@ -83,7 +85,7 @@ float Shapes::Sphere::GetRadius()
 	D3DXVECTOR3 S, T;
 	D3DXQUATERNION Q;
 	D3DXMatrixDecompose(&S, &Q, &T, &_world);
-	return _radius * S.x;
+	return _radius * fabsf(S.x);
 }
 
 void Shapes::Sphere::SetRadius(float radius)
@@ -106,15 +108,35 @@ bool Shapes::Sphere::Collide(Shape * shape)
 
 bool Shapes::Sphere::Collide(Sphere * sphere)
 {
+	ContainmentType type = Contains(sphere);
 
+	switch (type)
+	{
+	case Shapes::ContainmentType::Disjoint:
+		return false;
+		break;
+	case Shapes::ContainmentType::Contains:
+	case Shapes::ContainmentType::Intersects:
+		return true;
+		break;
+	}
 
 	return false;
 }
 
 bool Shapes::Sphere::Collide(Capsule * capsule)
 {
-
-
+	ContainmentType type = Contains(capsule);
+	switch (type)
+	{
+	case Shapes::ContainmentType::Disjoint:
+		return false;
+		break;
+	case Shapes::ContainmentType::Contains:
+	case Shapes::ContainmentType::Intersects:
+		return true;
+		break;
+	}
 	return false;
 }
 
@@ -125,6 +147,23 @@ Shapes::ContainmentType Shapes::Sphere::Contains(Shape * shape)
 
 Shapes::ContainmentType Shapes::Sphere::Contains(Capsule * capsule)
 {
+	D3DXVECTOR3 p0 = capsule->GetSSegment()->p0;
+	D3DXVECTOR3 p1 = capsule->GetSSegment()->p1;
+
+	float distance = Math::DistancePointFromLine(p0, p1, _position);
+
+	float sumRadius = GetRadius() + capsule->GetRadius();
+
+	if (distance > sumRadius) return ContainmentType::Disjoint;
+	else
+	{
+		if (distance + GetRadius() <= capsule->GetRadius())
+			return ContainmentType::Contains;
+
+		return ContainmentType::Intersects;
+	}
+
+
 	return ContainmentType::Disjoint;
 }
 
@@ -139,10 +178,10 @@ Shapes::ContainmentType Shapes::Sphere::Contains(Sphere * sphere)
 	if (distance > sumRadius) return ContainmentType::Disjoint;
 	else
 	{
-		//float min;
-		//min = GetRadius() > sphere->GetRadius() ? 
-		//if (distance + diff <= sumRadius)
-		//	return ContainmentType::Contains;
+		float min;
+		min = GetRadius() <= sphere->GetRadius() ? GetRadius() : sphere->GetRadius();
+		if (distance + min <= sumRadius - min)
+			return ContainmentType::Contains;
 
 		return ContainmentType::Intersects;
 	}
