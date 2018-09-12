@@ -1,24 +1,16 @@
 #include "stdafx.h"
 #include "GameSettings.h"
-#include "../Utilities/BinaryFile.h"
-#include "../Landscape/Terrain.h"
-#include "../Commands/Command.h"
-#include "../Lights/PointLight.h"
-#include "../Lights/SpotLight.h"
-#include "../Lights/ProjectionTexture.h"
-#include "../Lights/DirectionalLight.h"
-#include "../Objects/MeshSphere.h"
-#include "../Objects/MeshCube.h"
-#include "../Objects/MeshTeapot.h"
+#include "SettingsHeader.h"
 
 GameSettings::GameSettings(ExecuteValues* values)
-	: fixCamera(false), current(NULL), values(values)
+	: GameScene(values)
+	, current(NULL)
 {
 	Landscape::Terrain::brush = new Texture(Contents + L"Images/brush.png");
 	GameRender::root = new GameRender();
 	GameRender::root->SetValues(values);
 
-	GameRender::URManager = new UndoRedoManager();
+	GameRender::URManager = new UndoRedoManager();	
 }
 
 GameSettings::~GameSettings()
@@ -30,12 +22,9 @@ GameSettings::~GameSettings()
 
 void GameSettings::Update()
 {
-	FixedCamera();
 	InputHandle();
 	for (UINT i = 0; i < GameRender::root->ChildCount(); i++)
-	{
 		GameRender::root->Child(i)->Update();
-	}
 }
 
 void GameSettings::PreRender()
@@ -81,9 +70,7 @@ void GameSettings::PostRender()
 
 			if (ImGui::MenuItem("Close"))
 			{
-				GameRender::URManager->Clear();
-				GameRender::root->ClearChilds();
-				current= NULL;
+				ClearRoot();
 			}
 
 			ImGui::Separator();
@@ -146,6 +133,18 @@ void GameSettings::PostRender()
 		if (ImGui::Selectable("Create Empty"))
 			CreateEmpty();
 
+		if (ImGui::Selectable("Player"))
+			CreatePlayer();
+
+		if (ImGui::BeginMenu("Monsters"))
+		{
+			if (ImGui::MenuItem("Zombie"))
+				CreateMonsters(MonsterType::Zombie);
+
+			ImGui::EndMenu();
+		}
+			
+
 		if (ImGui::BeginMenu("Structure"))
 		{
 
@@ -188,6 +187,13 @@ void GameSettings::PostRender()
 
 }
 
+void GameSettings::ClearRoot()
+{
+	GameRender::URManager->Clear();
+	GameRender::root->ClearChilds();
+	current = NULL;
+}
+
 void GameSettings::CreateEmpty()
 {
 	GameRender* object = new GameRender();
@@ -209,10 +215,26 @@ void GameSettings::CreateEnvironment()
 
 void GameSettings::CreatePlayer()
 {
+	GameRender* player = new Eve(values);
 
-	//GameRender::URManager->AddState(cNew::Create(player));
+	GameRender::URManager->AddState(cNew::Create(player));
 
-	//GameRender::root->AddChild(player);
+	GameRender::root->AddChild(player);
+}
+
+void GameSettings::CreateMonsters(MonsterType type)
+{
+	GameRender* monster = NULL;
+	switch (type)
+	{
+	case GameSettings::MonsterType::Zombie:
+		monster = new Zombie();
+		break;
+	}
+
+	GameRender::URManager->AddState(cNew::Create(monster));
+
+	GameRender::root->AddChild(monster);
 }
 
 void GameSettings::CreateTerrain()
@@ -252,28 +274,6 @@ void GameSettings::CreateObject(UINT type)
 	}
 	GameRender::URManager->AddState(cNew::Create(object));
 	GameRender::root->AddChild(object);
-}
-
-void GameSettings::FixedCamera()
-{
-	if (Keyboard::Get()->Down(VK_RETURN))
-		fixCamera = !fixCamera;
-
-	if (!fixCamera) return;
-
-	//D3DXVECTOR3 position = player->Position();
-	//D3DXVECTOR3 direction = player->Direction();
-	//D3DXVECTOR3 camera = position - 5 * direction;
-
-	//float theta = D3DXVec3Dot(&D3DXVECTOR3(0, 0, 1), &direction);
-	//theta = acosf(theta);
-
-	//D3DXVECTOR3 cross;
-	//D3DXVec3Cross(&cross, &D3DXVECTOR3(0, 0, 1), &direction);
-	//if (cross.y < 0) theta = -theta;
-
-	//values->MainCamera->SetPosition(camera.x, 4.2f, camera.z);
-	//values->MainCamera->SetRotation((float)D3DX_PI / 18.0f, theta);
 }
 
 void GameSettings::InputHandle()
@@ -332,9 +332,7 @@ void GameSettings::SaveProject(wstring file)
 void GameSettings::LoadProject(wstring file)
 {
 	if (file.length() < 1) return;
-	GameRender::URManager->Clear();
-	GameRender::root->ClearChilds();
-	current = NULL;
+	ClearRoot();
 
 	BinaryReader* r = new BinaryReader();
 	r->Open(file);

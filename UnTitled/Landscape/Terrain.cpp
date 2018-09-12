@@ -25,7 +25,7 @@ Landscape::Terrain::Terrain(ExecuteValues *  values)
 	material = new Material();
 	material->SetShader(oShader);
 	material->SetDetailMap(Contents + L"Landscape/detail.jpg");
-
+	material->SetAmbient(0.8f, 0.8f, 0.8f);
 	worldBuffer = new WorldBuffer();
 	gridBuffer = new GridBuffer();
 
@@ -58,6 +58,11 @@ Landscape::Terrain::~Terrain()
 float Landscape::Terrain::GetVertexHeight(D3DXVECTOR3 position)
 {
 	return data->GetHeight(position);
+}
+
+void Landscape::Terrain::PreRender()
+{
+	Render();
 }
 
 void Landscape::Terrain::Update()
@@ -299,9 +304,7 @@ void Landscape::Terrain::Save(BinaryWriter * w)
 		wstring name = material->GetDiffuseMap()->GetFile();
 		w->String(String::ToString(name));
 	}
-	else w->Bool(false);
-	
-	
+	else w->Bool(false);	
 
 	w->UInt(childs.size());
 	for (UINT i = 0; i < childs.size(); i++)

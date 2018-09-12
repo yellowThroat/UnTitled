@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DirectionalLight.h"
+#include "../Objects/GameRender.h"
 #include "../Viewer/FixedCamera.h"
 
 DirectionalLight::DirectionalLight(ExecuteValues * val)
@@ -27,10 +28,13 @@ void DirectionalLight::AddObject(GameRender * object)
 void DirectionalLight::Update()
 {
 	D3DXVECTOR3 pos = values->GlobalLight->Data.Direction;
+
 	float x, y;
 	Math::RadianFromDirection(x, y, pos);
 	light->SetRotation(x, y);
-	pos *= -100.0f;
+	pos *= -50.0f;
+	if (position)
+		pos += *position;
 	light->SetPosition(pos.x, pos.y, pos.z);
 
 	light->GetMatrix(&view);
@@ -40,9 +44,41 @@ void DirectionalLight::Update()
 
 void DirectionalLight::Render()
 {
-	target->Set(0xFF000000);
+	target->Set(0xFFFFFFFF);
 
 	values->ViewProjection->SetView(view);
 	values->ViewProjection->SetProjection(projection);
 	values->ViewProjection->SetVSBuffer(0);
+
+
+	for (auto object : objects)
+	{
+		object->ShaderFile(shader);
+		object->PreRender();
+	}
+
+	if (Keyboard::Get()->Down('C'))
+	{
+		//ID3D11Texture2D* t = renderTarget->GetTexture()
+		Texture::SaveFile(L"test.png", target->GetTexture());
+	}
+
+}
+
+void DirectionalLight::EraseObject(UINT num)
+{
+	for (UINT i = 0; i < objects.size();)
+	{
+		if (objects[i]->GetNum() == num)
+		{
+			objects.erase(objects.begin() + i);
+			break;
+		}
+		else i++;
+	}
+}
+
+void DirectionalLight::Clear()
+{
+	objects.clear();
 }

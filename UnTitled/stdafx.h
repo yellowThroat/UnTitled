@@ -58,6 +58,7 @@ using namespace fbxsdk;
 const wstring Assets = L"../_Assets/";
 const wstring Contents = L"../_Contents/";
 const wstring Textures = L"../_Contents/Textures/";
+const wstring Images = L"../_Contents/Images/";
 const wstring Models = L"../_Contents/Models/";
 const wstring Project = L"../_Project/";
 const wstring Shaders = L"../_Shaders/";

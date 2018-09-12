@@ -12,10 +12,22 @@ public:
 	};
 
 	enum class RenderType 
-	{Unknown = 0, Player, Building, Terrain, PointLight, SpotLight, Etc,};
+	{
+		Unknown = 0,
+		Player,
+		Zombie,
+		Building,
+		Terrain, PointLight, SpotLight,
+		Etc,
+	};
 
 	GameRender();
 	virtual ~GameRender();
+
+	virtual void PreRender();
+	virtual void Update();
+	virtual void Render();
+	virtual void PostRender();
 
 	void Enable(bool val);
 	bool Enable();
@@ -57,9 +69,8 @@ public:
 	void AddPosition(D3DXVECTOR3 & vec);
 	D3DXMATRIX Transformed();
 
-	virtual void Update();
-	virtual void Render();
-	virtual void PostRender();
+	UINT GetNum() { return num; }
+	RenderType GetType() { return type; }
 
 	void Name(string str);
 	string Name();
@@ -77,6 +88,7 @@ public:
 	void Separation(GameRender* val = NULL);
 	bool CheckParenting(GameRender* val);
 	void ClearChilds();
+	void NullChilds();
 	void Parenting(D3DXVECTOR3& rotate, D3DXVECTOR3& scale);
 	void Separation(D3DXVECTOR3& rotate, D3DXVECTOR3& scale);
 

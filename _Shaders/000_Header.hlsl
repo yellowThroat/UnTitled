@@ -280,8 +280,8 @@ void SpotLighting(inout float3 color, SpotLight light, float3 position, float3 n
     color = saturate(color + light.Color * intensity);
 }
 
-Texture2D _projectionMap : register(t5);
-SamplerState _projectionSampler : register(s5);
+Texture2D _projectionMap : register(t6);
+SamplerState _projectionSampler : register(s6);
 
 cbuffer VS_VPTexture : register(b10)
 {
@@ -343,7 +343,7 @@ void LinearFog(inout float3 color, float3 vPosition)
 void Diffuse(inout float4 color, float3 normal)
 {
     float intensity = dot(normal, -_direction);
-    float3 diffuse = _ambient;
+    float4 diffuse = _ambient;
 
     if (intensity > 0.0f)
     {
@@ -351,7 +351,7 @@ void Diffuse(inout float4 color, float3 normal)
         diffuse = saturate(diffuse);
     }
 
-    color.rgb *= diffuse;
+    color *= diffuse;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

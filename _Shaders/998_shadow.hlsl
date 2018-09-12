@@ -6,14 +6,30 @@ struct PixelInput
     float4 dPosition : POSITION0;
 };
 
-PixelInput VS(VertexColorTextureNormal input)
+PixelInput VS(VertexTextureNormalTangentBlend input)
 {
     PixelInput output;
     output.position = float4(1, 1, 1, 1);
-    if (isBone)
-        output.position = WVP(input.position, Bones[BoneNumber]);
-    if (!isBone)
+    if (isBone == 0)
+    {
         output.position = WVP(input.position);
+
+    }
+    if (isBone == 1)
+    {
+        output.position = WVP(input.position, Bones[BoneNumber]);
+    }
+    if (isBone == 2)
+    {
+        matrix transform = 0;
+        transform += mul(input.blendWeights.x, Bones[(uint) input.blendIndices.x]);
+        transform += mul(input.blendWeights.y, Bones[(uint) input.blendIndices.y]);
+        transform += mul(input.blendWeights.z, Bones[(uint) input.blendIndices.z]);
+        transform += mul(input.blendWeights.w, Bones[(uint) input.blendIndices.w]);
+
+        output.position = WVP(input.position, transform);
+    }
+
     
     output.dPosition = output.position;
 
@@ -22,6 +38,5 @@ PixelInput VS(VertexColorTextureNormal input)
 
 float4 PS(PixelInput input) : SV_TARGET
 {
-    float depth = input.dPosition.z / input.dPosition.w;
-    return float4(depth, 0, 0, 1);
+    return float4(0, 0, 0, 1);
 }

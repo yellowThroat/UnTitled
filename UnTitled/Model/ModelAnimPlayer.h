@@ -15,6 +15,15 @@ struct Binder
 		return *this;
 	}
 
+	void Stop()
+	{
+		currentKeyframe = 0;
+		frameTime = 0.0f;
+		keyframeFactor = 0.0f;
+		nextKeyframe = 1;
+		elapsedTime = 0.0f;
+	}
+
 	void Initialize()
 	{
 		clip = NULL;
@@ -61,6 +70,8 @@ public:
 
 	void Update();
 	void Render();
+	void PostRender();
+
 public:
 	void World(D3DXMATRIX* world);
 	void RootAxis(D3DXMATRIX root);
@@ -88,6 +99,7 @@ private:
 	string clipList;
 
 	UINT BindCount;
+	UINT currentClipIndex;
 
 	float blendTime;
 

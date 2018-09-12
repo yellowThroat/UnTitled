@@ -2,12 +2,11 @@
 #include "Eve.h"
 #include "../Model/ModelAnimPlayer.h"
 #include "GamePlayerInput.h"
-#include "../Objects/AnimationBlender.h"
-#include "../Objects/AnimationClip.h"
 #include "../Bounding/Capsule.h"
 #include "../Bounding/Sphere.h"
 #include "../Weapons/Fist.h"
 #include "../Weapons/Sword.h"
+#include "../GUI/Bar.h"
 
 Eve::Eve(ExecuteValues* values)
 	: bRun(false)
@@ -20,47 +19,81 @@ Eve::Eve(ExecuteValues* values)
 {
 	OpenModel();
 
-	spec = new GamePlayerSpec();
 	input = new GamePlayerInput();
+	targetHpBar = new Bar(Images + L"hpBarBottom.png", Images + L"hpBarTop.png", NULL);
 }
 
 Eve::~Eve()
 {
-	SAFE_DELETE(spec);
 	SAFE_DELETE(input);
+	SAFE_DELETE(targetHpBar);
 }
 
-void Eve::Update()
+void Eve::UpdateInGame()
 {
 	InputHandle();
 
 	ModelRotation();
 
-	D3DXMATRIX S, R, T;
+	CalcPosition();
+
+	D3DXMATRIX R, T;
 	D3DXMatrixTranslation(&T, position.x, position.y, position.z);
 	D3DXMatrixRotationYawPitchRoll(&R, rotate.y + Math::ToRadian(currentWaistAngle), rotate.x, rotate.z);
 
 	World(R * T);
 
-	CalcPosition();
 
 	Character::Update();
 
 	DecideValid();
+
+	if (target)
+	{
+		targetHpBar->SetTarget(target->Target());
+		targetHpBar->SetRatio(target->GetHpRatio());
+
+	}
+	else
+		targetHpBar->SetTarget(NULL);
+
+	targetHpBar->Update();
+}
+
+void Eve::Update()
+{
+	Character::Update();
+
 }
 
 void Eve::Render()
 {
+	if (target)
+	{
+		ImGui::Text("target name %s", target->Name().c_str());
+		targetHpBar->Render();
+	}
 	Character::Render();
+
+
 }
 
 void Eve::OpenModel()
 {
+	type = RenderType::Player;
+	name = "Eve";
+	strcpy_s(editBuf.name, name.c_str());
+
 	// Model
 	model = new Model();
 	model->ReadMaterial(Models + L"Characters/Player/Eve.material");
 	model->ReadMesh(Models + L"Characters/Player/Eve.mesh");
 	model->LoadAnimationSet(Models + L"Animation/Player AnimSet.json");
+
+	oShader = new Shader(Shaders + L"999_Animation.hlsl");
+
+	for (auto material : model->Materials())
+		material->SetShader(oShader);
 
 	// Animation
 	D3DXMatrixScaling(&rootAxis, 0.05f, 0.05f, 0.05f);
@@ -74,12 +107,7 @@ void Eve::OpenModel()
 
 	box = new Shapes::BoundingBox();
 	box->index = model->Bone(L"Spine1")->Index();
-	box->box = new Shapes::Capsule(D3DXVECTOR3(0, -40, 0), D3DXVECTOR3(0, 20, 0), 18.0f);
-	hurtBoxes.push_back(box);
-
-	box = new Shapes::BoundingBox();
-	box->index = model->Bone(L"Head")->Index();
-	box->box = new Shapes::Sphere(10.0f);
+	box->box = new Shapes::Capsule(D3DXVECTOR3(0, -40, 0), D3DXVECTOR3(0, 30, 0), 20.0f);
 	hurtBoxes.push_back(box);
 
 	// Weapon
@@ -87,6 +115,12 @@ void Eve::OpenModel()
 	weapons.push_back(new Sword(this));
 	
 	WeaponChage(WeaponType::Fist);
+
+	// spec
+	basicSpec = new GamePlayerSpec();
+	spec = dynamic_cast<GamePlayerSpec*>(basicSpec);
+
+	InitStats();
 }
 
 void Eve::InputHandle()
@@ -108,13 +142,17 @@ void Eve::InputTransition()
 {
 	if (input->Stroke(GamePlayerKey::Run)) bRun = true;
 	if (input->Released(GamePlayerKey::Run)) bRun = false;
-	if (input->Stroke(GamePlayerKey::Transition) && Movable())
+
+	if (!Movable()) return;
+
+	if (input->Stroke(GamePlayerKey::Transition))
 	{
 		switch (mode)
 		{
 		case Eve::Mode::Free:	mode = Mode::Battle; break;
 		case Eve::Mode::Battle: mode = Mode::Free; break;
 		}
+
 	}
 
 	if (input->isStrokeSlot() >= 0)
@@ -171,6 +209,10 @@ void Eve::InputAction()
 			Priority(PlayerAnimation::TwoPunch);
 		if (currentAnimation == PlayerAnimation::TwoPunch)
 			Priority(PlayerAnimation::Kick);
+		if (currentAnimation == PlayerAnimation::OneHand_First)
+			Priority(PlayerAnimation::OneHand_Second);
+		if (currentAnimation == PlayerAnimation::OneHand_Second)
+			Priority(PlayerAnimation::OneHand_Last);			
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +232,7 @@ void Eve::InputAction()
 				bStop = true;
 			break;
 		case Eve::WeaponType::OneHand:
-			if (Prepare(PlayerAnimation::OneHand_Combo))
+			if (Prepare(PlayerAnimation::OneHand_First))
 				bStop = true;
 			break;
 		}
@@ -219,6 +261,7 @@ void Eve::Play()
 {
 	float blendTime = 0.0f;
 	bool bLoop = true;
+	bool bAttack = false;
 	int cut = 0;
 	switch (prepareAnimation)
 	{
@@ -236,20 +279,36 @@ void Eve::Play()
 		blendTime = 0.1f;
 		bLoop = false;
 		break;
+	case Eve::PlayerAnimation::Damaged:
+		velocity = D3DXVECTOR3(0, 0, 0);
+		blendTime = 0.1f;
+		bLoop = false;
+		break;
 	case Eve::PlayerAnimation::OnePunch:
 		weapons[(UINT)WeaponType::Fist]->ClearVictim();
 		blendTime = 0.1f;
 		bLoop = false;
+		bAttack = true;
 		cut = 12;
 		break;
-	case Eve::PlayerAnimation::OneHand_Combo:
+	case Eve::PlayerAnimation::OneHand_First:
 		weapons[(UINT)WeaponType::OneHand]->ClearVictim();
 		blendTime = 0.1f;
 		bLoop = false;
+		bAttack = true;
 		cut = 12;
 		break;
 	}
-	
+
+	if (bAttack && target)
+	{
+		D3DXVECTOR3 forward = Direction();
+		D3DXVECTOR3 dir = target->Position() - position;
+
+		float angle = Math::AngleToDegreeY(forward, dir);
+		currentWaistAngle += angle;
+	}
+
 	anim->Play((UINT)prepareAnimation, blendTime, bLoop, cut);
 	currentAnimation = prepareAnimation;
 	prepareAnimation = PlayerAnimation::UnKnown;
@@ -265,16 +324,31 @@ void Eve::Combo()
 	{
 	case PlayerAnimation::TwoPunch:
 		blendTime = 0.1f;
-		bLoop = false;
 		cut = 18;
 		break;
 	case PlayerAnimation::Kick:
 		blendTime = 0.1f;
-		bLoop = false;
+		break;
+	case PlayerAnimation::OneHand_Second:
+		blendTime = 0.1f;
+		cut = 18;
+		break;
+	case PlayerAnimation::OneHand_Last:
+		blendTime = 0.1f;
 		break;
 	}
-
+	velocity = D3DXVECTOR3(0, 0, 0);
 	currentWeapon->ClearVictim();
+
+	if (target)
+	{
+		D3DXVECTOR3 forward = Direction();
+		D3DXVECTOR3 dir = target->Position() - position;
+
+		float angle = Math::AngleToDegreeY(forward, dir);
+		currentWaistAngle += angle;
+	}
+
 
 	anim->Play((UINT)priorityAnimation, blendTime, bLoop, cut);
 
@@ -444,7 +518,17 @@ void Eve::DecideValid()
 			index = 2;
 		}
 		break;
-	case Eve::PlayerAnimation::OneHand_Combo:
+	case Eve::PlayerAnimation::OneHand_First:
+		if (frame >= 18 && frame <= 32)
+			bValid = true;
+		break;
+	case Eve::PlayerAnimation::OneHand_Second:
+		if (frame >= 22 && frame <= 27)
+			bValid = true;
+		break;
+	case Eve::PlayerAnimation::OneHand_Last:
+		if (frame >= 18 && frame <= 30)
+			bValid = true;
 		break;
 	}
 
@@ -461,7 +545,10 @@ bool Eve::Movable(MoveEnd type)
 	case Eve::PlayerAnimation::OnePunch:
 	case Eve::PlayerAnimation::TwoPunch:
 	case Eve::PlayerAnimation::Kick:
-	case Eve::PlayerAnimation::OneHand_Combo:
+	case Eve::PlayerAnimation::OneHand_First:
+	case Eve::PlayerAnimation::OneHand_Second:
+	case Eve::PlayerAnimation::OneHand_Last:
+	case Eve::PlayerAnimation::Damaged:
 		b = false;
 		break;
 	}
@@ -537,5 +624,58 @@ void Eve::WeaponChage(WeaponType type)
 
 bool Eve::Damaged(Character * hitter)
 {
+	float distance = D3DXVec3Length(&(hitter->Position() - position));
+	if (distance >= 5.0f) return false;
+
+	if (Character::Damaged(hitter))
+	{
+		prepareAnimation = PlayerAnimation::Damaged;
+		return true;
+	}
+
 	return false;
+}
+
+void Eve::SearchTarget(Character * character)
+{
+	D3DXVECTOR3 forward = Direction();
+	D3DXVECTOR3 dir;
+	float angle;
+	float distance = spec->TargetDistance;
+	float newAngle;
+	float newDistance;
+
+	if (target)
+	{
+		dir = target->Position() - position;
+		angle = Math::AngleToDegreeY(forward, dir);
+		distance = D3DXVec3Length(&(target->Position() - position));
+
+		if (distance >= spec->TargetDistance || fabsf(angle) >= spec->TargetAngle)
+			target = NULL;
+	}
+
+	if (!character) return;
+
+	dir = character->Position() - position;
+
+	newAngle = Math::AngleToDegreeY(forward, dir);
+	newDistance = D3DXVec3Length(&(character->Position() - position));
+
+	if (fabsf(newAngle) < spec->TargetAngle && newDistance < distance)
+		target = character;
+}
+
+void Eve::ShaderFile(Shader * val)
+{
+	if (!val)
+	{
+		for (auto material : model->Materials())
+			material->SetShader(oShader);
+
+		return;
+	}
+
+	for (auto material : model->Materials())
+		material->SetShader(val);
 }

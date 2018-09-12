@@ -120,32 +120,14 @@
     <ClInclude Include="Executes\ExportMesh.h">
       <Filter>Executes</Filter>
     </ClInclude>
-    <ClInclude Include="Executes\ExportAnimation.h">
-      <Filter>Executes</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities\Xml.h">
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Fbx\XmlToAnim.h">
       <Filter>Fbx</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\AnimationBinder.h">
-      <Filter>Objects\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\AnimationKeyframe.h">
-      <Filter>Objects\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\AnimationClip.h">
-      <Filter>Objects\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\AnimationBlender.h">
-      <Filter>Objects\Animation</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\GameModel.h">
       <Filter>Objects\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\GameAnimationModel.h">
-      <Filter>Objects\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Viewer\Free.h">
       <Filter>Viewer</Filter>
@@ -264,14 +246,41 @@
     <ClInclude Include="Bounding\Segment.h">
       <Filter>Bounding</Filter>
     </ClInclude>
-    <ClInclude Include="Weapons\Fist.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="Characters\Zombie.h">
       <Filter>Characters\Monsters</Filter>
     </ClInclude>
     <ClInclude Include="Landscape\Grid.h">
       <Filter>Landscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\SettingsHeader.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\InGame.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\GameScene.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\AiContext.h">
+      <Filter>Characters\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters\AiState.h">
+      <Filter>Characters\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\Fist.h">
+      <Filter>Weapons\Fist</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\ZombieFist.h">
+      <Filter>Weapons\Fist</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\WeaponDatas.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Bar.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Canvas.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -302,9 +311,6 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{b8e22b6e-ca58-4412-b76d-cdc9b2ea4b45}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\Animation">
-      <UniqueIdentifier>{ef3f3779-359b-4bf1-92b4-6527c398280c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Objects\Models">
       <UniqueIdentifier>{efefd54a-0aca-4f3c-888b-f42cbcf3352a}</UniqueIdentifier>
     </Filter>
@@ -332,9 +338,6 @@
     <Filter Include="Characters\Player">
       <UniqueIdentifier>{6e7bc4b3-c0b5-4b20-a744-cc21b14b5aa5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tool">
-      <UniqueIdentifier>{852c8e48-95f7-4381-a427-8ea0f8122ce1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Weapons">
       <UniqueIdentifier>{f7df0f69-acd4-49a6-83b2-0d74c390b07c}</UniqueIdentifier>
     </Filter>
@@ -343,6 +346,18 @@
     </Filter>
     <Filter Include="Characters\Monsters">
       <UniqueIdentifier>{b5e78856-b8ee-4f90-b04d-a572294a0041}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool">
+      <UniqueIdentifier>{852c8e48-95f7-4381-a427-8ea0f8122ce1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Characters\AI">
+      <UniqueIdentifier>{69511ba3-4cd2-4cb0-97c4-b514450931f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons\Fist">
+      <UniqueIdentifier>{357a7b51-7c2c-49aa-86e4-4821d1be43e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{7590c19b-7cc9-4770-b42b-ae9c49fd27ee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -444,9 +459,6 @@
     <ClCompile Include="Executes\ExportMesh.cpp">
       <Filter>Executes</Filter>
     </ClCompile>
-    <ClCompile Include="Executes\ExportAnimation.cpp">
-      <Filter>Executes</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities\Xml.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
@@ -455,9 +467,6 @@
     </ClCompile>
     <ClCompile Include="Objects\GameModel.cpp">
       <Filter>Objects\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\GameAnimationModel.cpp">
-      <Filter>Objects\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Viewer\Free.cpp">
       <Filter>Viewer</Filter>
@@ -567,14 +576,32 @@
     <ClCompile Include="Bounding\Segment.cpp">
       <Filter>Bounding</Filter>
     </ClCompile>
-    <ClCompile Include="Weapons\Fist.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="Characters\Zombie.cpp">
       <Filter>Characters\Monsters</Filter>
     </ClCompile>
     <ClCompile Include="Landscape\Grid.cpp">
       <Filter>Landscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\InGame.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\GameScene.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Characters\AiContext.cpp">
+      <Filter>Characters\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\Fist.cpp">
+      <Filter>Weapons\Fist</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\ZombieFist.cpp">
+      <Filter>Weapons\Fist</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Bar.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Canvas.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

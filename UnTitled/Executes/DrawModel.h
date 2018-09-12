@@ -1,11 +1,16 @@
 #pragma once
-namespace Shapes
-{
-	class Shape;
-}
 
 class DrawModel : public Execute
 {
+public:
+	enum class SceneType
+	{
+		Unknown,
+		LevelEditor,
+		InGame,
+		Count,
+	};
+
 public:
 	DrawModel(ExecuteValues* values);
 	~DrawModel();
@@ -19,9 +24,14 @@ public:
 	void ResizeScreen() {}
 
 private:
-	void Test();
+	void InputHandle();
+	void RunGame();
+	void RunEditor();
 
 	class GameSettings* settings;
-	class Eve* eve;
-	class Zombie* zombie;
+	class InGame* inGame;
+
+	class GameScene* currentScene;
+
+	SceneType currentSceneType;
 };

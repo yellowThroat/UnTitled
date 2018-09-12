@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Sword.h"
+#include "WeaponDatas.h"
 #include "../Characters/Character.h"
 #include "../Bounding/Capsule.h"
 
@@ -32,4 +33,6 @@ void Sword::OpenModel()
 	hitBoxes.push_back(hitBox);
 
 	D3DXMatrixTranslation(&rootAxis, 13.7f, -3.4f, 25.0f);
+
+	spec = new PlayerSwordSpec();
 }

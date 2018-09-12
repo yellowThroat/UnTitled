@@ -1,77 +1,109 @@
 #include "stdafx.h"
 #include "DrawModel.h"
-#include "../Fbx/Exporter.h"
-#include "../Objects/GameAnimationModel.h"
 #include "../Tool/GameSettings.h"
-#include "../Model/ModelAnimPlayer.h"
-#include "../Environment/Rain.h"
-#include "../Environment/Snow.h"
+#include "../Tool/InGame.h"
 #include "../Characters/Eve.h"
-#include "../Characters/Zombie.h"
-#include "../Weapons/Sword.h"
-#include "../Bounding/Capsule.h"
-#include "../Bounding/Sphere.h"
 
 DrawModel::DrawModel(ExecuteValues* values)
 	: Execute(values)
 	, settings(NULL)
-	, eve(NULL)
-	, zombie(NULL)
+	, inGame(NULL)
+	, currentScene(NULL)
+	, currentSceneType(SceneType::LevelEditor)
 {
 	settings = new GameSettings(values);
-	eve = new Eve(values);
-	zombie = new Zombie();
+	inGame = new InGame(values);
+	currentScene = settings;
 }
 
 DrawModel::~DrawModel()
 {	
-	SAFE_DELETE(zombie);
-	SAFE_DELETE(eve);
 	SAFE_DELETE(settings);	
+	SAFE_DELETE(inGame);
 }
 
 void DrawModel::Update()
 {
-	if (settings)
-		settings->Update();	
+	InputHandle();
 
-	eve->Update();
-	zombie->Update();
-	Test();
+	if (currentScene)
+		currentScene->Update();
 }
 
 void DrawModel::PreRender()
 {
+	if (currentScene)
+		currentScene->PreRender();
 }
 
 void DrawModel::Render()
 {
-	if (settings)
-		settings->Render();
-	eve->Render();
-	zombie->Render();
+	currentScene->Render();
 }
 
 void DrawModel::PostRender()
 {
-	if (settings)
-		settings->PostRender();
+	currentScene->PostRender();
+
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Run"))
+		{
+			if (ImGui::MenuItem("Runs", "Ctrl + F5"))
+			{
+				RunGame();
+			}
+
+			if (ImGui::MenuItem("Stop", "Ctrl + F5"))
+			{
+				RunEditor();
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
 }
 
-void DrawModel::Test()
+void DrawModel::InputHandle()
 {
-	if (Keyboard::Get()->Down(VK_RETURN))
+	if (Keyboard::Get()->Press(VK_CONTROL))
 	{
-		values->MainCamera = Camera::cameras[1];
-		values->MainCamera->CopyInfo(Camera::cameras[0]);
-		values->MainCamera->SetTarget(eve->Target());
+		if (Keyboard::Get()->Down(VK_F5))
+		{
+			switch (currentSceneType)
+			{
+			case DrawModel::SceneType::LevelEditor:
+				RunGame();
+				break;
+			case DrawModel::SceneType::InGame:
+				RunEditor();
+				break;
+			}
+		}
 	}
-
-	if (Keyboard::Get()->Down('P'))
-	{
-		values->MainCamera = Camera::cameras[0];
-		values->MainCamera->CopyInfo(Camera::cameras[1]);
-	}
-
-	zombie->Damaged(eve);
 }
+
+void DrawModel::RunGame()
+{
+	settings->SaveProject(Project + L"Temp");
+	inGame->TakeRootInfo();
+	currentSceneType = SceneType::InGame;
+	currentScene = inGame;
+	values->MainCamera = Camera::cameras[1];
+	values->MainCamera->SetTarget(inGame->Target());
+}
+
+void DrawModel::RunEditor()
+{
+	currentSceneType = SceneType::LevelEditor;
+	currentScene = settings;
+	values->MainCamera = Camera::cameras[0];
+	values->MainCamera->CopyInfo(Camera::cameras[1]);
+
+	inGame->Clear();
+	GameRender::root->NullChilds();;
+	settings->LoadProject(Project + L"Temp.pro");
+}
+

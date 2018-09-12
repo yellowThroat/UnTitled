@@ -26,6 +26,8 @@
     <ClInclude Include="Bounding\Segment.h" />
     <ClInclude Include="Bounding\Shape.h" />
     <ClInclude Include="Bounding\Sphere.h" />
+    <ClInclude Include="Characters\AiContext.h" />
+    <ClInclude Include="Characters\AiState.h" />
     <ClInclude Include="Characters\Character.h" />
     <ClInclude Include="Characters\Eve.h" />
     <ClInclude Include="Characters\GameData.h" />
@@ -44,7 +46,6 @@
     <ClInclude Include="Executes\DrawModel.h" />
     <ClInclude Include="Executes\Execute.h" />
     <ClInclude Include="Executes\ExeGui.h" />
-    <ClInclude Include="Executes\ExportAnimation.h" />
     <ClInclude Include="Executes\ExportMesh.h" />
     <ClInclude Include="Executes\GuiSettings.h" />
     <ClInclude Include="Fbx\BoneWeights.h" />
@@ -52,6 +53,8 @@
     <ClInclude Include="Fbx\Type.h" />
     <ClInclude Include="Fbx\Utility.h" />
     <ClInclude Include="Fbx\XmlToAnim.h" />
+    <ClInclude Include="GUI\Bar.h" />
+    <ClInclude Include="GUI\Canvas.h" />
     <ClInclude Include="Interfaces\ICloneable.h" />
     <ClInclude Include="Landscape\Data.h" />
     <ClInclude Include="Landscape\Grid.h" />
@@ -69,13 +72,8 @@
     <ClInclude Include="Model\ModelBone.h" />
     <ClInclude Include="Model\ModelMesh.h" />
     <ClInclude Include="Model\ModelMeshPart.h" />
-    <ClInclude Include="Objects\AnimationBinder.h" />
-    <ClInclude Include="Objects\AnimationBlender.h" />
-    <ClInclude Include="Objects\AnimationClip.h" />
-    <ClInclude Include="Objects\GameAnimationModel.h" />
     <ClInclude Include="Objects\GameModel.h" />
     <ClInclude Include="Objects\GameRender.h" />
-    <ClInclude Include="Objects\AnimationKeyframe.h" />
     <ClInclude Include="Objects\MeshCube.h" />
     <ClInclude Include="Objects\MeshSphere.h" />
     <ClInclude Include="Objects\MeshTeapot.h" />
@@ -95,6 +93,9 @@
     <ClInclude Include="Systems\Time.h" />
     <ClInclude Include="Systems\Window.h" />
     <ClInclude Include="Tool\GameSettings.h" />
+    <ClInclude Include="Tool\InGame.h" />
+    <ClInclude Include="Tool\GameScene.h" />
+    <ClInclude Include="Tool\SettingsHeader.h" />
     <ClInclude Include="Utilities\BinaryFile.h" />
     <ClInclude Include="Utilities\Json.h" />
     <ClInclude Include="Utilities\Math.h" />
@@ -113,6 +114,8 @@
     <ClInclude Include="Weapons\Fist.h" />
     <ClInclude Include="Weapons\Sword.h" />
     <ClInclude Include="Weapons\Weapon.h" />
+    <ClInclude Include="Weapons\WeaponDatas.h" />
+    <ClInclude Include="Weapons\ZombieFist.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bounding\Box.cpp" />
@@ -122,6 +125,7 @@
     <ClCompile Include="Bounding\Segment.cpp" />
     <ClCompile Include="Bounding\Shape.cpp" />
     <ClCompile Include="Bounding\Sphere.cpp" />
+    <ClCompile Include="Characters\AiContext.cpp" />
     <ClCompile Include="Characters\Character.cpp" />
     <ClCompile Include="Characters\Eve.cpp" />
     <ClCompile Include="Characters\Zombie.cpp" />
@@ -136,11 +140,12 @@
     </ClCompile>
     <ClCompile Include="Executes\DrawModel.cpp" />
     <ClCompile Include="Executes\ExeGui.cpp" />
-    <ClCompile Include="Executes\ExportAnimation.cpp" />
     <ClCompile Include="Executes\ExportMesh.cpp" />
     <ClCompile Include="Fbx\Exporter.cpp" />
     <ClCompile Include="Fbx\Utility.cpp" />
     <ClCompile Include="Fbx\XmlToAnim.cpp" />
+    <ClCompile Include="GUI\Bar.cpp" />
+    <ClCompile Include="GUI\Canvas.cpp" />
     <ClCompile Include="Landscape\Data.cpp" />
     <ClCompile Include="Landscape\Grid.cpp" />
     <ClCompile Include="Landscape\Ocean.cpp" />
@@ -159,7 +164,6 @@
     <ClCompile Include="Model\ModelMesh.cpp" />
     <ClCompile Include="Model\ModelMeshPart.cpp" />
     <ClCompile Include="Model\ModelReader.cpp" />
-    <ClCompile Include="Objects\GameAnimationModel.cpp" />
     <ClCompile Include="Objects\GameModel.cpp" />
     <ClCompile Include="Objects\GameRender.cpp" />
     <ClCompile Include="Objects\MeshCube.cpp" />
@@ -177,6 +181,8 @@
     <ClCompile Include="Systems\Time.cpp" />
     <ClCompile Include="Systems\Window.cpp" />
     <ClCompile Include="Tool\GameSettings.cpp" />
+    <ClCompile Include="Tool\InGame.cpp" />
+    <ClCompile Include="Tool\GameScene.cpp" />
     <ClCompile Include="Utilities\BinaryFile.cpp" />
     <ClCompile Include="Utilities\Json.cpp" />
     <ClCompile Include="Utilities\Math.cpp" />
@@ -195,6 +201,7 @@
     <ClCompile Include="Weapons\Fist.cpp" />
     <ClCompile Include="Weapons\Sword.cpp" />
     <ClCompile Include="Weapons\Weapon.cpp" />
+    <ClCompile Include="Weapons\ZombieFist.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F89A7778-CBF0-4E22-B019-B7729ABB8281}</ProjectGuid>

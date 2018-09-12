@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "Weapon.h"
+#include "WeaponDatas.h"
 #include "../Bounding/Shape.h"
 #include "../Characters/Character.h"
 
 Weapon::Weapon(Character* character)
 	: character(character)
+	, spec(NULL)
 {
 	D3DXMatrixIdentity(&rootAxis);
 }
@@ -13,6 +15,8 @@ Weapon::~Weapon()
 {
 	for (auto hitBox : hitBoxes)
 		SAFE_DELETE(hitBox);
+
+	SAFE_DELETE(spec);
 }
 
 void Weapon::Update()
@@ -70,4 +74,9 @@ bool Weapon::CheckVictim(Character * victim)
 	}
 
 	return false;
+}
+
+float Weapon::GetWeaponAtk()
+{
+	return spec->Atk;
 }

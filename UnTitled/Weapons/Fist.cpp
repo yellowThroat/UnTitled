@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Fist.h"
+#include "WeaponDatas.h"
 #include "../Bounding/Sphere.h"
 #include "../Bounding/Capsule.h"
 #include "../Characters/Character.h"
@@ -47,4 +48,6 @@ void Fist::OpenModel()
 	hitBox->box = new Shapes::Capsule(D3DXVECTOR3(0, -50, 0), D3DXVECTOR3(0, 10, 0), 10.0f);
 	hitBox->box->SetColor(D3DXCOLOR(0, 0, 1, 1));
 	hitBoxes.push_back(hitBox);
+
+	spec = new PlayerFistSpec();
 }

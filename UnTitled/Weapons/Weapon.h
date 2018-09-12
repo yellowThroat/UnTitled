@@ -19,9 +19,12 @@ public:
 	void AddVictim(Character* victim);
 	void ClearVictim();
 	bool CheckVictim(Character* victim);
+	float GetWeaponAtk();
+
 protected:
 	vector<class Character*> victims;
 	vector<class Shapes::BoundingBox*> hitBoxes;
 	class Character* character;
 	D3DXMATRIX rootAxis;
+	struct GameWeaponSpec* spec;
 };

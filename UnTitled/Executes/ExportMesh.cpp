@@ -6,8 +6,10 @@ ExportMesh::ExportMesh(ExecuteValues* values)
 	: Execute(values)
 {
 	Fbx::Exporter* exporter = NULL;
-	//exporter = new Fbx::Exporter(Assets + L"Zombie.fbx");
-	//exporter->ExportMesh(Models + L"Characters/Monsters/", L"Zombie");
+	//exporter = new Fbx::Exporter(Assets + L"maria.fbx");
+	//exporter->ExportMaterial(Models + L"Characters/Player/", L"maria");
+	//exporter->ExportMesh(Models + L"Characters/player/", L"maria");
+
 	//exporter = new Fbx::Exporter(Assets + L"ToExportModel/Zombie.fbx");
 	//exporter->ExportMesh(Models + L"Characters/Monsters/", L"Zombie");
 	//exporter->ExportMaterial(Models + L"Characters/Monsters/", L"Zombie");
@@ -22,7 +24,7 @@ ExportMesh::ExportMesh(ExecuteValues* values)
 
 	for (UINT i = 0; i < files.size(); i++)
 	{
-		wstring folder = Models + L"Animation/";
+		wstring folder = Models + L"Animation/Player/";
 		wstring name = Path::GetFileNameWithoutExtension(files[i]);
 		exporter = new Fbx::Exporter(files[i]);
 		exporter->ExportAnimation(folder, name);

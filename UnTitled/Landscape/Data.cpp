@@ -409,6 +409,7 @@ void Landscape::Data::SaveData(BinaryWriter * w)
 
 	w->Byte(&vertexData[0], sizeof(VertexType) * vertexCount);
 	w->Byte(&indexData[0], sizeof(UINT) * indexCount);
+	w->Byte(&vertices[0], sizeof(VertexType) * (width + 1) * (height + 1));
 }
 
 void Landscape::Data::LoadData(BinaryReader * r)
@@ -422,12 +423,16 @@ void Landscape::Data::LoadData(BinaryReader * r)
 
 	vertexData = new VertexType[vertexCount];
 	indexData = new UINT[indexCount];
+	vertices = new VertexType[(width + 1) * (height + 1)];
 
 	void* ptr = (void *)&(vertexData[0]);
 	r->Byte(&ptr, sizeof(VertexType) * vertexCount);
 
 	ptr = (void *)&(indexData[0]);
 	r->Byte(&ptr, sizeof(UINT) * indexCount);
+
+	ptr = (void *)&(vertices[0]);
+	r->Byte(&ptr, sizeof(VertexType) * (width + 1) * (height + 1));
 
 	FillNormalData();
 

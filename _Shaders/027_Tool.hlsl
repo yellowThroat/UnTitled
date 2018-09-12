@@ -40,8 +40,8 @@ PixelInput VS(VertexColorTextureNormal input)
 {
     PixelInput output;
 
-    output.oPosition    = input.position;
-    output.wPosition    = WORLD(input.position);
+    output.oPosition    = input.position.xyz;
+    output.wPosition    = WORLD(input.position).xyz;
     output.position     = VIEW(float4(output.wPosition, 1));
     output.position     = PROJECTION(output.position);
     output.vPosition    = ProjectionVP(input.position, _world);
@@ -52,6 +52,12 @@ PixelInput VS(VertexColorTextureNormal input)
     output.dPosition    = output.position;
     return output;
 }
+
+static const float weights[9] =
+{
+    0.022f, 0.04f, 0.123f, 0.201f,
+    0.224f, 0.201f, 0.123f, 0.04f, 0.022f
+};
 
 float4 PS(PixelInput input) : SV_TARGET
 {
@@ -198,19 +204,25 @@ float4 PS(PixelInput input) : SV_TARGET
     float2 projUv;
     projUv.x = input.vPosition.x / input.vPosition.w / 2.0f + 0.5f;
     projUv.y = -input.vPosition.y / input.vPosition.w / 2.0f + 0.5f;
+        
+    float4 depth = float4(0, 0, 0, 1);
+    float width = 1.0f / 1280.0f;
+    float height = 1.0f / 720.0f;
+    int i = 0;
+
+    for (i = -4; i <= 4; i++)
+    {
+        depth += weights[i + 4] * _depthMap.SampleLevel(_specularSampler, projUv + float2(width * (float) i,0),0);
+        depth += weights[i + 4] * _depthMap.SampleLevel(_specularSampler, projUv + float2(0, height * (float) i), 0);
+    }
 
     if (saturate(projUv.x) == projUv.x && saturate(projUv.y) == projUv.y)
     {
-        float depthMap = _depthMap.Sample(_specularSampler, projUv).r;
-
-        float lightDepth = input.vPosition.z / input.vPosition.w - 0.0001f;
-
-        if (lightDepth > depthMap)
-            color = myColor * _ambient;
+        depth = max(depth, _ambient);
+        color *= depth;
     }
 
 
-    int i = 0;
     for (i = 0; i < _pointLightCount; i++)
         PointLighting(color.rgb, _pointLights[i], input.wPosition, input.normal);
 

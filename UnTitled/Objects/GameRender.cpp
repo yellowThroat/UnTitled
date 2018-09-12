@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "GameRender.h"
-#include "../Utilities/BinaryFile.h"
-#include "../Landscape/Terrain.h"
-#include "../Commands/Command.h"
-#include "../Lights/PointLight.h"
-#include "../Lights/SpotLight.h"
+#include "../Tool/SettingsHeader.h"
 
 UINT GameRender::numOfRender = 0;
 bool GameRender::bParenting = false;
@@ -246,6 +242,12 @@ void GameRender::CalcPosition()
 D3DXMATRIX GameRender::Transformed()
 {
 	return rootAxis * world;
+}
+
+void GameRender::PreRender()
+{
+	for (GameRender* render : childs)
+		render->PreRender();
 }
 
 void GameRender::Update()
@@ -499,6 +501,11 @@ void GameRender::ClearChilds()
 	childs.clear();
 }
 
+void GameRender::NullChilds()
+{
+	childs.clear();
+}
+
 void GameRender::Parenting(D3DXVECTOR3 & rotate, D3DXVECTOR3& scale)
 {
 	rotate -= this->rotate;
@@ -595,7 +602,10 @@ GameRender * GameRender::CreateObject(RenderType type)
 		render = new GameRender();
 		break;
 	case GameRender::RenderType::Player:
-
+		render = new Eve(values);
+		break;
+	case GameRender::RenderType::Zombie:
+		render = new Zombie();
 		break;
 	case GameRender::RenderType::Building:
 		break;

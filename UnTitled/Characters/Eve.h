@@ -17,7 +17,8 @@ public:
 		Boxing_Idle, Boxing_Step,
 		OnePunch, TwoPunch, Kick,
 		OneHand_Idle, OneHand_Walk, OneHand_Run,
-		OneHand_Combo,
+		OneHand_First, OneHand_Second, OneHand_Last,
+		Damaged,
 		Count,
 	};
 
@@ -32,9 +33,12 @@ public:
 public:
 	Eve(ExecuteValues* values);
 	~Eve();
-	D3DXVECTOR3 * Target() { return &position; }
+	void UpdateInGame() override;
 	void Update() override;
 	void Render() override;
+	bool Damaged(Character* hitter) override;
+	void SearchTarget(Character* character);
+	void ShaderFile(Shader* val = NULL) override;
 
 private:
 	void OpenModel();
@@ -48,7 +52,6 @@ private:
 	void DecideAction(D3DXVECTOR3& velocity);
 	void DecideValid();
 	void WeaponChage(WeaponType type);
-	bool Damaged(Character* hitter) override;
 
 	bool Prepare(PlayerAnimation animation);
 	bool Priority(PlayerAnimation animation);
@@ -70,9 +73,8 @@ private:
 
 	WeaponType currentWeaponType;
 
+	class Bar* targetHpBar;
 	ExecuteValues* values;
 	struct GamePlayerInput* input;
 	struct GamePlayerSpec* spec;
-
-	Shapes::Sphere* sphere;
 };

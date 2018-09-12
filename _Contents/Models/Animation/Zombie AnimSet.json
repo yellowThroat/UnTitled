@@ -1,0 +1,12 @@
+{
+   "Anim Set" : {
+      "anim" : [
+         "../_Contents/Models/Animation/Monsters/Zombie Idle.anim",
+         "../_Contents/Models/Animation/Monsters/Zombie Reaction Hit.anim",
+         "../_Contents/Models/Animation/Monsters/Zombie Death.anim",
+         "../_Contents/Models/Animation/Monsters/Zombie Wander.anim",
+         "../_Contents/Models/Animation/Monsters/Zombie Running.anim",
+         "../_Contents/Models/Animation/Monsters/Zombie Attack.anim"
+      ]
+   }
+}

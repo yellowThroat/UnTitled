@@ -70,6 +70,7 @@ namespace Landscape
 
 		float GetVertexHeight(D3DXVECTOR3 position);
 
+		void PreRender() override;
 		void Update() override;
 		void Render() override;
 		void PostRender() override;

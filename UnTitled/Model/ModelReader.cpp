@@ -8,6 +8,12 @@
 
 void Model::ReadMaterial(wstring file)
 {
+	if (file.length() < 1)
+	{
+		Material* material = new Material();
+		materials.push_back(material);
+		return;
+	}
 	Models::LoadMaterial(file, &materials);
 }
 

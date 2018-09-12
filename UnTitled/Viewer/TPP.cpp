@@ -16,7 +16,12 @@ TPP::~TPP()
 void TPP::Update()
 {
 	D3DXVECTOR3 direction = D3DXVECTOR3(0, 0, 1);
-	D3DXVECTOR3 pos = *target;
+	D3DXVECTOR3 pos;
+
+	if (target)
+		pos = *target;
+	else pos = D3DXVECTOR3(0, 0, 0);
+
 	GetDirection(direction);
 	pos.y = 5.0f;
 	pos -= distance * direction;

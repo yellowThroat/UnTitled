@@ -1,14 +1,18 @@
 #pragma once
+#include "GameScene.h"
+
 struct ExecuteValues;
 
-namespace Xml
+class GameSettings : public GameScene
 {
-	class XMLDocument;
-	class XMLElement;
-}
+public:
+	enum class MonsterType
+	{
+		Unknown = -1,
+		Zombie,
+		Count,
+	};
 
-class GameSettings
-{
 public:
 	GameSettings(ExecuteValues* values);
 	~GameSettings();
@@ -18,27 +22,24 @@ public:
 	void PreRender();
 	void Render();
 	void PostRender();
-	
-	void FixCamera(bool val) { fixCamera = val; }
-	
+
+public:
+	void ClearRoot();
+	void SaveProject(wstring file);
+	void LoadProject(wstring file);
+
 private:
 	void CreateEmpty();
 	void CreateEnvironment();
 	void CreatePlayer();
+	void CreateMonsters(MonsterType type);
 	void CreateTerrain();
 	void CreateLights(UINT type);
 	void CreateObject(UINT type);
-	void FixedCamera();
 
 private:
 	void InputHandle();
 	void DeleteCurrent();
-	void SaveProject(wstring file);
-	void LoadProject(wstring file);
 
 	class GameRender* current;
-
-private:
-	ExecuteValues* values;
-	bool fixCamera;
 };

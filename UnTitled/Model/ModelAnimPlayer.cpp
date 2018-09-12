@@ -10,6 +10,7 @@ ModelAnimPlayer::ModelAnimPlayer(Model * model)
 	, mode(Mode::Play)
 	, currentClip(NULL), nextClip(NULL)
 	, BindCount(0), blendTime(0.0f)
+	, currentClipIndex(0)
 {
 	shader = new Shader(Shaders + L"999_Animation.hlsl");
 	
@@ -47,17 +48,32 @@ void ModelAnimPlayer::Update()
 	if (currentClip == NULL)
 		return;
 
-	if(mode == Mode::Play)
-	UpdateTime();
+	if (mode == Mode::Play)
+		UpdateTime();
 	UpdateBone();
 	model->Buffer()->SetBones(&skinTransform[0], skinTransform.size());
 }
 
 void ModelAnimPlayer::Render()
 {
+	model->Buffer()->SetVSBuffer(2);
+
+	for (ModelMesh* mesh : model->Meshes())
+		mesh->Render();
+}
+
+void ModelAnimPlayer::PostRender()
+{
 	ImGui::Begin("Animation Player");
 
-	ImGui::Text(String::ToString(currentClip->clip->Name()).c_str());
+	if (ImGui::Combo("Clip List", (int*)&currentClipIndex, clipList.c_str()))
+	{
+		Mode m = mode;
+		Stop();
+		currentClip->clip = model->Clip(currentClipIndex);
+		if (m == Mode::Play) Play();
+	}
+
 	if (ImGui::Button("Play"))	Play(); ImGui::SameLine();
 	if (ImGui::Button("Stop"))	Stop(); ImGui::SameLine();
 	if (ImGui::Button("Pause"))	Pause();
@@ -65,11 +81,6 @@ void ModelAnimPlayer::Render()
 	ImGui::SliderInt("keyframe", &currentClip->currentKeyframe, 0, currentClip->clip->TotalFrame() - 1);
 
 	ImGui::End();
-
-	model->Buffer()->SetVSBuffer(2);
-
-	for (ModelMesh* mesh : model->Meshes())
-		mesh->Render();
 }
 
 void ModelAnimPlayer::World(D3DXMATRIX * world)
@@ -208,6 +219,7 @@ void ModelAnimPlayer::UpdateBone()
 void ModelAnimPlayer::Stop()
 {
 	mode = Mode::Stop;
+	currentClip->Stop();
 }
 
 void ModelAnimPlayer::Play()
@@ -242,7 +254,7 @@ void Binder::UpdateTime()
 		else if(currentKeyframe >= keyframeCount - 1)
 		{
 			currentKeyframe = keyframeCount - 1;
-			nextKeyframe = 0;
+			nextKeyframe = keyframeCount - 1;
 		}
 		frameTime -= invFrameRate;
 	}

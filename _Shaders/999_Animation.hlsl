@@ -7,6 +7,7 @@ struct PixelInput
     float3 normal : NORMAL0;
     float3 view : VIEW0;
     float3 tangent : TANGENT0;
+    float4 vPosition : LIGHTVIEW0;
 };
 
 PixelInput VS(VertexTextureNormalTangentBlend input)
@@ -23,11 +24,13 @@ PixelInput VS(VertexTextureNormalTangentBlend input)
     world = mul(input.position, transform);
     output.position = mul(world , _view);
     output.position = mul(output.position, _projection);
+    output.vPosition = ProjectionVP(input.position, transform);
 
     output.normal   = normalize(mul(input.normal , (float3x3) transform));
     output.tangent  = normalize(mul(input.tangent, (float3x3) transform));
     output.view     = normalize(GetViewPosition() - world.xyz);
     output.uv       = input.uv;
+    
     return output;
 }
 
@@ -37,6 +40,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 bump     = _normalMap.Sample(_normalSampler, input.uv);
     float4 specular = _specularMap.Sample(_specularSampler, input.uv);
 
-    Bump(color, bump , specular, input.normal, input.tangent, input.view);
+    Bump(color, bump, specular, input.normal, input.tangent, input.view);
+
     return color;
 }

@@ -18,4 +18,6 @@ public:
 	static float DistanceSquared(D3DXVECTOR3 vec1, D3DXVECTOR3 vec2);
 	static float DistancePointFromLine(D3DXVECTOR3 vec1, D3DXVECTOR3 vec2, D3DXVECTOR3 vec3);
 	static void RadianFromDirection(float& x, float& y, D3DXVECTOR3 dir);
+	static float AngleToRadianY(D3DXVECTOR3 vec1, D3DXVECTOR3 vec2);
+	static float AngleToDegreeY(D3DXVECTOR3 vec1, D3DXVECTOR3 vec2);
 };
