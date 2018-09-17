@@ -27,7 +27,7 @@ public:
 	int ParentBoneIndex() { return parentBoneIndex; }
 	class ModelBone* ParentBone() { return parentBone; }
 
-
+	void RenderWithoutShader();
 	void Render();
 
 private:

@@ -2,24 +2,16 @@
 #include "Canvas.h"
 #include "../Viewer/Orthographic.h"
 
-Canvas::Canvas(ExecuteValues * val)
-	: values(val)
+Canvas::Canvas()
 {
 	quad = new Model();
-	//quad->ReadMaterial()
-	D3DXMatrixIdentity(&view);
-
-	D3DDesc desc;
-	D3D::GetDesc(&desc);
-
-	projection = new Orthographic(0, desc.Width, 0, desc.Height);
+	quad->ReadMaterial(Models + L"Meshes/Quad.material");
+	quad->ReadMesh(Models + L"Meshes/quad.mesh");
 }
 
 Canvas::~Canvas()
 {
 	SAFE_DELETE(quad);
-	SAFE_DELETE(shader);
-	SAFE_DELETE(projection);
 }
 
 void Canvas::Update()
@@ -42,8 +34,13 @@ void Canvas::Create(float w, float h, float sX, float sY)
 	D3DDesc desc;
 	D3D::GetDesc(&desc);
 
-	D3DXMatrixScaling(&S, width, height, 1);
-	D3DXMatrixTranslation(&T, desc.Width / 2.0f + startX, desc.Height / 2.0f - startY, 0.1f);
+	D3DXMatrixScaling(&S, -width, height, 1);
+	D3DXMatrixTranslation(&T, width/ 2.0f + startX, desc.Height - height / 2.0f - startY, 0.1f);
 
 	quad->Mesh(0)->SetWorld(S * T);
+}
+
+void Canvas::SetTexture(wstring file)
+{
+	quad->Materials()[0]->SetDiffuseMap(file);
 }

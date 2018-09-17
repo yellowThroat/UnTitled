@@ -33,6 +33,7 @@ void InGame::Update()
 	{
 		monster->UpdateInGame();
 		monster->Damaged(eve);
+		monster->BodyCheck(eve);
 		eve->SearchTarget(monster);
 		eve->Damaged(monster);
 	}

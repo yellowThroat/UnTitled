@@ -5,6 +5,7 @@
 
 DirectionalLight::DirectionalLight(ExecuteValues * val)
 	:values(val)
+	, position(NULL)
 {
 	light = new FixedCamera();
 	shader = new Shader(Shaders + L"998_shadow.hlsl");

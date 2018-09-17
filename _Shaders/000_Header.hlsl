@@ -417,3 +417,13 @@ void Bump(inout float4 tColor, float4 bumpMap, float4 specularIntensity, float3 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+float4 CatmullRom(float4 p0, float4 p1, float4 p2, float4 p3, float t)
+{
+    float4 r;
+
+    r = 0.5f * ((2.0f * p1) + (-p0 + p2) * t + (2.0f * p0 - 5.0f * p1 + 4.0 * p2 - p3) *
+    pow(t, 2.0f) + (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * pow(t, 3.0f));
+
+    return r;
+}

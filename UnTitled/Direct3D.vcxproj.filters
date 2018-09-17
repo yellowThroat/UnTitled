@@ -282,6 +282,12 @@
     <ClInclude Include="GUI\Canvas.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Executes\DrawGui.h">
+      <Filter>Executes</Filter>
+    </ClInclude>
+    <ClInclude Include="Effects\WeaponTrail.h">
+      <Filter>Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Executes">
@@ -358,6 +364,9 @@
     </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{7590c19b-7cc9-4770-b42b-ae9c49fd27ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effects">
+      <UniqueIdentifier>{84624cbf-5ad5-4457-a8c8-5430e32a680e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -602,6 +611,12 @@
     </ClCompile>
     <ClCompile Include="GUI\Canvas.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Executes\DrawGui.cpp">
+      <Filter>Executes</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\WeaponTrail.cpp">
+      <Filter>Effects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

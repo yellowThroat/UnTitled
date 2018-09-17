@@ -13,6 +13,7 @@ private:
 	~ModelMeshPart();
 
 	void Binding();
+	void RenderWithoutShader();
 	void Render();
 
 public:

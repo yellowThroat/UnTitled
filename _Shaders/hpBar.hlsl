@@ -29,11 +29,10 @@ PixelInput VS(VertexBar input)
     PixelInput output;
 
     float4 center;
-    center = WORLD(input.position + float4(Bar_position, 1));
+    center = WORLD(input.position + float4(Bar_position, 0));
 
     output.uv = input.uv;
     output.isBottom = input.isBottom;
-
     float3 finalPos = center;
     float3 view = normalize(_viewInverse._31_32_33);
     float3 rotAxis = -normalize(_viewInverse._21_22_23);
@@ -54,8 +53,6 @@ PixelInput VS(VertexBar input)
         finalPos += input.uv.x * Bar_length * Bar_ratio * side;
         finalPos += input.uv.y * Bar_width * rotAxis;
     }
-
-    
     matrix VP = mul(_view, _projection);
     output.position = mul(float4(finalPos, 1), VP);
 

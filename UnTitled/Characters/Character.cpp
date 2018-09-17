@@ -61,6 +61,14 @@ void Character::PreRender()
 
 	if (anim)
 		anim->Render();
+
+	isBoneBuffer->Data.isBone = 0;
+	isBoneBuffer->SetVSBuffer(4);
+
+	if (currentWeapon)
+		currentWeapon->PreRender();
+
+	isBoneBuffer->Data.isBone = 2;
 }
 
 void Character::Render()
@@ -113,6 +121,11 @@ bool Character::Damaged(Character * hitter)
 	}
 
 	return false;
+}
+
+bool Character::BodyCheck(Character * other)
+{
+	return other->GetBody()->box->Collide(hurtBoxes[0]->box);
 }
 
 D3DXMATRIX Character::GetTransform(UINT index)

@@ -38,6 +38,8 @@ public:
 	virtual void PostRender();
 	virtual void InitStats();
 	virtual bool Damaged(Character* hitter);
+	virtual bool BodyCheck(Character* other);
+	virtual float MoveSpeed() { return 0.0f; }
 
 public:
 	Model* GetModel() { return model; }
@@ -49,6 +51,7 @@ public:
 	D3DXVECTOR3 * Target() { return &position; }
 	float GetHpRatio() { return currentHp / maxHp; }
 	float GetExistTime() { return existTime; }
+	Shapes::BoundingBox* GetBody() { return hurtBoxes[0]; }
 
 protected:
 	Model* model;

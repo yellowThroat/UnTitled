@@ -13,6 +13,7 @@ public:
 	~Weapon();
 
 	virtual void Update();
+	virtual void PreRender();
 	virtual void Render();
 	void SetValid(UINT index, bool val);
 	vector<class Shapes::BoundingBox*>& GetHitBoxes() { return hitBoxes; }

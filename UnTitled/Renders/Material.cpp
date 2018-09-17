@@ -41,7 +41,6 @@ void Material::Clone(void ** clone)
 {
 	Material* material = new Material();
 
-	material->SetNumber(this->number);
 	material->SetName(this->name);
 	material->SetShader(this->shader->GetFile());
 

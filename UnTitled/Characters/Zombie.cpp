@@ -86,6 +86,21 @@ bool Zombie::Damaged(Character * hitter)
 	return false;
 }
 
+bool Zombie::BodyCheck(Character * other)
+{
+	if (Character::BodyCheck(other))
+	{
+		D3DXVECTOR3 dir = position - other->Position();
+		D3DXVec3Normalize(&dir, &dir);
+		dir *= Time::Delta();
+		AddPosition(dir * other->MoveSpeed());
+		other->AddPosition(-dir * other->MoveSpeed());
+		return true;
+	}
+
+	return false;
+}
+
 void Zombie::ShaderFile(Shader * val)
 {
 	if (!val)

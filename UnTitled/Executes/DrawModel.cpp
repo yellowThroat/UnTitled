@@ -3,6 +3,7 @@
 #include "../Tool/GameSettings.h"
 #include "../Tool/InGame.h"
 #include "../Characters/Eve.h"
+#include "../GUI/Canvas.h"
 
 DrawModel::DrawModel(ExecuteValues* values)
 	: Execute(values)
@@ -49,12 +50,12 @@ void DrawModel::PostRender()
 	{
 		if (ImGui::BeginMenu("Run"))
 		{
-			if (ImGui::MenuItem("Runs", "Ctrl + F5"))
+			if (ImGui::MenuItem("Runs", "Tap"))
 			{
 				RunGame();
 			}
 
-			if (ImGui::MenuItem("Stop", "Ctrl + F5"))
+			if (ImGui::MenuItem("Stop", "Tap"))
 			{
 				RunEditor();
 			}
@@ -68,19 +69,18 @@ void DrawModel::PostRender()
 
 void DrawModel::InputHandle()
 {
-	if (Keyboard::Get()->Press(VK_CONTROL))
+	if (Keyboard::Get()->Down(VK_TAB))
 	{
-		if (Keyboard::Get()->Down(VK_F5))
+		if (Keyboard::Get()->Press(VK_MENU)) return;
+
+		switch (currentSceneType)
 		{
-			switch (currentSceneType)
-			{
-			case DrawModel::SceneType::LevelEditor:
-				RunGame();
-				break;
-			case DrawModel::SceneType::InGame:
-				RunEditor();
-				break;
-			}
+		case DrawModel::SceneType::LevelEditor:
+			RunGame();
+			break;
+		case DrawModel::SceneType::InGame:
+			RunEditor();
+			break;
 		}
 	}
 }
@@ -91,8 +91,9 @@ void DrawModel::RunGame()
 	inGame->TakeRootInfo();
 	currentSceneType = SceneType::InGame;
 	currentScene = inGame;
-	values->MainCamera = Camera::cameras[1];
-	values->MainCamera->SetTarget(inGame->Target());
+	//values->MainCamera = Camera::cameras[1];
+	//values->MainCamera->SetTarget(inGame->Target());
+	GameRender::root->NullChilds();;
 }
 
 void DrawModel::RunEditor()
@@ -103,7 +104,6 @@ void DrawModel::RunEditor()
 	values->MainCamera->CopyInfo(Camera::cameras[1]);
 
 	inGame->Clear();
-	GameRender::root->NullChilds();;
 	settings->LoadProject(Project + L"Temp.pro");
 }
 

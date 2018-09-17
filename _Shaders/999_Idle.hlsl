@@ -34,8 +34,8 @@ float4 PS(PixelInput input) : SV_TARGET
     //float4 color = _diffuseMap.Sample(_diffuseSampler, input.uv);
     float4 myColor = (1, 1, 1, 1);
     float4 color = myColor;
-    Diffuse(color.rgb, input.normal);
-    Specular(color.rgb, input.normal, input.view);
+    Diffuse(color, input.normal);
+    Specular(color, input.normal, input.view);
 
     float2 projUv;
     projUv.x = input.viewPosition.x / input.viewPosition.w / 2.0f + 0.5f;

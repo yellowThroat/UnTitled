@@ -33,7 +33,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 myColor = _diffuseMap.Sample(_diffuseSampler, input.uv);
     
     float4 color = myColor;
-    Diffuse(color.rgb, input.normal);
+    Diffuse(color, input.normal);
     
     //Specular(color.rgb, input.normal, input.view);
     

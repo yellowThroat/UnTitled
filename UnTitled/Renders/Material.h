@@ -42,9 +42,6 @@ public:
 
 	void Clone(void** clone);
 
-	UINT GetNumber() { return number; }
-	void SetNumber(UINT number) { this->number = number; }
-
 	wstring GetName() { return name; }
 	void SetName(wstring val) { name = val; }
 
@@ -139,7 +136,6 @@ public:
 	void SetBuffer();
 
 private:
-	UINT number;
 	wstring name;
 
 	MaterialBuffer* buffer;

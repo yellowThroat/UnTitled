@@ -36,7 +36,9 @@ public:
 	void Update() override;
 	void Render() override;
 	bool Damaged(Character* hitter) override;
+	bool BodyCheck(Character* other) override;
 	void ShaderFile(Shader* val) override;
+	float MoveSpeed();
 
 private:
 	void OpenModel();
@@ -46,7 +48,6 @@ private:
 	void DecideValid();
 	bool Movable(MoveEnd type = MoveEnd::Normal);
 	bool Prepare(ZombieAnimation animation);
-	float MoveSpeed();
 
 private:
 	// Ai

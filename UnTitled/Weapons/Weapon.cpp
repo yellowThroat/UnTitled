@@ -38,7 +38,15 @@ void Weapon::Update()
 			for (ModelMesh* mesh : hitBoxes[i]->model->Meshes())
 				mesh->SetWorld(transforms[i]);
 		}
+
 	}
+}
+
+void Weapon::PreRender()
+{
+	for (auto model : hitBoxes)
+		if (model->model)
+			model->model->Mesh(0)->RenderWithoutShader();
 }
 
 void Weapon::Render()

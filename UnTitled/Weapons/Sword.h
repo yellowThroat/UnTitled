@@ -1,5 +1,9 @@
 #pragma once
 #include "Weapon.h"
+namespace Shapes
+{
+	class Capsule;
+}
 class Sword : public Weapon
 {
 public:
@@ -7,7 +11,10 @@ public:
 	~Sword();
 
 	void Update() override;
+	void Render() override;
 
 private:
 	void OpenModel();
+	Shapes::Capsule* capsule;
+	class WeaponTrail* trail;
 };

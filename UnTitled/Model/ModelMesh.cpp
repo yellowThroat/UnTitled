@@ -40,6 +40,14 @@ void ModelMesh::Clone(void ** clone)
 	*clone = mesh;
 }
 
+void ModelMesh::RenderWithoutShader()
+{
+	worldBuffer->SetVSBuffer(1);
+
+	for (ModelMeshPart* part : meshParts)
+		part->RenderWithoutShader();
+}
+
 void ModelMesh::Render()
 {
 	worldBuffer->SetVSBuffer(1);

@@ -39,6 +39,7 @@ public:
 	bool Damaged(Character* hitter) override;
 	void SearchTarget(Character* character);
 	void ShaderFile(Shader* val = NULL) override;
+	float MoveSpeed();
 
 private:
 	void OpenModel();
@@ -57,7 +58,6 @@ private:
 	bool Priority(PlayerAnimation animation);
 	bool Movable(MoveEnd type = MoveEnd::Normal);
 	float CorrectionDegree(float& degree);
-	float MoveSpeed();
 	WeaponType GetWeaponType() { return currentWeaponType; }
 
 private:
