@@ -55,6 +55,8 @@ void InGame::Update()
 void InGame::PreRender()
 {
 	light->Render();
+
+	terrain->PreRender();
 }
 
 void InGame::Render()
@@ -128,6 +130,7 @@ void InGame::TakeInfo(GameRender * object)
 		break;
 	case GameRender::RenderType::Terrain:
 		terrain = dynamic_cast<Landscape::Terrain*>(object);
+		terrain->ShaderFile();
 		bLight = false;
 		break;
 	case GameRender::RenderType::PointLight:

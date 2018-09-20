@@ -69,12 +69,12 @@ struct VertexColorTextureNormal
 	VertexColorTextureNormal()
 		: position(0, 0, 0)
 		, color(0, 0, 0, 1)
-		, uv(0, 0, 0, 0)
+		, uv(0, 0)
 		, normal(0, 0, 0) {}
 
 	D3DXVECTOR3 position;
 	D3DXCOLOR color;
-	D3DXVECTOR4 uv;
+	D3DXVECTOR2 uv;
 	D3DXVECTOR3 normal;
 };
 

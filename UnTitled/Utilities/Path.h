@@ -35,6 +35,7 @@ public:
 	const static WCHAR* ShaderFilter;
 
 	static void OpenFileDialog(wstring file, const WCHAR* filter, wstring folder, function<void(wstring)> func, HWND hwnd = NULL);
+	static wstring OpenFileDialog(wstring file, const WCHAR* filter, wstring folder, HWND hwnd = NULL);
 	static void SaveFileDialog(wstring file, const WCHAR* filter, wstring folder, function<void(wstring)> func, HWND hwnd = NULL);
 
 	static void GetFiles(vector<string>* files, string path, string filter, bool bFindSubFolder);

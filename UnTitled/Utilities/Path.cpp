@@ -123,7 +123,7 @@ wstring Path::GetFileNameWithoutExtension(wstring path)
 }
 
 
-const WCHAR* Path::ImageFilter = L"Image\0*.png;*.bmp;*.jpg";
+const WCHAR* Path::ImageFilter = L"Image\0*.png;*.bmp;*.jpg;*.dds;";
 const WCHAR* Path::BinModelFilter = L"Binary Model\0*.model";
 const WCHAR* Path::FbxModelFilter = L"Fbx Model\0*.fbx;*.obj\0";
 const WCHAR* Path::ShaderFilter = L"HLSL file\0*.hlsl";
@@ -157,6 +157,36 @@ void Path::OpenFileDialog(wstring file, const WCHAR* filter, wstring folder, fun
 			func(loadName);
 		}
 	}
+}
+
+wstring Path::OpenFileDialog(wstring file, const WCHAR * filter, wstring folder, HWND hwnd)
+{
+	WCHAR name[255];
+	wcscpy_s(name, file.c_str());
+
+	wstring tempFolder = folder;
+	String::Replace(&tempFolder, L"/", L"\\");
+
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFilter = filter;
+	ofn.lpstrFile = name;
+	ofn.lpstrFileTitle = L"불러오기";
+	ofn.nMaxFile = 255;
+	ofn.lpstrInitialDir = tempFolder.c_str();
+	ofn.Flags = OFN_NOCHANGEDIR;
+
+	if (GetOpenFileName(&ofn) == TRUE)
+	{
+		wstring loadName = name;
+		String::Replace(&loadName, L"\\", L"/");
+
+		return loadName;
+	}
+
+	return L"";
 }
 
 void Path::SaveFileDialog(wstring file, const WCHAR* filter, wstring folder, function<void(wstring)> func, HWND hwnd)

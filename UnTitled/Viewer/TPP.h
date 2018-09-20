@@ -4,7 +4,7 @@
 class TPP : public Camera
 {
 public:
-	TPP(float rotationSpeed = 0.01f, float distance = 10.0f);
+	TPP(float distance = 10.0f, float rotationSpeed = 0.01f);
 	~TPP();
 
 	void Update() override;

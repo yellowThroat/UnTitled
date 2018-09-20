@@ -7,7 +7,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR param, int 
 	desc.AppName = L"D3D Game";
 	desc.Instance = instance;
 	desc.bFullScreen = false;
-	desc.bVsync = true;
+	desc.bVsync = false;
 	desc.Handle = NULL;
 	desc.Width = 1280;
 	desc.Height = 720;

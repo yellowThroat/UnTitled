@@ -32,6 +32,5 @@ private:
 	class InGame* inGame;
 
 	class GameScene* currentScene;
-
 	SceneType currentSceneType;
 };

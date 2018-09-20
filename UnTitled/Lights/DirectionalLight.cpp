@@ -33,7 +33,7 @@ void DirectionalLight::Update()
 	float x, y;
 	Math::RadianFromDirection(x, y, pos);
 	light->SetRotation(x, y);
-	pos *= -50.0f;
+	pos *= -20.0f;
 	if (position)
 		pos += *position;
 	light->SetPosition(pos.x, pos.y, pos.z);

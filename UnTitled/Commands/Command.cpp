@@ -126,35 +126,25 @@ cTexture * cTexture::Create(Landscape::Terrain * target)
 {
 	cTexture * pCommand = new cTexture();
 	pCommand->target = target;
-	pCommand->haveDiffuse = target->GetMaterial()->GetBuffer()->Data.haveDiffuse;
-	if (pCommand->haveDiffuse)
+	if (target->GetMaterial()->GetDiffuseMap())
 		pCommand->file = target->GetMaterial()->GetDiffuseMap()->GetFile();
+	else pCommand->file = L"";
 	return pCommand;
 }
 
 void cTexture::Undo()
 {
-	UINT tHaveDiffuse = target->GetMaterial()->GetBuffer()->Data.haveDiffuse;
 	wstring tFile;
-	if(tHaveDiffuse)
-		tFile = target->GetMaterial()->GetDiffuseMap()->GetFile();
-	target->GetMaterial()->GetBuffer()->Data.haveDiffuse = haveDiffuse;
-	if (haveDiffuse)
-		target->GetMaterial()->SetDiffuseMap(file);
-	haveDiffuse = tHaveDiffuse;
+	tFile = target->GetMaterial()->GetDiffuseMap()->GetFile();
+	target->GetMaterial()->SetDiffuseMap(file);
 	file = tFile;
 }
 
 void cTexture::Redo()
 {
-	UINT tHaveDiffuse = target->GetMaterial()->GetBuffer()->Data.haveDiffuse;
 	wstring tFile;
-	if (tHaveDiffuse)
-		tFile = target->GetMaterial()->GetDiffuseMap()->GetFile();
-	target->GetMaterial()->GetBuffer()->Data.haveDiffuse = haveDiffuse;
-	if (haveDiffuse)
-		target->GetMaterial()->SetDiffuseMap(file);
-	haveDiffuse = tHaveDiffuse;
+	tFile = target->GetMaterial()->GetDiffuseMap()->GetFile();
+	target->GetMaterial()->SetDiffuseMap(file);
 	file = tFile;
 }
 

@@ -36,6 +36,7 @@
     <ClInclude Include="Commands\UndoRedoManager.h" />
     <ClInclude Include="Commands\Command.h" />
     <ClInclude Include="Effects\WeaponTrail.h" />
+    <ClInclude Include="Environment\BillBoard.h" />
     <ClInclude Include="Environment\Rain.h" />
     <ClInclude Include="Environment\Sky.h" />
     <ClInclude Include="Environment\SkyPlane.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="Commands\UndoRedoManager.cpp" />
     <ClCompile Include="Commands\Command.cpp" />
     <ClCompile Include="Effects\WeaponTrail.cpp" />
+    <ClCompile Include="Environment\BillBoard.cpp" />
     <ClCompile Include="Environment\Rain.cpp" />
     <ClCompile Include="Environment\Sky.cpp" />
     <ClCompile Include="Environment\SkyPlane.cpp" />
@@ -272,6 +274,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DH);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DL);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -315,12 +319,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>./;../_Libraries/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <Version>
+      </Version>
+      <AdditionalLibraryDirectories>./;../_Libraries/;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

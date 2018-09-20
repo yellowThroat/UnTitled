@@ -43,6 +43,4 @@ float4 PS(PixelInput input) : SV_TARGET
     alpha = saturate(alpha * 200.0f);
     color.a = alpha;
     return color;
-
-    //return input.color;
 }

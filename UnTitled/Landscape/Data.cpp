@@ -9,7 +9,7 @@ Landscape::Data::Data(wstring file, float heightRatio)
 	: width(0), height(0)
 	, vertexCount(0), indexCount(0)
 	, vertexBuffer(NULL), indexBuffer(NULL)
-	, vertexData(NULL), indexData(NULL), vertices(NULL)
+	, indexData(NULL), vertices(NULL)
 	, heightMap(NULL)
 {
 	if (file.length() > 0)
@@ -30,7 +30,7 @@ float Landscape::Data::GetHeight(D3DXVECTOR3 position)
 {
 	UINT x = (UINT)position.x;
 	UINT z = (UINT)position.z;
-
+	int a = 0;
 	if (x < 0 || x >= width)
 		return 0.0f;
 
@@ -96,7 +96,7 @@ void Landscape::Data::UpdateVertexData(D3D11_BOX * box)
 {
 	D3D::GetDC()->UpdateSubresource
 	(
-		vertexBuffer, 0, box, vertexData, sizeof(VertexType) * vertexCount, 0
+		vertexBuffer, 0, box, vertices, sizeof(VertexType) * vertexCount, 0
 	);
 }
 
@@ -112,22 +112,73 @@ void Landscape::Data::Render()
 	D3D::GetDC()->DrawIndexed(indexCount, 0, 0);
 }
 
-void Landscape::Data::SetColor(D3DXCOLOR color, int x, int y)
+void Landscape::Data::SetColor(GridBuffer& grid, BrushBuffer& brush, D3DXCOLOR color)
 {
-	vertices[x + (width + 1) *y].color = color;
-	vertices[x + 1 + (width + 1) *y].color = color;
-	vertices[x + (width + 1) *(y + 1)].color = color;
-	vertices[x + 1 + (width + 1) *(y + 1)].color = color;
-
-	UpdateVertexData();
-}
-
-void Landscape::Data::SetColor(D3DXCOLOR color)
-{
-	for (UINT i = 0; i < vertexCount; i++)
+	if (brush.Info.Type == 1)
 	{
-		vertexData[i].color = color;
+		if (brush.Info.Select)
+		{
+			UINT BeforeX = (UINT)brush.Info.Before.x / grid.Grid.Spacing;
+			UINT BeforeZ = (UINT)brush.Info.Before.z / grid.Grid.Spacing;
+			UINT CurrentX = (UINT)brush.Info.Position.x / grid.Grid.Spacing;
+			UINT CurrentZ = (UINT)brush.Info.Position.z / grid.Grid.Spacing;
+			UINT minX = min(BeforeX, CurrentX);
+			UINT minZ = min(BeforeZ, CurrentZ);
+			UINT maxX = max(BeforeX, CurrentX);
+			UINT maxZ = max(BeforeZ, CurrentZ);
+
+			for (UINT i = minZ; i <= maxZ + 1; i++)
+			{
+				for (UINT j = minX; j <= maxX + 1; j++)
+				{
+					vertices[j + (width + 1) * i].color = color;
+
+				}
+			}
+		}
 	}
+	else if (brush.Info.Type == 2)
+	{
+
+		UINT minX = (UINT)max(0, (brush.Info.Position.x - brush.Info.Range));
+		UINT maxX = (UINT)min(width + 1, (brush.Info.Position.x + brush.Info.Range));
+		UINT minZ = (UINT)max(0, (brush.Info.Position.z - brush.Info.Range));
+		UINT maxZ = (UINT)min(height + 1, (brush.Info.Position.z + brush.Info.Range));
+
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				float dx = vertices[j + i*(width + 1)].position.x - brush.Info.Position.x;
+				float dy = vertices[j + i*(width + 1)].position.z - brush.Info.Position.z;
+
+				float dist = sqrt(dx*dx + dy*dy);
+
+				if (dist <= brush.Info.Range)
+				{
+					vertices[j + (width + 1) * i].color = color;
+
+				}
+			}
+		}
+
+	}
+	else if (brush.Info.Type == 3)
+	{
+		UINT minX = (UINT)max(0, (brush.Info.Position.x - brush.Info.Range));
+		UINT maxX = (UINT)min(width + 1, (brush.Info.Position.x + brush.Info.Range));
+		UINT minZ = (UINT)max(0, (brush.Info.Position.z - brush.Info.Range));
+		UINT maxZ = (UINT)min(height + 1, (brush.Info.Position.z + brush.Info.Range));
+
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				vertices[j + (width + 1) * i].color = color;
+			}
+		}
+	}
+
 
 	UpdateVertexData();
 }
@@ -158,7 +209,15 @@ void Landscape::Data::SetHeight(GridBuffer & grid, BrushBuffer & brush, bool upH
 					else
 					{
 						vertices[j + (width + 1)*i].position.y -= brush.Info.Speed;
-					}				
+					}
+				}
+			}
+
+			for (UINT i = minZ; i <= maxZ + 1; i++)
+			{
+				for (UINT j = minX; j <= maxX + 1; j++)
+				{
+					vertices[j + i*(width + 1)].normal = CalculateNormal(j, i);
 				}
 			}
 		}
@@ -190,9 +249,26 @@ void Landscape::Data::SetHeight(GridBuffer & grid, BrushBuffer & brush, bool upH
 					{
 						vertices[j + i*(width + 1)].position.y -= brush.Info.Speed;
 					}
+
 				}
 			}
 		}
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				float dx = vertices[j + i*(width + 1)].position.x - brush.Info.Position.x;
+				float dy = vertices[j + i*(width + 1)].position.z - brush.Info.Position.z;
+
+				float dist = sqrt(dx*dx + dy*dy);
+
+				if (dist <= brush.Info.Range)
+				{
+					vertices[j + i*(width + 1)].normal = CalculateNormal(j, i);
+				}
+			}
+		}
+
 		
 	}
 	else if (brush.Info.Type == 3)
@@ -214,11 +290,18 @@ void Landscape::Data::SetHeight(GridBuffer & grid, BrushBuffer & brush, bool upH
 				{
 					vertices[j + i*(width + 1)].position.y -= brush.Info.Speed;
 				}
-				
+
+			}
+		}
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				vertices[j + i*(width + 1)].normal = CalculateNormal(j, i);
 			}
 		}
 	}
-	VertexBind();
+
 	UpdateVertexData();
 }
 
@@ -251,6 +334,29 @@ void Landscape::Data::Smooth(GridBuffer & grid, BrushBuffer & brush)
 					{
 						elapsed = temp - average < brush.Info.Speed ? temp - average : brush.Info.Speed;
 						vertices[j + i*(width + 1)].position.y -= elapsed;
+
+					}
+				}
+			}
+		}
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				float dx = vertices[j + i*(width + 1)].position.x - brush.Info.Position.x;
+				float dy = vertices[j + i*(width + 1)].position.z - brush.Info.Position.z;
+
+				float dist = sqrt(dx*dx + dy*dy);
+
+				if (dist <= brush.Info.Range)
+				{
+					float average = GetAverage(j, i);
+					float temp = vertices[j + i*(width + 1)].position.y;
+
+
+					if (temp > average)
+					{
+						vertices[j + i*(width + 1)].normal = CalculateNormal(j, i);
 					}
 				}
 			}
@@ -274,9 +380,23 @@ void Landscape::Data::Smooth(GridBuffer & grid, BrushBuffer & brush)
 				}
 			}
 		}
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				float average = GetAverage(j, i);
+				float temp = vertices[j + i*(width + 1)].position.y;
+
+
+				if (temp > average)
+				{
+					vertices[j + i*(width + 1)].normal = CalculateNormal(j, i);
+				}
+			}
+		}
+
 	}
 
-	VertexBind();
 	UpdateVertexData();
 }
 
@@ -302,10 +422,25 @@ void Landscape::Data::Flattening(GridBuffer & grid, BrushBuffer & brush, float H
 				if (dist <= brush.Info.Range)
 				{
 					vertices[j + i*(width + 1)].position.y = Height;
+
 				}
 			}
 		}
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				float dx = vertices[j + i*(width + 1)].position.x - brush.Info.Position.x;
+				float dy = vertices[j + i*(width + 1)].position.z - brush.Info.Position.z;
 
+				float dist = sqrt(dx*dx + dy*dy);
+
+				if (dist <= brush.Info.Range)
+				{
+					vertices[j + i*(width + 1)].normal = CalculateNormal(j, i);
+				}
+			}
+		}
 	}
 	else if (brush.Info.Type = 3)
 	{
@@ -316,16 +451,20 @@ void Landscape::Data::Flattening(GridBuffer & grid, BrushBuffer & brush, float H
 				vertices[j + i*(width + 1)].position.y = Height;
 			}
 		}
-
+		for (UINT i = minZ; i <= maxZ; i++)
+		{
+			for (UINT j = minX; j <= maxX; j++)
+			{
+				vertices[j + i*(width + 1)].normal = CalculateNormal(j, i);
+			}
+		}
 	}
-	VertexBind();
 	UpdateVertexData();
 }
 
 void Landscape::Data::CopyData(VertexType** data, VertexType** data1, UINT** index)
 {
 	*data1 = new VertexType[(width + 1) * (height + 1)];
-	memcpy(*data, vertexData, vertexCount * sizeof(VertexType));
 	memcpy(*data1, vertices, (width + 1) * (height + 1) * sizeof(VertexType));
 	memcpy(*index, indexData, indexCount * sizeof(UINT));
 }
@@ -337,11 +476,9 @@ void Landscape::Data::SetData(VertexType * data, VertexType* data1, UINT * index
 	vertexCount = vCount;
 	indexCount = iCount;
 
-	vertexData = new VertexType[vertexCount];
 	indexData = new UINT[indexCount];
-	vertices = new VertexType[(width + 1) *(height + 1)];
+	vertices = new VertexType[vertexCount];
 
-	memcpy(vertexData, data, sizeof(VertexType)* vertexCount);
 	memcpy(vertices, data1, sizeof(VertexType)* (width + 1) * (height + 1));
 	memcpy(indexData, index, sizeof(UINT)* indexCount);
 
@@ -407,7 +544,6 @@ void Landscape::Data::SaveData(BinaryWriter * w)
 	w->UInt(vertexCount);
 	w->UInt(indexCount);	
 
-	w->Byte(&vertexData[0], sizeof(VertexType) * vertexCount);
 	w->Byte(&indexData[0], sizeof(UINT) * indexCount);
 	w->Byte(&vertices[0], sizeof(VertexType) * (width + 1) * (height + 1));
 }
@@ -421,18 +557,16 @@ void Landscape::Data::LoadData(BinaryReader * r)
 	vertexCount = r->UInt();
 	indexCount = r->UInt();
 
-	vertexData = new VertexType[vertexCount];
 	indexData = new UINT[indexCount];
-	vertices = new VertexType[(width + 1) * (height + 1)];
+	vertices = new VertexType[vertexCount];
 
-	void* ptr = (void *)&(vertexData[0]);
-	r->Byte(&ptr, sizeof(VertexType) * vertexCount);
+	void* ptr;
 
 	ptr = (void *)&(indexData[0]);
 	r->Byte(&ptr, sizeof(UINT) * indexCount);
 
 	ptr = (void *)&(vertices[0]);
-	r->Byte(&ptr, sizeof(VertexType) * (width + 1) * (height + 1));
+	r->Byte(&ptr, sizeof(VertexType) * (vertexCount));
 
 	FillNormalData();
 
@@ -517,12 +651,71 @@ void Landscape::Data::Clear()
 {
 	SAFE_DELETE(heightMap);
 
-	SAFE_DELETE_ARRAY(vertexData);
 	SAFE_DELETE_ARRAY(indexData);
 	SAFE_DELETE_ARRAY(vertices);
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+}
+
+D3DXVECTOR3 Landscape::Data::CalculateNormal(int w, int h)
+{
+	D3DXVECTOR3 n = D3DXVECTOR3(0, 0, 0);
+	int index0 = w + (width + 1)* (h - 1);
+	int index1 = (w + 1) + (width + 1)*(h - 1);
+	int index2 = (w - 1) + (width + 1)* h;
+	int index3 = w + (width + 1) * h;
+	int index4 = (w + 1) + (width + 1) * h;
+	int index5 = (w - 1) + (width + 1) * (h + 1);
+	int index6 = w + (width + 1) * (h + 1);
+
+	D3DXVECTOR3 d0, d1, normal;
+
+	if (w > 0 && h > 0)
+	{
+		d0 = vertices[index0].position - vertices[index3].position;
+		d1 = vertices[index2].position - vertices[index3].position;
+		normal;
+		D3DXVec3Cross(&normal, &d0, &d1);
+		n += normal;
+	}
+
+	if (w < (int)width && h > 0)
+	{
+		d0 = vertices[index0].position - vertices[index1].position;
+		d1 = vertices[index3].position - vertices[index1].position;
+		D3DXVec3Cross(&normal, &d0, &d1);
+		n += normal;
+
+		d0 = vertices[index1].position - vertices[index4].position;
+		d1 = vertices[index3].position - vertices[index4].position;
+		D3DXVec3Cross(&normal, &d0, &d1);
+		n += normal;
+	}
+
+	if (w > 0 && h < (int)height)
+	{
+		d0 = vertices[index2].position - vertices[index3].position;
+		d1 = vertices[index5].position - vertices[index3].position;
+		D3DXVec3Cross(&normal, &d0, &d1);
+		n += normal;
+
+		d0 = vertices[index3].position - vertices[index6].position;
+		d1 = vertices[index5].position - vertices[index6].position;
+		D3DXVec3Cross(&normal, &d0, &d1);
+		n += normal;
+	}
+
+	if (w < (int)width && h < (int)height)
+	{
+		d0 = vertices[index3].position - vertices[index4].position;
+		d1 = vertices[index6].position - vertices[index4].position;
+		D3DXVec3Cross(&normal, &d0, &d1);
+		n += normal;
+	}
+
+	D3DXVec3Normalize(&n, &n);
+	return n;
 }
 
 void Landscape::Data::FillVertexData(int a, int b, float heightRatio)
@@ -541,15 +734,15 @@ void Landscape::Data::FillVertexData(int a, int b, float heightRatio)
 		height = desc.Height - 1;
 	}
 
-	int count = (width + 1) * (height + 1);
-	vertices = new VertexType[count];
+	vertexCount = (width + 1) * (height + 1);
+	vertices = new VertexType[vertexCount];
 
 	UINT index = 0;
 	for (UINT z = 0; z <= height; z++)
 	{
 		for (UINT x = 0; x <= width; x++)
 		{
-			vertices[index].color = D3DXCOLOR(1, 1, 1, 1);
+			vertices[index].color = D3DXCOLOR(0, 0, 0, 0);
 
 			vertices[index].position.x = (float)x;
 
@@ -570,10 +763,7 @@ void Landscape::Data::FillVertexData(int a, int b, float heightRatio)
 	}//for(y)	
 
 
-	vertexCount = width * height * 6;
-	vertexData = new VertexType[vertexCount];
-
-	indexCount = vertexCount;
+	indexCount = width * height * 6;
 	indexData = new UINT[indexCount];
 
 	index = 0;
@@ -588,46 +778,18 @@ void Landscape::Data::FillVertexData(int a, int b, float heightRatio)
 			int index4 = (width + 1) * (z + 1) + x;
 			int index5 = (width + 1) * (z + 1) + (x + 1);
 
-			indexData[index] = index;
-			vertexData[index] = vertices[index0];
-			vertexData[index].uv += D3DXVECTOR4(0, 0, 0, 1);
-			index++;
-
-			indexData[index] = index;
-			vertexData[index] = vertices[index1];
-			vertexData[index].uv += D3DXVECTOR4(0, 0, 0, 0);
-			index++;
-
-			indexData[index] = index;
-			vertexData[index] = vertices[index2];
-			vertexData[index].uv += D3DXVECTOR4(0, 0, 1, 1);
-			index++;
-
-			indexData[index] = index;
-			vertexData[index] = vertices[index3];
-			vertexData[index].uv += D3DXVECTOR4(0, 0, 1, 1);
-			index++;
-
-			indexData[index] = index;
-			vertexData[index] = vertices[index4];
-			vertexData[index].uv += D3DXVECTOR4(0, 0, 0, 0);
-			index++;
-
-			indexData[index] = index;
-			vertexData[index] = vertices[index5];
-			vertexData[index].uv += D3DXVECTOR4(0, 0, 1, 0);
-			index++;
+			indexData[index++] = index0;
+			indexData[index++] = index1;
+			indexData[index++] = index2;
+			indexData[index++] = index3;
+			indexData[index++] = index4;
+			indexData[index++] = index5;
 		}
 	}
 }
 
 void Landscape::Data::FillNormalData()
 {
-	UINT count = (width + 1) * (height + 1);
-
-	D3DXVECTOR3 * normals = new D3DXVECTOR3[count];
-	memset(normals, 0, sizeof(D3DXVECTOR3) * count);
-
 	for (UINT z = 0; z < height; z++)
 	{
 		for (UINT x = 0; x < width; x++)
@@ -655,55 +817,14 @@ void Landscape::Data::FillNormalData()
 			D3DXVec3Cross(&n0, &d1, &d2);
 			D3DXVec3Cross(&n1, &d3, &d4);
 			
-			normals[index0] += n0;
-			normals[index1] += n0;
-			normals[index2] += n0;
-			normals[index3] += n1;
-			normals[index4] += n1;
-			normals[index5] += n1;
+			D3DXVec3Normalize(&vertices[index0].normal, &(vertices[index0].normal + n0));
+			D3DXVec3Normalize(&vertices[index1].normal, &(vertices[index1].normal + n0));
+			D3DXVec3Normalize(&vertices[index2].normal, &(vertices[index2].normal + n0));
+			D3DXVec3Normalize(&vertices[index3].normal, &(vertices[index3].normal + n1));
+			D3DXVec3Normalize(&vertices[index4].normal, &(vertices[index4].normal + n1));
+			D3DXVec3Normalize(&vertices[index5].normal, &(vertices[index5].normal + n1));
 		}
 	}
-
-	for (UINT i = 0; i < count; i++)
-	{
-		D3DXVec3Normalize(&normals[i], &normals[i]);
-		vertices[i].normal = normals[i];
-	}
-
-	UINT index = 0;
-
-	for (UINT z = 0; z < height; z++)
-	{
-		for (UINT x = 0; x < width; x++)
-		{
-			int index0 = (width + 1) * z + x;
-			int index1 = (width + 1) * (z + 1) + x;
-			int index2 = (width + 1) * z + x + 1;
-			int index3 = (width + 1) * z + x + 1;
-			int index4 = (width + 1) * (z + 1) + x;
-			int index5 = (width + 1) * (z + 1) + (x + 1);
-
-			vertexData[index].normal = normals[index0];
-			index++;
-
-			vertexData[index].normal = normals[index1];
-			index++;
-
-			vertexData[index].normal = normals[index2];
-			index++;
-
-			vertexData[index].normal = normals[index3];
-			index++;
-
-			vertexData[index].normal = normals[index4];
-			index++;
-
-			vertexData[index].normal = normals[index5];
-			index++;
-		}
-	}
-
-	SAFE_DELETE_ARRAY(normals);
 }
 
 void Landscape::Data::CreateBuffer()
@@ -716,7 +837,7 @@ void Landscape::Data::CreateBuffer()
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		D3D11_SUBRESOURCE_DATA data = { 0 };
-		data.pSysMem = vertexData;
+		data.pSysMem = vertices;
 
 		HRESULT hr;
 		hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
@@ -738,41 +859,5 @@ void Landscape::Data::CreateBuffer()
 		HRESULT hr;
 		hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &indexBuffer);
 		assert(SUCCEEDED(hr));
-	}
-}
-
-void Landscape::Data::VertexBind()
-{
-	UINT index = 0;
-
-	for (UINT z = 0; z < height; z++)
-	{
-		for (UINT x = 0; x < width; x++)
-		{
-			int index0 = (width + 1) * z + x;
-			int index1 = (width + 1) * (z + 1) + x;
-			int index2 = (width + 1) * z + x + 1;
-			int index3 = (width + 1) * z + x + 1;
-			int index4 = (width + 1) * (z + 1) + x;
-			int index5 = (width + 1) * (z + 1) + (x + 1);
-
-			vertexData[index] = vertices[index0];
-			index++;
-
-			vertexData[index] = vertices[index1];
-			index++;
-
-			vertexData[index] = vertices[index2];
-			index++;
-
-			vertexData[index] = vertices[index3];
-			index++;
-
-			vertexData[index] = vertices[index4];
-			index++;
-
-			vertexData[index] = vertices[index5];
-			index++;
-		}
 	}
 }

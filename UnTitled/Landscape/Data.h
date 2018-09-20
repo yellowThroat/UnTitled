@@ -50,8 +50,7 @@ namespace Landscape
 		void Render();
 
 	public:
-		void SetColor(D3DXCOLOR color, int x, int y);
-		void SetColor(D3DXCOLOR color);
+		void SetColor(GridBuffer& grid, BrushBuffer& brush, D3DXCOLOR color);
 		void SetHeight(GridBuffer& grid, BrushBuffer& brush, bool upHeight);
 		void Smooth(GridBuffer& grid, BrushBuffer & brush);
 		void Flattening(GridBuffer& grid, BrushBuffer& brush, float height);
@@ -63,7 +62,6 @@ namespace Landscape
 		UINT GetHeight() { return height; }
 		UINT GetVertexCount() { return vertexCount; }
 		UINT GetIndexCount() { return indexCount; }
-		VertexType* GetVertexData() { return vertexData; }
 		VertexType* GetVertices() { return vertices; }
 		UINT* GetIndexData() { return indexData; }
 
@@ -76,10 +74,10 @@ namespace Landscape
 		float GetAverage(UINT x, UINT y);
 		void Clear();
 
+		D3DXVECTOR3 CalculateNormal(int width, int height);
 		void FillVertexData(int x, int y, float heightRatio);
 		
 		void CreateBuffer();
-		void VertexBind();
 	private:
 		Texture* heightMap;
 
@@ -87,7 +85,6 @@ namespace Landscape
 		UINT vertexCount, indexCount;
 		ID3D11Buffer* vertexBuffer, *indexBuffer;
 
-		VertexType* vertexData;
 		VertexType* vertices;
 		UINT* indexData;
 		Quad* root;

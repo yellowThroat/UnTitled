@@ -9,6 +9,8 @@ public:
 	wstring GetFile() { return shaderFile; }
 
 	void Render();
+	ID3DBlob* GetVertexBlob() { return vertexBlob; }
+	ID3DBlob* GetPixelBlob() { return pixelBlob; }
 
 private:
 	void CreateVertexShader();

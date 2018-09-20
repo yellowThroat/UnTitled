@@ -288,6 +288,9 @@
     <ClInclude Include="Effects\WeaponTrail.h">
       <Filter>Effects</Filter>
     </ClInclude>
+    <ClInclude Include="Environment\BillBoard.h">
+      <Filter>Environment\BillBoard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Executes">
@@ -367,6 +370,9 @@
     </Filter>
     <Filter Include="Effects">
       <UniqueIdentifier>{84624cbf-5ad5-4457-a8c8-5430e32a680e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Environment\BillBoard">
+      <UniqueIdentifier>{26546485-691e-4057-b1a6-4066bc3886e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -617,6 +623,9 @@
     </ClCompile>
     <ClCompile Include="Effects\WeaponTrail.cpp">
       <Filter>Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\BillBoard.cpp">
+      <Filter>Environment\BillBoard</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

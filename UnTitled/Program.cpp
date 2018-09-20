@@ -32,7 +32,7 @@ Program::Program()
 		camera->SetPosition(0, 5, -15);
 		Camera::cameras.push_back(camera);
 
-		camera = new TPP();
+		camera = new TPP(15);
 		Camera::cameras.push_back(camera);
 	}
 	values->MainCamera = Camera::cameras[0];

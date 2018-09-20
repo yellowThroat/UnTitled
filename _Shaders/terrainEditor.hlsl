@@ -27,7 +27,7 @@ struct PixelInput
 {
     float4 position : SV_POSITION;
     float4 color : COLOR0;
-    float4 uv : TEXCOORD0;
+    float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
     float3 oPosition : POSITION0;
     float3 wPosition : POSITION1;
@@ -59,16 +59,37 @@ static const float weights[9] =
     0.224f, 0.201f, 0.123f, 0.04f, 0.022f
 };
 
+Texture2D _landTexture0 : register(t10);
+Texture2D _landTexture1 : register(t11);
+Texture2D _landTexture2 : register(t12);
+Texture2D _landTexture3 : register(t13);
+
+
 float4 PS(PixelInput input) : SV_TARGET
 {
-    float4 myColor;
+    float4 textureBlend = input.color;
+    float4 myColor = float4(1, 1, 1, 1);
 
-    if (_haveDiffuse)
+    if (length(_diffuseMap.Sample(_diffuseSampler, input.uv)) > 0.0f)
     {
-        myColor = _diffuseMap.Sample(_diffuseSampler, input.uv.xy);
+        myColor = _diffuseMap.Sample(_diffuseSampler, input.uv) * (1.0f - textureBlend.x - textureBlend.y - textureBlend.z - textureBlend.w);
     }
-    else
-        myColor = input.color;
+    if (length(_landTexture0.Sample(_diffuseSampler, input.uv)) > 0.0f)
+    {
+        myColor += _landTexture0.Sample(_diffuseSampler, input.uv) * textureBlend.x;
+    }
+    if (length(_landTexture1.Sample(_diffuseSampler, input.uv)) > 0.0f)
+    {
+        myColor += _landTexture1.Sample(_diffuseSampler, input.uv) * textureBlend.y;
+    }
+    if (length(_landTexture2.Sample(_diffuseSampler, input.uv)) > 0.0f)
+    {
+        myColor += _landTexture2.Sample(_diffuseSampler, input.uv) * textureBlend.z;
+    }
+    if (length(_landTexture3.Sample(_diffuseSampler, input.uv)) > 0.0f)
+    {
+        myColor += _landTexture3.Sample(_diffuseSampler, input.uv) * textureBlend.w;
+    }
 
     float4 color;
     float depthValue;
@@ -79,7 +100,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     if (depthValue < 0.95f)
     {
-        detailColor = _detailMap.Sample(_detailSampler, input.uv.zw);
+        detailColor = _detailMap.Sample(_detailSampler, input.oPosition.xz);
 
         detailBrightness = 1.8f;
 
@@ -218,6 +239,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     if (saturate(projUv.x) == projUv.x && saturate(projUv.y) == projUv.y)
     {
+        depth = saturate(depth);
         depth = max(depth, _ambient);
         color *= depth;
     }

@@ -5,6 +5,7 @@ class BinaryReader;
 class BinaryWriter;
 
 class Ocean;
+class BillBoard;
 
 namespace Landscape
 {
@@ -78,6 +79,7 @@ namespace Landscape
 	public:
 		Material* GetMaterial() { return material; }
 		void SetDiffuse(wstring file = L"");
+		void SetTexture(wstring file = L"", UINT index = 0);
 		void SetHeight(wstring file = L"");
 		class Data* GetData() { return data; }
 
@@ -95,20 +97,28 @@ namespace Landscape
 		class Data* data;
 		Ocean* ocean;
 
-		GridBuffer* gridBuffer;
-
 		Material* material;
-		WorldBuffer* worldBuffer;
 
+		Texture* texture[4];
+		
+		WorldBuffer* worldBuffer;
 		BrushBuffer* brushBuffer;
-		float flatteningHeight;
-		int mode;
+		GridBuffer* gridBuffer;
+		
 		POINT size;
+		float flatteningHeight;
+		D3DXVECTOR4 textureBlend;
+		int bTextureBlend;
+		int mode;
 		int width;
 		int height;
-
+		int billBoardCount;
+		wstring currentBillBoard;
+		Shader* billBoardShader;
+		Shader* billBoardShadowShader;
+		vector<BillBoard*> billBoards;
+		
 	public:
 		static Texture* brush;
-		string diffuseName;
 	};
 }

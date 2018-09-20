@@ -14,8 +14,6 @@ public:
 
 		Data.Shininess = 5;
 		Data.DetailFactor = 1;
-
-		Data.haveDiffuse = 0;
 	}
 
 	struct Struct
@@ -28,8 +26,7 @@ public:
 		float Shininess;
 		float DetailFactor;
 
-		UINT haveDiffuse;
-		float Padding;
+		float Padding[2];
 	} Data;
 };
 

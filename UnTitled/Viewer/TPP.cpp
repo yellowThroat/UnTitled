@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TPP.h"
 
-TPP::TPP(float rotationSpeed, float distance)
+TPP::TPP(float distance, float rotationSpeed)
 	: rotationSpeed(rotationSpeed)
 	, distance(distance)
 {

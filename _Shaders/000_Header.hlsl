@@ -107,7 +107,7 @@ struct VertexColorTextureNormal
 {
     float4 position : POSITION0;
     float4 color : COLOR0;
-    float4 uv : TEXCOORD0;
+    float2 uv : TEXCOORD0;
     float3 normal : NORMAL0;
 };
 

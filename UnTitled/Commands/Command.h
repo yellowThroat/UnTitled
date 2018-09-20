@@ -82,7 +82,6 @@ public:
 
 	Landscape::Terrain* target;
 	wstring file;
-	UINT haveDiffuse;
 };
 
 class cData : public Command
